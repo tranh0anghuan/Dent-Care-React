@@ -1,0 +1,16 @@
+/* top bar */
+
+.top-bar{
+    background-color: var(--light);
+}
+
+.top-shape::before {
+    position: absolute;
+    content: "";
+    width: 35px;
+    height: 100%;
+    top: 0;
+    left: -17px;
+    background: var(--primary);
+    transform: skew(40deg);
+}
