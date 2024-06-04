@@ -1,5 +1,6 @@
 import React from 'react'
 import './style.css'
+import { Link } from 'react-router-dom'
 
 function Navbar() {
   return (
@@ -31,7 +32,7 @@ function Navbar() {
                 <button type="button" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa-solid fa-magnifying-glass fs-5"></i></button>
             </form>
 
-            <a href="login.html" class="btn btn-primary py-2 px-4 ms-3">Log In</a>
+            <Link to={"/login"} class="btn btn-primary py-2 px-4 ms-3">Log In cc</Link>
 
         </div>
     </nav>
