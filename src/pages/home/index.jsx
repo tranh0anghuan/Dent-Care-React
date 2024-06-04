@@ -1,12 +1,19 @@
 import React from 'react'
-import Topbar from '../../components/topbar/Topbar'
-import Navbar from '../../components/navbar/Navbar'
+import Carousel from '../../components/carousel'
+import Services from '../../components/services'
+import Offer from '../../components/offer'
+import Team from '../../components/team'
+import Testimonial from '../../components/testimonial'
+import About from '../../components/about'
 
 function HomePage() {
   return (
     <>
-        {/* <Topbar/>
-        <Navbar/> */}
+        <Carousel/>
+        <Services/>
+        <Offer/>
+        <Team/>
+        <About/>
     </>
   )
 }
