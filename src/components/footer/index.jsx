@@ -63,6 +63,9 @@ function Footer() {
         </div>
       </div>
 
+      <a href="#" className="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i class="fa-solid fa-arrow-up"></i></a>
+
+
     </>
 
     
