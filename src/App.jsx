@@ -7,6 +7,7 @@ import Layout from './components/layout'
 import Services from './components/services'
 import ServicesPage from './pages/services'
 import ContactPage from './pages/contact'
+import DentistPage from './pages/dentist'
 
 
 function App() {
@@ -28,6 +29,10 @@ function App() {
         {
           path:"/contact",
           element: <ContactPage/>
+        },
+        {
+          path:"/dentist",
+          element: <DentistPage/>
         },
       ]
     },
