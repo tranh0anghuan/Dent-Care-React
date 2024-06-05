@@ -7,10 +7,10 @@ function Dentist() {
     
         <HeroHeader/>
 
-        <main className="pt-4 bg-light" style={{fontSize: 20, overflow: 'hidden'}}>
+        <main className="pt-4" style={{backgroundColor: '#fff',fontSize: 20, overflow: 'hidden'}}>
             <div className="container mt-5 pb-5 ">
                 {/*Grid row*/}
-                <div className="row pt-5" style={{backgroundColor: '#fff', borderRadius: 2, boxShadow: '0 1px 2px 0 rgba(0,0,0,0.1)'}}>
+                <div className="row pt-5 bg-light" style={{ borderRadius: 2, boxShadow: '0 1px 2px 0 rgba(0,0,0,0.1)'}}>
                 {/*Grid column*/}
                 <div className="col-md-6 mb-4">
                     <img src="/team-1.jpg" className="img-fluid" alt style={{width: 500}} />
@@ -53,7 +53,7 @@ function Dentist() {
                 {/*Grid column*/}
                 </div>
                 {/*Grid row*/}
-                <div className="row" style={{backgroundColor: '#fff', marginTop: 20, borderRadius: 2, boxShadow: '0 1px 2px 0 rgba(0,0,0,0.1)', fontSize: 15, padding: 20}}>
+                <div className="row bg-light" style={{backgroundColor: '#fff', marginTop: 20, borderRadius: 2, boxShadow: '0 1px 2px 0 rgba(0,0,0,0.1)', fontSize: 15, padding: 20}}>
                 <div className="d-flex" style={{margin: '10px 0'}}>
                     <p style={{marginRight: 20, width: 150}}>Experiences</p>
                     <p>10</p>

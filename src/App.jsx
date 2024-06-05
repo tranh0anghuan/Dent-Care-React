@@ -10,6 +10,7 @@ import ContactPage from './pages/contact'
 import DentistPage from './pages/dentist'
 import TeamPage from './pages/team'
 import AppointmentPage from './pages/appointment'
+import RecordPage from './pages/record'
 
 
 function App() {
@@ -43,6 +44,10 @@ function App() {
         {
           path:"/appointment",
           element: <AppointmentPage/>
+        },
+        {
+          path:"/record",
+          element: <RecordPage/>
         },
       ]
     },
