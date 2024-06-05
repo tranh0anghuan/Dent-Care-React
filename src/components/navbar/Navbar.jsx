@@ -14,8 +14,7 @@ function Navbar() {
     <div className="collapse navbar-collapse" id="navbarCollapse">
       <div className="navbar-nav ms-auto py-0">
         <Link to={"/"} className="nav-item nav-link">Home</Link>
-        <Link to={"/"} className="nav-item nav-link">About</Link>
-        <Link to={"/"} className="nav-item nav-link">Service</Link>
+        <Link to={"/services"} className="nav-item nav-link">Services</Link>
         <div className="nav-item dropdown">
           <Link to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
           <div className="dropdown-menu m-0">
@@ -25,7 +24,8 @@ function Navbar() {
             <Link to={"/"} className="dropdown-item">Appointment</Link>
           </div>
         </div>
-        <Link to={"/"} className="nav-item nav-link">Contact</Link>
+        <Link to={"/schedule"} className="nav-item nav-link">Schedule</Link>
+        <Link to={"/contact"} className="nav-item nav-link">Contact</Link>
       </div>
 
       <form action>
