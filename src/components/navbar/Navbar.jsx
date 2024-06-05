@@ -13,7 +13,7 @@ function Navbar() {
     </button>
     <div className="collapse navbar-collapse" id="navbarCollapse">
       <div className="navbar-nav ms-auto py-0">
-        <Link to={"/"} className="nav-item nav-link">rthanh</Link>
+        <Link to={"/"} className="nav-item nav-link">Home</Link>
         <Link to={"/services"} className="nav-item nav-link">Services</Link>
         <Link to={"/schedule"} className="nav-item nav-link">Schedule</Link>
         <Link to={"/contact"} className="nav-item nav-link">Contact</Link>
