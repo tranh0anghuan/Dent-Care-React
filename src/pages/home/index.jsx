@@ -3,17 +3,16 @@ import Carousel from '../../components/carousel'
 import Services from '../../components/services'
 import Offer from '../../components/offer'
 import Team from '../../components/team'
-import Testimonial from '../../components/testimonial'
 import About from '../../components/about'
 
 function HomePage() {
   return (
     <>
         <Carousel/>
+        <About/>
         <Services/>
         <Offer/>
         <Team/>
-        <About/>
     </>
   )
 }

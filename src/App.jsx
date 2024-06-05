@@ -18,12 +18,6 @@ function App() {
           path:"/",
           element: <HomePage/>
         },
-        {
-          path:"contact",
-          element:"contact"
-        },
-
-
       ]
     },
     {
