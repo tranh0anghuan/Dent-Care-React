@@ -15,17 +15,17 @@ function Navbar() {
       <div className="navbar-nav ms-auto py-0">
         <Link to={"/"} className="nav-item nav-link">Home</Link>
         <Link to={"/services"} className="nav-item nav-link">Services</Link>
+        <Link to={"/schedule"} className="nav-item nav-link">Schedule</Link>
+        <Link to={"/contact"} className="nav-item nav-link">Contact</Link>
         <div className="nav-item dropdown">
           <Link to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
           <div className="dropdown-menu m-0">
-            <Link to={"/"} className="dropdown-item">Pricing Plan</Link>
-            <Link to={"/"} className="dropdown-item">Our Dentist</Link>
+            <Link to={"/team"} className="dropdown-item">Our Dentist</Link>
+            <Link to={"/appointment"} className="dropdown-item">Appointment</Link>
             <Link to={"/"} className="dropdown-item">Testimonial</Link>
             <Link to={"/"} className="dropdown-item">Appointment</Link>
           </div>
         </div>
-        <Link to={"/schedule"} className="nav-item nav-link">Schedule</Link>
-        <Link to={"/contact"} className="nav-item nav-link">Contact</Link>
       </div>
 
       <form action>

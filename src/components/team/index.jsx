@@ -13,7 +13,7 @@ function Team() {
                     <div className="section-title bg-light rounded h-100 p-5">
                     <h5 className="position-relative d-inline-block text-primary text-uppercase">Our Dentist</h5>
                     <h1 className="display-6 mb-4">Meet Our Certified &amp; Experienced Dentist</h1>
-                    <a href="appointment.html" className="btn btn-primary py-3 px-5">Appointment</a>
+                    <Link to={'/appointment'} className="btn btn-primary py-3 px-5">Appointment</Link>
                     </div>
                 </div>
                 <div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s">

@@ -14,8 +14,8 @@ function Carousel() {
                     <div className="p-3" style={{maxWidth: 900}}>
                         <h5 className="text-white text-uppercase mb-3 animated slideInDown">Keep Your Teeth Healthy</h5>
                         <h1 className="display-1 text-white mb-md-4 animated zoomIn">Take The Best Quality Dental Treatment</h1>
-                        <a href="appointment.html" className="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Appointment</a>
-                        <a href className="btn btn-secondary py-md-3 px-md-5 animated slideInRight">Contact Us</a>
+                        <Link to={'/appointment'}  className="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Appointment</Link>
+                        <Link to={'/contact'}  className="btn btn-secondary py-md-3 px-md-5 animated slideInRight">Contact Us</Link>
                     </div>
                     </div>
                 </div>
@@ -25,8 +25,8 @@ function Carousel() {
                     <div className="p-3" style={{maxWidth: 900}}>
                         <h5 className="text-white text-uppercase mb-3 animated slideInDown">Keep Your Teeth Healthy</h5>
                         <h1 className="display-1 text-white mb-md-4 animated zoomIn">Take The Best Quality Dental Treatment</h1>
-                        <a href="appointment.html" className="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Appointment</a>
-                        <a href className="btn btn-secondary py-md-3 px-md-5 animated slideInRight">Contact Us</a>
+                        <Link to={'/appointment'}  className="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Appointment</Link>
+                        <Link to={'/contact'}  className="btn btn-secondary py-md-3 px-md-5 animated slideInRight">Contact Us</Link>
                     </div>
                     </div>
                 </div>

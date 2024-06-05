@@ -8,6 +8,8 @@ import Services from './components/services'
 import ServicesPage from './pages/services'
 import ContactPage from './pages/contact'
 import DentistPage from './pages/dentist'
+import TeamPage from './pages/team'
+import AppointmentPage from './pages/appointment'
 
 
 function App() {
@@ -33,6 +35,14 @@ function App() {
         {
           path:"/dentist",
           element: <DentistPage/>
+        },
+        {
+          path:"/team",
+          element: <TeamPage/>
+        },
+        {
+          path:"/appointment",
+          element: <AppointmentPage/>
         },
       ]
     },
