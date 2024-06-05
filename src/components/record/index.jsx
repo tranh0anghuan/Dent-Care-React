@@ -9,7 +9,7 @@ function Record() {
         <HeroHeader/>
 
         <div>
-            <div className="container container-custom mb-5">
+            <div className="container container-custom mb-5 wow zoomIn" data-wow-delay="0.1s">
                 <div className="row row-custom">
                 <div className="col-md-12 text-center fw-bold h5">Basic Information</div>
                 </div>
@@ -215,7 +215,7 @@ function Record() {
                 </div>
             </div>
             <div className="d-flex justify-content-center align-items-center">
-                <a href="index.html" className="btn btn-primary py-md-3 px-md-5 me-3">Submit</a>
+                <a href="index.html" className="btn btn-primary py-md-3 px-md-5 me-3 wow fadeInUp" data-wow-delay="0.6s">Submit</a>
             </div>
         </div>
 
