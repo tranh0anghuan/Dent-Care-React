@@ -11,6 +11,7 @@ import DentistPage from './pages/dentist'
 import TeamPage from './pages/team'
 import AppointmentPage from './pages/appointment'
 import RecordPage from './pages/record'
+import SignupPage from './pages/signup'
 
 
 function App() {
@@ -54,6 +55,10 @@ function App() {
     {
       path: "/login",
       element: <LoginPage/>,
+    },
+    {
+      path: "/signup",
+      element: <SignupPage/>,
     },
     
   ]);
