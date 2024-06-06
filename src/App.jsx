@@ -19,6 +19,7 @@ import WisdomPage from './pages/wisdom'
 import CeramicPage from './pages/ceramic'
 import OrthdonticPage from './pages/orthdontic'
 import DenturesPage from './pages/dentures'
+import SchedulePage from './pages/schedule'
 
 
 function App() {
@@ -88,6 +89,10 @@ function App() {
         {
           path:"/Dentures",
           element: <DenturesPage/>
+        },
+        {
+          path:"/schedule",
+          element: <SchedulePage/>
         },
         
       ]
