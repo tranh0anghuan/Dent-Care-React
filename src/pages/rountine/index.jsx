@@ -1,5 +1,5 @@
 import React from 'react'
-import Routine from '../../components/rountine'
+import Routine from '../../components/routine'
 
 function RoutinePage() {
   return (
