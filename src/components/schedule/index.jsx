@@ -7,7 +7,7 @@ function Schedule() {
     <>
         <HeroHeader/>
 
-        <div className="container mb-5">
+        <div className="container mb-5 wow fadeInUp" data-wow-delay="0.1s">
         <div className="row">
             <div className="col-md-12">
             <div className="schedule-table">
@@ -238,7 +238,7 @@ function Schedule() {
         </div>
     </div>
 
-    <div className="row" style={{margin: '20px 50px'}}> 
+    <div className="row  wow zoomIn" style={{margin: '20px 50px'}} data-wow-delay="0.6s"> 
     <div className="col-lg-12">
         <div className="row">
         <main className="col-lg-12 mb-5" style={{fontSize: 15, marginTop: 40}}>        
