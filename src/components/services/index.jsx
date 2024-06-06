@@ -23,7 +23,7 @@ function Services() {
                         <img className="img-fluid" src="/service-1.jpg" alt />
                         </div>
                         <div className="position-relative bg-light rounded-bottom text-center p-4">
-                        <h5 className="m-0">Cosmetic Dentistry</h5>
+                        <h5 className="m-0">Tooth Extraction</h5>
                         </div>
                     </div>
                     <div className="col-md-6 service-item wow zoomIn" data-wow-delay="0.9s">
@@ -45,7 +45,7 @@ function Services() {
                         <img className="img-fluid" src="/service-3.jpg" alt />
                         </div>
                         <div className="position-relative bg-light rounded-bottom text-center p-4">
-                        <h5 className="m-0">Dental Bridges</h5>
+                        <h5 className="m-0">Routine Dental Check</h5>
                         </div>
                     </div>
                     <div className="col-md-6 service-item wow zoomIn" data-wow-delay="0.6s">

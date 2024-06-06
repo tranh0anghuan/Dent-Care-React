@@ -4,7 +4,6 @@ import LoginPage from './pages/login'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import HomePage from './pages/home'
 import Layout from './components/layout'
-import Services from './components/services'
 import ServicesPage from './pages/services'
 import ContactPage from './pages/contact'
 import DentistPage from './pages/dentist'
@@ -12,6 +11,10 @@ import TeamPage from './pages/team'
 import AppointmentPage from './pages/appointment'
 import RecordPage from './pages/record'
 import SignupPage from './pages/signup'
+import TeethWhiteningPage from './pages/teethwhitening'
+import ToothExtractionPage from './pages/tooth-extraction'
+import RoutinePage from './pages/rountine'
+import ImplantPage from './pages/implant'
 
 
 function App() {
@@ -49,6 +52,22 @@ function App() {
         {
           path:"/record",
           element: <RecordPage/>
+        },
+        {
+          path:"/Teeth Whitening",
+          element: <TeethWhiteningPage/>
+        },
+        {
+          path:"/Tooth Extraction",
+          element: <ToothExtractionPage/>
+        },
+        {
+          path:"/Routine",
+          element: <RoutinePage/>
+        },
+        {
+          path:"/Implant",
+          element: <ImplantPage/>
         },
       ]
     },
