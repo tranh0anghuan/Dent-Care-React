@@ -1,8 +1,33 @@
 import React from 'react'
 import './style.css'
 import { Link } from 'react-router-dom'
+import { auth, googleProvider } from '../../config/firebaseConfig';
+import { signInWithPopup } from 'firebase/auth';
 
 function LoginPage() {
+
+const loginGoogle = () => {
+  signInWithPopup(auth, googleProvider)
+  .then((result) => {    
+    const token = result.user.accessToken;
+    const user = result.user;
+    console.log(user);
+    console.log(token)
+   
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+
+}
+
+
   return (
 <section className="vh-100 d-flex align-items-center">
   <div className="container-fluid h-custom">
@@ -20,7 +45,7 @@ function LoginPage() {
         <form>
           <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
             <p className="lead fw-normal mb-0 me-3">Sign in with</p>
-            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-floating mx-2" style={{fontSize: '1.5rem', borderRadius: '50%'}}>
+            <button onClick={loginGoogle} type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-floating mx-2" style={{fontSize: '1.5rem', borderRadius: '50%'}}>
               <i className="fa-brands fa-google" />
           
             </button>

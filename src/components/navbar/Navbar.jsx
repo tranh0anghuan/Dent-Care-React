@@ -23,7 +23,7 @@ function Navbar() {
             <Link to={"/team"} className="dropdown-item">Our Dentist</Link>
             <Link to={"/appointment"} className="dropdown-item">Appointment</Link>
             <Link to={"/record"} className="dropdown-item">Record</Link>
-            <Link to={"/"} className="dropdown-item">Dashboard</Link>
+            <Link to={"/dashboard"} className="dropdown-item">Dashboard</Link>
           </div>
         </div>
       </div>

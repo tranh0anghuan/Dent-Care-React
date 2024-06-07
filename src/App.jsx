@@ -20,6 +20,8 @@ import CeramicPage from './pages/ceramic'
 import OrthdonticPage from './pages/orthdontic'
 import DenturesPage from './pages/dentures'
 import SchedulePage from './pages/schedule'
+import Dashboard from './pages/dashboard'
+import Category from './components/category'
 
 
 function App() {
@@ -104,6 +106,16 @@ function App() {
     {
       path: "/signup",
       element: <SignupPage/>,
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard/>,
+      children: [
+        {
+        path: "/dashboard/category",
+        element: <Category/>,
+        }
+      ],
     },
     
   ]);
