@@ -1,43 +1,171 @@
 import React from 'react'
 import './style.css'
-import { Link } from 'react-router-dom'
+import { Await, Link, useNavigate } from 'react-router-dom'
+import { auth, googleProvider } from '../../config/firebaseConfig';
+import { signInWithPopup } from 'firebase/auth';
+import api from '../../config/axios';
+import { Button, Checkbox, Form, Input } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, logout, selectUser } from '../../redux/features/counterSlice';
+
+
 
 function SignupPage() {
+
+  // luu redux dung dispatch
+  const dispatch = useDispatch()
+  // lay data tu redux dung useSelector
+  const abc = useSelector(selectUser)
+  // chuyen trang dung useNavigate cua react-router-dom
+  const navigate = useNavigate()
+
+  const onFinish = async (values) => {
+    console.log(values.username)
+    console.log(values.password)
+    const res = await api.post("/login", {
+
+      email: values.username,
+      password: values.password
+
+    })
+    const user = res.data
+    localStorage.setItem("token", user.token)
+    dispatch(login(user))
+    navigate("/contact")
+
+
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  // ========== Login with Google =========
+
+  const loginGoogle = async () => {
+
+    const result = await signInWithPopup(auth, googleProvider)
+    const token = result.user.accessToken;
+
+
+    const res = await api.post("/login-google", {
+      token: token
+    })
+
+    const user = res.data
+    localStorage.setItem("token", user.token)
+    dispatch(login(user))
+    navigate("/contact")
+  }
+
+
   return (
-<section className="vh-100 d-flex align-items-center">
-  <div className="container-fluid h-custom">
-    <div className="row d-flex justify-content-center align-items-center h-100 wow fadeInUp" data-wow-delay="0.1s">
-      <div className="col-md-9 col-lg-6 col-xl-5">
-        <Link to={'/'}> 
-            <h1 className="my-5 display-3 fw-bold ls-tight text-primary">
-            DentCare
-            </h1>
-        </Link>
-        <p style={{color: 'hsl(217, 10%, 50.8%)'}}>We believe in delivering the highest standard of dental care. Our state-of-the-art facility is equipped with the latest technology and adheres to the strictest hygiene protocols to ensure your safety and comfort.
-        </p>
+    <section className="vh-100 d-flex align-items-center">
+      <div className="container-fluid h-custom">
+        <div className="row d-flex justify-content-center align-items-center h-100 wow fadeInUp" data-wow-delay="0.1s">
+          <div className="col-md-9 col-lg-6 col-xl-5">
+            <Link to={'/'}>
+              <h1 className="my-5 display-3 fw-bold ls-tight text-primary">
+                DentCare
+              </h1>
+            </Link>
+            <p style={{ color: 'hsl(217, 10%, 50.8%)' }}>We believe in delivering the highest standard of dental care. Our state-of-the-art facility is equipped with the latest technology and adheres to the strictest hygiene protocols to ensure your safety and comfort.
+            </p>
+          </div>
+          <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1 wow zoomIn" data-wow-delay="0.6s">
+
+            <Form
+              name="basic"
+              labelCol={{
+                span: 4,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+              style={{
+                maxWidth: 600,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item
+                label="Username"
+                name="username"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your username!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your password!',
+                  },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+
+              <Form.Item
+                label="Phone"
+                name="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your phone!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your email!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 4,
+                  span: 16,
+                }}
+              >
+
+                <Button className="btn btn-primary btn-lg" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }} type="primary" htmlType="submit">
+                  Sign up
+                </Button>
+              </Form.Item>
+            </Form>
+
+            <div className="text-center text-lg-start mt-4" style={{ marginLeft: '80px' }}>
+              <p className="small fw-bold mt-2 pt-1 mb-0">Already have an account <Link to={'/login'} className="link-danger" style={{ textDecoration: 'none' }}>Log in</Link></p>
+            </div>
+
+
+
+          </div>
+        </div>
       </div>
-      <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1 wow zoomIn" data-wow-delay="0.6s">
-        <form>
-          {/* Email input */}
-          <div data-mdb-input-init className="form-outline mb-4">
-            <input type="email" id="form3Example3" className="form-control form-control-lg" placeholder="Email address" />
-          </div>
-          {/* Password input */}
-          <div data-mdb-input-init className="form-outline mb-3">
-            <input type="password" id="form3Example4" className="form-control form-control-lg" placeholder="Password" />
-          </div>
-          <div data-mdb-input-init className="form-outline mb-3">
-            <input type="password" id="form3Example4" className="form-control form-control-lg" placeholder="Confirm Password" />
-          </div>
-          <div className="text-center text-lg-start mt-4 pt-2">
-            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-lg" style={{paddingLeft: '2.5rem', paddingRight: '2.5rem'}}>Sign up</button>
-            <p className="small fw-bold mt-2 pt-1 mb-0">Already haved an account? <Link to={'/login'} className="link-danger" style={{textDecoration: 'none'}}>Log in</Link></p>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
   )
