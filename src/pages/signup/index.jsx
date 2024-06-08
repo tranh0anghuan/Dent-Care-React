@@ -1,8 +1,6 @@
 import React from 'react'
 import './style.css'
 import { Await, Link, useNavigate } from 'react-router-dom'
-import { auth, googleProvider } from '../../config/firebaseConfig';
-import { signInWithPopup } from 'firebase/auth';
 import api from '../../config/axios';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,23 +37,7 @@ function SignupPage() {
     console.log('Failed:', errorInfo);
   };
 
-  // ========== Login with Google =========
-
-  const loginGoogle = async () => {
-
-    const result = await signInWithPopup(auth, googleProvider)
-    const token = result.user.accessToken;
-
-
-    const res = await api.post("/login-google", {
-      token: token
-    })
-
-    const user = res.data
-    localStorage.setItem("token", user.token)
-    dispatch(login(user))
-    navigate("/contact")
-  }
+  
 
 
   return (
