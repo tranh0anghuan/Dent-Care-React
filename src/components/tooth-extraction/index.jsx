@@ -1,6 +1,6 @@
 import React from 'react'
 import HeroHeader from '../hero-header'
-
+import "./tooth.css";
 function ToothExtraction() {
   return (
     <>
@@ -11,8 +11,8 @@ function ToothExtraction() {
                     <h1 style={{textAlign: 'center'}}>Aesthetics – The Solution for a Perfectly Beautiful Smile</h1>
                     <div className="row" id="teeth">
                     <h1>Tooth Extraction</h1>
-                    <p>Tooth extraction is a dental procedure to remove one or more teeth from the mouth. This procedure can be performed for various reasons.</p>
-                    <p>Reasons for tooth extraction:</p>
+                    <div id="new-paragraph">Tooth extraction is a dental procedure to remove one or more teeth from the mouth. This procedure can be performed for various reasons.</div>
+                    <div id="new-paragraph">Reasons for tooth extraction:</div>
                     <ul id="ul">
                         <li><strong>Severe tooth decay:</strong> When tooth decay has spread to the pulp and cannot be treated with fillings or root canal therapy, extraction is the only solution.</li>
                         <li><strong>Periodontitis:</strong> Periodontitis is a condition that affects the gums and bones around the teeth. If left untreated, it can lead to tooth loss.</li>
