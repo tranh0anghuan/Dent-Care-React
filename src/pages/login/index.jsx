@@ -20,18 +20,18 @@ function LoginPage() {
   const navigate = useNavigate()
 
   const onFinish = async (values) => {
-    console.log(values.username)
+    console.log(values.email)
     console.log(values.password)
     const res = await api.post("/login", {
 
-      email: values.username,
+      email: values.email,
       password: values.password
 
     })
     const user = res.data
     localStorage.setItem("token", user.token)
     dispatch(login(user))
-    navigate("/contact")
+    navigate("/")
 
 
   };
@@ -54,7 +54,7 @@ function LoginPage() {
     const user = res.data
     localStorage.setItem("token", user.token)
     dispatch(login(user))
-    navigate("/contact")
+    navigate("/")
   }
 
 
@@ -100,12 +100,12 @@ function LoginPage() {
               autoComplete="off"
             >
               <Form.Item
-                label="Username"
-                name="username"
+                label="Email"
+                name="email"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your username!',
+                    message: 'Please input your Email!',
                   },
                 ]}
               >

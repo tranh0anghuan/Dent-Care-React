@@ -18,18 +18,23 @@ function SignupPage() {
   const navigate = useNavigate()
 
   const onFinish = async (values) => {
-    console.log(values.username)
+    console.log(values.email)
     console.log(values.password)
-    const res = await api.post("/login", {
+    console.log(values.phone)
+    console.log(values.fullName)
 
-      email: values.username,
-      password: values.password
+    const res = await api.post("/register", {
+
+      email: values.email,
+      password: values.password,
+      fullName: values.fullName,
+      phone: values.phone
 
     })
     const user = res.data
     localStorage.setItem("token", user.token)
-    dispatch(login(user))
-    navigate("/contact")
+    // dispatch(login(user))
+    navigate("/login")
 
 
   };
@@ -74,12 +79,12 @@ function SignupPage() {
               autoComplete="off"
             >
               <Form.Item
-                label="Username"
-                name="username"
+                label="Email"
+                name="email"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your username!',
+                    message: 'Please input your email!',
                   },
                 ]}
               >
@@ -100,8 +105,8 @@ function SignupPage() {
               </Form.Item>
 
               <Form.Item
-                label="Phone"
-                name="phone"
+                label="Full Name"
+                name="fullName"
                 rules={[
                   {
                     required: true,
@@ -113,8 +118,8 @@ function SignupPage() {
               </Form.Item>
 
               <Form.Item
-                label="Email"
-                name="email"
+                label="Phone"
+                name="phone"
                 rules={[
                   {
                     required: true,
