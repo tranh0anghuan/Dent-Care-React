@@ -12,10 +12,11 @@ import { login, logout, selectUser } from '../../redux/features/counterSlice';
 
 function LoginPage() {
 
+
   // luu redux dung dispatch
   const dispatch = useDispatch()
   // lay data tu redux dung useSelector
-  const abc = useSelector(selectUser)
+  const loggedIn = useSelector(selectUser)
   // chuyen trang dung useNavigate cua react-router-dom
   const navigate = useNavigate()
 
