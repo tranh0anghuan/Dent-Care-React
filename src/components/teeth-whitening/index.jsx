@@ -27,7 +27,7 @@ function TeethWhitening() {
               </ul>
             </div>
             <div className="col-md-6">
-              <img src="/price-1.jpg" id="img" alt="Teeth Whitening" />
+              <img src="/price-1.jpg" id="img" />
             </div>
             
             <h1>Popular Teeth Whitening Methods</h1>
