@@ -1,26 +1,83 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Form, Input, Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 function Footer() {
+
+
+
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+  
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  const navigate = useNavigate();
+
+  const handleSignUp = () => {
+    navigate('/signup');
+  };
+
   return (
 
     <>
-      <div className="container-fluid position-relative pt-5 wow fadeInUp" data-wow-delay="0.1s" style={{zIndex: 1, top: 100}}>
+      {/* <div className="container-fluid position-relative pt-5 wow fadeInUp" data-wow-delay="0.1s" style={{zIndex: 1, top: 100}}>
         <div className="container">
           <div className="bg-primary p-5">
             <form className="mx-auto" style={{maxWidth: 600}}>
               <div className="input-group">
                 <input type="text" className="form-control border-white p-3" placeholder="Your Email" />
-                <button className="btn btn-dark px-4">Sign Up</button>
+                <Link to={'/signup'} className="btn btn-dark px-4" style={{paddingTop:'15px'}}>Sign Up</Link>
               </div>
             </form>
+          </div>
+        </div>
+      </div> */}
+
+      <div className="container-fluid position-relative pt-5" style={{ zIndex: 1, top: 100 }}>
+        <div className="container">
+          <div className="bg-primary p-5">
+            <Form
+              name="basic"
+              wrapperCol={{ span: 24 }}
+              style={{ maxWidth: 600, margin: '0 auto', display: 'flex' }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item
+                name="email"
+                style={{flexGrow: '1'}}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your email!',
+                  },
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+
+                ]}
+              >
+                <Input placeholder="Your Email" className="border-white p-3" style={{borderRadius : 'unset'}} />
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="dark" onClick={handleSignUp} className="btn btn-dark px-4" style={{paddingTop: '15px', paddingBottom: '40px'}}>
+                  Sign Up
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
         </div>
       </div>
 
 
       <div>
-        <div className="container-fluid bg-dark text-light py-5 wow fadeInUp" data-wow-delay="0.3s"style={{marginTop: 20}}>
+        <div className="container-fluid bg-dark text-light py-5 wow fadeInUp" data-wow-delay="0.3s" style={{ marginTop: 20 }}>
           <div className="container pt-5">
             <div className="row g-5 pt-4">
               <div className="col-lg-3 col-md-6">
@@ -68,9 +125,9 @@ function Footer() {
 
     </>
 
-    
 
-    
+
+
 
 
   )

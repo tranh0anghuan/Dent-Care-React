@@ -48,21 +48,6 @@ function Navbar() {
           <button type="button" className="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i className="fa-solid fa-magnifying-glass fs-5" /></button>
         </form>
 
-        {/* <Link to={"/login"} className="btn btn-primary py-2 px-4 ms-3">Log In</Link> */}
-
-        {/* <div className="navbar-nav py-0" style={{ marginRight: '80px', marginLeft: '20px' }}>
-          <div className="d-flex justify-content-center align-items-center nav-item dropdown">
-            <img src="/logo.png" alt className="header__navbar-user-img dropdown-toggle" data-bs-toggle="dropdown" />
-            <div className="dropdown-menu m-0">
-              <Link to={"/team"} className="dropdown-item">Profile</Link>
-              <Link to={"/appointment"} className="dropdown-item">Schedule</Link>
-              <Link to={"/dashboard"} className="dropdown-item">Log out</Link>
-            </div>
-          </div>
-
-
-        </div> */}
-
         {user ? (
           <div className="navbar-nav py-0" style={{ marginRight: '80px', marginLeft: '20px' }}>
             <div className="d-flex justify-content-center align-items-center nav-item dropdown">
