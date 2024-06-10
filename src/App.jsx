@@ -22,6 +22,10 @@ import DenturesPage from './pages/dentures'
 import SchedulePage from './pages/schedule'
 import Dashboard from './pages/dashboard'
 import Category from './components/category'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import ForgotPage from './pages/forgot-password'
+import ResetPage from './pages/reset-password'
 
 
 function App() {
@@ -101,7 +105,8 @@ function App() {
     },
     {
       path: "/login",
-      element: <LoginPage/>,
+      element: <LoginPage/>
+      
     },
     {
       path: "/signup",
@@ -117,11 +122,22 @@ function App() {
         }
       ],
     },
+    {
+      path: "/forgot",
+      element: <ForgotPage/>
+      
+    },
+    {
+      path: "/reset",
+      element: <ResetPage/>
+      
+    },
     
   ]);
 
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={router} />
     </>
   )

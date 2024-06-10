@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './style.css'
 import { Await, Link, useNavigate } from 'react-router-dom'
 import api from '../../config/axios';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, selectUser } from '../../redux/features/counterSlice';
+import { toast } from 'react-toastify';
 
 
 
 function SignupPage() {
+
+  const [loading, setLoading] = useState(false)
 
   // luu redux dung dispatch
   const dispatch = useDispatch()
@@ -24,7 +27,11 @@ function SignupPage() {
     console.log(values.phone)
     console.log(values.fullName)
 
-    const res = await api.post("/register", {
+    setLoading(true)
+
+    try{
+
+      const res = await api.post("/register", {
 
       email: values.email,
       password: values.password,
@@ -32,10 +39,18 @@ function SignupPage() {
       phone: values.phone
 
     })
-    const user = res.data
-    localStorage.setItem("token", user.token)
-    // dispatch(login(user))
+
+
+
+    toast.success('Sign up successfully!')
     navigate("/login")
+
+    }catch(e){
+      toast.error(e.response.data)
+    }
+    finally{
+      setLoading(false)
+    }
 
 
   };
@@ -86,6 +101,10 @@ function SignupPage() {
                   {
                     required: true,
                     message: 'Please input your email!',
+                  },
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
                   },
                 ]}
               >
@@ -138,7 +157,7 @@ function SignupPage() {
                 }}
               >
 
-                <Button className="btn btn-primary btn-lg" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }} type="primary" htmlType="submit">
+                <Button loading={loading} className="btn btn-primary btn-lg" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }} type="primary" htmlType="submit">
                   Sign up
                 </Button>
               </Form.Item>

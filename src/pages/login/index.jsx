@@ -7,6 +7,7 @@ import api from '../../config/axios';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, selectUser } from '../../redux/features/counterSlice';
+import { toast } from 'react-toastify';
 
 
 
@@ -30,6 +31,7 @@ function LoginPage() {
 
     })
     const user = res.data
+    toast.success('Login successfully!')
     localStorage.setItem("token", user.token)
     dispatch(login(user))
     navigate("/")
@@ -108,6 +110,10 @@ function LoginPage() {
                     required: true,
                     message: 'Please input your Email!',
                   },
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
                 ]}
               >
                 <Input />
@@ -139,7 +145,7 @@ function LoginPage() {
                       Remember me
                     </label>
                   </div>
-                  <a href="#!" className="text-body" style={{ textDecoration: 'none' }}>Forgot password?</a>
+                  <Link to={'/forgot'} className="text-body" style={{ textDecoration: 'none' }}>Forgot password?</Link>
                 </div>
 
                 <Button className="btn btn-primary btn-lg" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }} type="primary" htmlType="submit">
