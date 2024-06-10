@@ -9,7 +9,7 @@ function TeethWhitening() {
 
       <div className="container" id="contain1">
         <div className="row g-5">
-          <h1 style={{textAlign: 'center'}}>Understanding Teeth Whitening: Is It Beneficial      fgffef</h1>
+          <h1 style={{textAlign: 'center'}}>Understanding Teeth Whitening: Is It Beneficial      fgfiiifef</h1>
           <div id="new-paragraph">Teeth whitening is a popular cosmetic dental procedure aimed at restoring and enhancing the brightness of discolored teeth. It is an affordable and simple solution, considered one of the most effective ways to achieve a bright, white smile. However, some believe that teeth whitening can damage tooth enamel. Let's delve into this method with Kim Dental in the following article.</div>
           
           <div className="row" id="teeth">
