@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, Form, Input } from 'antd';
 import { toast } from 'react-toastify';
 import api from '../../config/axios';
@@ -7,6 +7,8 @@ import api from '../../config/axios';
 function ForgotPage() {
 
     const [loading, setLoading] = useState(false)
+
+    const navigate = useNavigate()
 
 
     const onFinish = async (values) => {
@@ -25,6 +27,13 @@ function ForgotPage() {
 
             })
             toast.info("Please check your email")
+
+            setTimeout(() => {
+                navigate("/login")
+              }, 10000);
+
+            
+
         } catch (e) {
             toast.error(e.response.data)
         }finally{

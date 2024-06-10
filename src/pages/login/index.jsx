@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './style.css'
 import { Await, Link, useNavigate } from 'react-router-dom'
 import { auth, googleProvider } from '../../config/firebaseConfig';
@@ -11,7 +11,10 @@ import { toast } from 'react-toastify';
 
 
 
+
 function LoginPage() {
+
+ 
 
 
   // luu redux dung dispatch
@@ -24,6 +27,7 @@ function LoginPage() {
   const onFinish = async (values) => {
     console.log(values.email)
     console.log(values.password)
+
     const res = await api.post("/login", {
 
       email: values.email,
@@ -49,15 +53,17 @@ function LoginPage() {
     const result = await signInWithPopup(auth, googleProvider)
     const token = result.user.accessToken;
 
+    
+      const res = await api.post("/login-google", {
+        token: token
+      })
+      const user = res.data
+      localStorage.setItem("token", user.token)
+      dispatch(login(user))
+      navigate("/")
+    
 
-    const res = await api.post("/login-google", {
-      token: token
-    })
-
-    const user = res.data
-    localStorage.setItem("token", user.token)
-    dispatch(login(user))
-    navigate("/")
+    
   }
 
 
