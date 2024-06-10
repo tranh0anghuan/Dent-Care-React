@@ -1,138 +1,137 @@
-import { useState } from 'react'
-import './App.css'
-import LoginPage from './pages/login'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import HomePage from './pages/home'
-import Layout from './components/layout'
-import ServicesPage from './pages/services'
-import ContactPage from './pages/contact'
-import DentistPage from './pages/dentist'
-import TeamPage from './pages/team'
-import AppointmentPage from './pages/appointment'
-import RecordPage from './pages/record'
-import SignupPage from './pages/signup'
-import TeethWhiteningPage from './pages/teethwhitening'
-import ToothExtractionPage from './pages/tooth-extraction'
-import RoutinePage from './pages/rountine'
-import ImplantPage from './pages/implant'
-import WisdomPage from './pages/wisdom'
-import CeramicPage from './pages/ceramic'
-import OrthdonticPage from './pages/orthdontic'
-import DenturesPage from './pages/dentures'
-import SchedulePage from './pages/schedule'
-import Dashboard from './pages/dashboard'
-import Category from './components/category'
-import { ToastContainer } from 'react-toastify'
+import { useState } from 'react';
+import './App.css';
+import LoginPage from './pages/login';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import HomePage from './pages/home';
+import Layout from './components/layout';
+import ServicesPage from './pages/services';
+import ContactPage from './pages/contact';
+import DentistPage from './pages/dentist';
+import TeamPage from './pages/team';
+import AppointmentPage from './pages/appointment';
+import RecordPage from './pages/record';
+import SignupPage from './pages/signup';
+import TeethWhiteningPage from './pages/teethwhitening';
+import ToothExtractionPage from './pages/tooth-extraction';
+import RoutinePage from './pages/rountine';
+import ImplantPage from './pages/implant';
+import WisdomPage from './pages/wisdom';
+import CeramicPage from './pages/ceramic';
+import OrthdonticPage from './pages/orthdontic';
+import DenturesPage from './pages/dentures';
+import SchedulePage from './pages/schedule';
+import Dashboard from './pages/dashboard';
+import Category from './components/category';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ForgotPage from './pages/forgot-password'
-import ResetPage from './pages/reset-password'
-
+import ForgotPage from './pages/forgot-password';
+import ResetPage from './pages/reset-password';
+import Information from './components/information';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <Layout/>,
-      children:[
+      path: '/',
+      element: <Layout />,
+      children: [
         {
-          path:"/",
-          element: <HomePage/>
+          path: '/',
+          element: <HomePage />
         },
         {
-          path:"/services",
-          element: <ServicesPage/>
+          path: '/services',
+          element: <ServicesPage />
         },
         {
-          path:"/contact",
-          element: <ContactPage/>
+          path: '/contact',
+          element: <ContactPage />
         },
         {
-          path:"/dentist",
-          element: <DentistPage/>
+          path: '/dentist',
+          element: <DentistPage />
         },
         {
-          path:"/team",
-          element: <TeamPage/>
+          path: '/team',
+          element: <TeamPage />
         },
         {
-          path:"/appointment",
-          element: <AppointmentPage/>
+          path: '/appointment',
+          element: <AppointmentPage />
         },
         {
-          path:"/record",
-          element: <RecordPage/>
+          path: '/record',
+          element: <RecordPage />
         },
         {
-          path:"/Teeth Whitening",
-          element: <TeethWhiteningPage/>
+          path: '/Teeth Whitening',
+          element: <TeethWhiteningPage />
         },
         {
-          path:"/Tooth Extraction",
-          element: <ToothExtractionPage/>
+          path: '/Tooth Extraction',
+          element: <ToothExtractionPage />
         },
         {
-          path:"/Routine Check",
-          element: <RoutinePage/>
+          path: '/Routine Check',
+          element: <RoutinePage />
         },
         {
-          path:"/Dental Implant",
-          element: <ImplantPage/>
+          path: '/Dental Implant',
+          element: <ImplantPage />
         },
         {
-          path:"/Wisdom Teeth",
-          element: <WisdomPage/>
+          path: '/Wisdom Teeth',
+          element: <WisdomPage />
         },
         {
-          path:"/Ceramic Tooth",
-          element: <CeramicPage/>
+          path: '/Ceramic Tooth',
+          element: <CeramicPage />
         },
         {
-          path:"/Orthdontic",
-          element: <OrthdonticPage/>
+          path: '/Orthdontic',
+          element: <OrthdonticPage />
         },
         {
-          path:"/Dentures",
-          element: <DenturesPage/>
+          path: '/Dentures',
+          element: <DenturesPage />
         },
         {
-          path:"/schedule",
-          element: <SchedulePage/>
+          path: '/schedule',
+          element: <SchedulePage />
         },
-        
       ]
     },
     {
-      path: "/login",
-      element: <LoginPage/>
-      
+      path: '/login',
+      element: <LoginPage />
     },
     {
-      path: "/signup",
-      element: <SignupPage/>,
+      path: '/signup',
+      element: <SignupPage />,
     },
     {
-      path: "/dashboard",
-      element: <Dashboard/>,
+      path: '/dashboard',
+      element: <Dashboard />,
       children: [
         {
-        path: "/dashboard/category",
-        element: <Category/>,
+          path: '/dashboard/category',
+          element: <Category />,
+        },
+        {
+          path: '/dashboard/information',
+          element: <Information />,
         }
       ],
     },
     {
-      path: "/forgot",
-      element: <ForgotPage/>
-      
+      path: '/forgot',
+      element: <ForgotPage />
     },
     {
-      path: "/reset",
-      element: <ResetPage/>
-      
+      path: '/reset',
+      element: <ResetPage />
     },
-    
   ]);
 
   return (
@@ -140,7 +139,7 @@ function App() {
       <ToastContainer />
       <RouterProvider router={router} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
