@@ -79,7 +79,7 @@ function SignupPage() {
             <Form
               name="basic"
               labelCol={{
-                span: 4,
+                span: 5,
               }}
               wrapperCol={{
                 span: 16,
@@ -122,6 +122,27 @@ function SignupPage() {
                 ]}
               >
                 <Input.Password />
+              </Form.Item>
+
+              <Form.Item
+                label="RE Password"
+                name="confirmPassword"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your confirm password!',
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('newPassword') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('The new password that you entered do not match!'));
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password/>
               </Form.Item>
 
               <Form.Item
