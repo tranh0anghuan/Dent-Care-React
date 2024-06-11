@@ -5,7 +5,7 @@ function Dentist() {
   return (
     <>
     
-        <HeroHeader/>
+        <HeroHeader content="Dentist"/>
 
         <main className="pt-4" style={{backgroundColor: '#fff',fontSize: 20, overflow: 'hidden'}}>
             <div className="container mt-5 pb-5 ">

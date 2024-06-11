@@ -5,6 +5,7 @@ import Offer from '../../components/offer'
 import Team from '../../components/team'
 import About from '../../components/about'
 import Appointment from '../../components/appointment'
+import Clinic from '../../components/clinic'
 
 function HomePage() {
   return (
@@ -14,7 +15,8 @@ function HomePage() {
         <Appointment/>
         <Services/>
         <Offer/>
-        <Team/>
+        <Clinic/>
+        {/* <Team/> */}
     </>
   )
 }

@@ -5,7 +5,7 @@ import './style.css'
 function Schedule() {
   return (
     <>
-        <HeroHeader/>
+        <HeroHeader content="Schedule"/>
 
         <div className="container mb-5 wow fadeInUp" data-wow-delay="0.1s">
         <div className="row">

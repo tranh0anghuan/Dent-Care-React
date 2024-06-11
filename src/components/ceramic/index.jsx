@@ -4,7 +4,7 @@ import "./cearmic_teeth.css";
 function Ceramic() {
   return (
     <>
-      <HeroHeader/>
+      <HeroHeader content="Ceramic Teeth"/>
 
       <div className="container" id="contain1">
         <div className="row g-5">

@@ -4,7 +4,7 @@ import "./tooth.css";
 function ToothExtraction() {
   return (
     <>
-        <HeroHeader/>
+        <HeroHeader content="Tooth Extraction"/>
 
             <div className="container" id="contain1">
                 <div className="row g-5">

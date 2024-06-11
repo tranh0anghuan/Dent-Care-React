@@ -4,7 +4,7 @@ import "./routine_teeth.css";
 function Routine() {
   return (
     <>
-      <HeroHeader />
+      <HeroHeader content="Routine" />
       
        
       

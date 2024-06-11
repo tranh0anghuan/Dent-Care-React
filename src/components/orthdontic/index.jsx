@@ -5,7 +5,7 @@ import "./orthdontic_teeth.css";
 function Orthodontic() {
   return (
     <>
-      <HeroHeader/>
+      <HeroHeader content="Orthodontic"/>
 
       <div className="container" id="contain1">
         <div className="row g-5">

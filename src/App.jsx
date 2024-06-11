@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import LoginPage from './pages/login';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter, useLocation } from 'react-router-dom';
 import HomePage from './pages/home';
 import Layout from './components/layout';
 import ServicesPage from './pages/services';
@@ -27,6 +27,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ForgotPage from './pages/forgot-password';
 import ResetPage from './pages/reset-password';
 import Information from './components/information';
+import ClinicPage from './pages/clinic-detail';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -99,6 +100,10 @@ function App() {
         {
           path: '/schedule',
           element: <SchedulePage />
+        },
+        {
+          path: '/clinic',
+          element: <ClinicPage />
         },
       ]
     },

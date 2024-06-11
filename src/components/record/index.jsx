@@ -6,7 +6,7 @@ function Record() {
   return (
     <>
     
-        <HeroHeader/>
+        <HeroHeader content="Record"/>
 
         <div>
             <div className="container container-custom mb-5 wow zoomIn" data-wow-delay="0.1s">

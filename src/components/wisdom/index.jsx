@@ -5,7 +5,7 @@ import "./wisdonm_teeth.css";
 function Wisdom() {
   return (
     <>
-      <HeroHeader />
+      <HeroHeader content="Wisdom"/>
 
       <div className="container" id="contain1">
         <div className="row g-5">

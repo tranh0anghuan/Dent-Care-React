@@ -5,7 +5,7 @@ function Contact() {
   return (
     <>
     
-        <HeroHeader/>
+        <HeroHeader content="Contact Us"/>
 
         <div className="container-fluid py-5">
             <div className="container">

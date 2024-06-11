@@ -5,7 +5,7 @@ import './teeth.css';
 function TeethWhitening() {
   return (
     <>
-      <HeroHeader/>
+      <HeroHeader content="Teeth Whitening"/>
 
       <div className="container" id="contain1">
         <div className="row g-5">

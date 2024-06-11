@@ -4,7 +4,7 @@ import "./denture_teeth.css";
 function Dentures() {
   return (
     <>
-      <HeroHeader />
+      <HeroHeader content="Denture"/>
       <div className="container" id="contain1">
         <div className="row g-5">
           <h1 style={{ textAlign: 'center', marginTop: 20, color: 'rgba(6, 163, 218, .7)', fontSize: 50 }}>

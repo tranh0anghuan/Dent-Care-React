@@ -4,7 +4,7 @@ import "./implan.css";
 function Implant() {
   return (
     <>
-      <HeroHeader />
+      <HeroHeader content="Implant"/>
 
       <div className="container" id="contain1">
         <div className="row g-5">
