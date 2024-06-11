@@ -1,6 +1,6 @@
 import React from 'react';
 import HeroHeader from '../hero-header';
-import './teeth.css';
+import './teeth_whitening.css';
 
 function TeethWhitening() {
   return (
@@ -10,12 +10,18 @@ function TeethWhitening() {
       <div className="container" id="contain1">
         <div className="row g-5">
           <h1 style={{textAlign: 'center'}}>Understanding Teeth Whitening: Is It Beneficial?</h1>
-          <div id="new-paragraph">Teeth whitening is a popular cosmetic dental procedure aimed at restoring and enhancing the brightness of discolored teeth. It is an affordable and simple solution, considered one of the most effective ways to achieve a bright, white smile. However, some believe that teeth whitening can damage tooth enamel. Let's delve into this method with Kim Dental in the following article.</div>
+          <div id="new-paragraph">
+            Teeth whitening is a popular cosmetic dental procedure aimed at restoring and enhancing the brightness of discolored teeth. It is an affordable and simple solution, considered one of the most effective ways to achieve a bright, white smile. However, some believe that teeth whitening can damage tooth enamel. Let's delve into this method with Kim Dental in the following article.
+          </div>
           
           <div className="row" id="teeth">
             <h1>What is Teeth Whitening?</h1>
-            <div id="new-paragraph">Teeth whitening involves using compounds combined with light energy to create an oxidation reaction that breaks down color molecules in the dentin. This process whitens the teeth beyond their natural color without harming the tooth surface or its internal components.</div>
-            <div id="new-paragraph">Today, teeth whitening is widely used, especially for yellow teeth caused by factors such as:</div>
+            <div id="new-paragraph">
+              Teeth whitening involves using compounds combined with light energy to create an oxidation reaction that breaks down color molecules in the dentin. This process whitens the teeth beyond their natural color without harming the tooth surface or its internal components.
+            </div>
+            <div id="new-paragraph">
+              Today, teeth whitening is widely used, especially for yellow teeth caused by factors such as:
+            </div>
             <div className="col-md-5" id="whiting">
               <ul id="ul">
                 <li>Consuming foods and beverages with strong colorants like coffee, fruit juice, and wine.</li>
@@ -27,14 +33,18 @@ function TeethWhitening() {
               </ul>
             </div>
             <div className="col-md-6">
-              <img src="/price-1.jpg" id="img" />
+              <img src="/price-1.jpg" style={{height: '90%', width: '100%', marginTop: '20px'}} alt="Teeth Whitening Image" />
             </div>
             
             <h1>Popular Teeth Whitening Methods</h1>
-            <div id="new-paragraph">Currently, the two most popular methods are <strong>at-home teeth whitening</strong> and <strong>in-office teeth whitening</strong>. Each has its own set of advantages and disadvantages:</div>
+            <div id="new-paragraph">
+              Currently, the two most popular methods are <strong>at-home teeth whitening</strong> and <strong>in-office teeth whitening</strong>. Each has its own set of advantages and disadvantages:
+            </div>
             
             <h3>At-home Teeth Whitening</h3>
-            <div id="new-paragraph">In this method, a dentist takes an impression of your teeth to create a custom-fit plastic tray that holds the whitening gel and prevents saliva from diluting the gel.</div>
+            <div id="new-paragraph">
+              In this method, a dentist takes an impression of your teeth to create a custom-fit plastic tray that holds the whitening gel and prevents saliva from diluting the gel.
+            </div>
             <ul id="ul">
               <li>Advantages: Convenience, flexibility, and cost-effectiveness, with prices starting around 1,400,000 VND.</li>
               <li>Disadvantages: Best suited for mild staining; improper use can lead to long-term oral health issues.</li>
