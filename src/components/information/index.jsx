@@ -52,6 +52,8 @@ function Category() {
   };
 
 
+  
+
 
   useEffect(() => {
     fetchData();
