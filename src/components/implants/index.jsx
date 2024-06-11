@@ -21,7 +21,7 @@ function Implant() {
             <div id="new-paragraph">
               Currently, dental implants are considered the most advanced and effective method for tooth replacement. They not only restore your confident smile but also help regain proper chewing function, prevent bone loss, and mitigate other dental issues.
             </div>
-            <img src="/Implant.jpg" id="img" alt="Implant Dentistry" />
+            <img src="/Implant.jpg"  style={{height: '25%', width: '100%', marginTop: '20px', marginbottom: '20px'}} />
 
             <h1>Is Getting Dental Implants the Right Choice for You?</h1>
             <div id="new-paragraph">
@@ -41,6 +41,26 @@ function Implant() {
                 <strong>Long-lasting Durability:</strong> The average lifespan of an implant ranges from 20 to 30 years, and with proper care, they can last a lifetime, making them a cost-effective long-term solution.
               </li>
             </ul>
+
+            <h1>Why Choose DentCare Dental Clinic for Safe Tooth Extraction?</h1>
+            <ul id="ul">
+              <li>Our team of highly skilled and certified dentists ensures gentle and precise procedures, providing comfort and reassurance to our patients.</li>
+              <li>We use advanced diagnostic and treatment technologies such as X-ray machines and 3D CT Cone Beam to accurately diagnose dental issues and plan detailed treatments. Our Piezotome technology minimizes invasiveness, pain, and recovery time.</li>
+              <li>Our central sterilization system ensures 100% sterilization of all tools. Each patient is provided with a personal set of tools and a private treatment room to ensure safety and prevent cross-infection.</li>
+              <li>Our dental services are certified by GCR (USA) and ISO 9001:2015. We offer convenient appointment scheduling at over 30 Kim Dental Clinic locations nationwide. Our dedicated and caring staff and doctors provide comprehensive care throughout each stage of treatment.</li>
+            </ul>
+            
+            <div className="row" style={{marginLeft: 15}}>
+              <div className="col-md-4">
+                <img src="/Wisdom2.jpg" style={{width: '100%', height: '100%'}} alt="Dental Image 1" />
+              </div>
+              <div className="col-md-4">
+                <img src="/Wisdom5.jpg" style={{width: '100%', height: '100%'}} alt="Dental Image 2" />
+              </div>
+              <div className="col-md-4">
+                <img src="/Wisdom4.jpg" style={{width: '100%', height: '100%'}} alt="Dental Image 3" />
+              </div>
+            </div>
 
           </div>
         </div>
