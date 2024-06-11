@@ -53,7 +53,7 @@ function LoginPage() {
     const result = await signInWithPopup(auth, googleProvider)
     const token = result.user.accessToken;
 
-    
+    console.log(token)
       const res = await api.post("/login-google", {
         token: token
       })

@@ -1,25 +1,37 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Button, Form, Input } from 'antd';
+// import api from '../../config/axios';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function ResetPage() {
+ 
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const token = searchParams.get("token")
+  const navigate = useNavigate()
+
+
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }
 
     const onFinish = async (values) => {
-        console.log(values.email)
-        console.log(values.password)
-        const res = await api.post("/login", {
-    
-          email: values.email,
-          password: values.password
-    
-        })
-        const user = res.data
-        toast.success('Login successfully!')
-        localStorage.setItem("token", user.token)
-        dispatch(login(user))
-        navigate("/")
-    
-    
+      if(values.newPassword === values.confirmPassword){
+        try {
+          const res = await axios.patch("http://68.183.183.140:8080/api/reset-password", {
+            password: values.newPassword
+          }, config)
+          toast.success('Reset password successfully!')
+          navigate("/login")
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
       };
       const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -67,26 +79,33 @@ function ResetPage() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your email!',
+                    message: 'Please input your new password !',
                   },
                 ]}
               >
-                <Input />
+               <Input.Password/>
               </Form.Item>
 
               <Form.Item
-                labelCol={{span:"24"}}
                 label="Confirm Password"
+                labelCol={{span:"24"}}
                 name="confirmPassword"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your email!',
+                    message: 'Please input your confirm password!',
                   },
-                  
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('newPassword') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('The new password that you entered do not match!'));
+                    },
+                  }),
                 ]}
               >
-                <Input />
+                <Input.Password/>
               </Form.Item>
 
               <Form.Item
