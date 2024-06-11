@@ -8,7 +8,7 @@ function ToothExtraction() {
 
             <div className="container" id="contain1">
                 <div className="row g-5">
-                    <h1 style={{textAlign: 'center'}}>Aesthetics – The Solution for a Perfectly Beautiful Smile</h1>
+                    <h1 style={{textAlign: 'center'}}>Aesthetics – The Solution for a Perfectly Beautiful Smi</h1>
                     <div className="row" id="teeth">
                     <h1>Tooth Extraction</h1>
                     <div id="new-paragraph">Tooth extraction is a dental procedure to remove one or more teeth from the mouth. This procedure can be performed for various reasons.</div>
