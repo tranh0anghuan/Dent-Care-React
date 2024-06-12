@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './style.css'
-import { useSelector , useDispatch } from 'react-redux';
-import {selectUser, logout } from '../../redux/features/counterSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, logout } from '../../redux/features/counterSlice';
 
 
 function Navbar() {
@@ -27,14 +27,13 @@ function Navbar() {
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav ms-auto py-0">
           <Link to={"/"} className="nav-item nav-link">Home</Link>
-          <Link to={"/services"} className="nav-item nav-link">Services</Link>
-          <Link to={"/schedule"} className="nav-item nav-link">Schedule</Link>
+          <Link to={"/clinic"} className="nav-item nav-link">Clinic</Link>
+          <Link to={"/appointment"} className="nav-item nav-link">Appointment</Link>
           <Link to={"/contact"} className="nav-item nav-link">Contact</Link>
           <div className="nav-item dropdown">
             <Link to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
             <div className="dropdown-menu m-0">
               <Link to={"/team"} className="dropdown-item">Our Dentist</Link>
-              <Link to={"/appointment"} className="dropdown-item">Appointment</Link>
               <Link to={"/record"} className="dropdown-item">Record</Link>
               <Link to={"/dashboard"} className="dropdown-item">Dashboard</Link>
             </div>
@@ -54,7 +53,7 @@ function Navbar() {
               <img src="/logo.png" alt="User" className="header__navbar-user-img dropdown-toggle" data-bs-toggle="dropdown" />
               <div className="dropdown-menu m-0">
                 <Link to={"/team"} className="dropdown-item">Profile</Link>
-                <Link to={"/appointment"} className="dropdown-item">Schedule</Link>
+                <Link to={"/schedule"} className="dropdown-item">Schedule</Link>
                 <Link to={"/"} className="dropdown-item" onClick={handleLogout}>Log out</Link>
               </div>
             </div>

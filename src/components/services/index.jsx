@@ -41,7 +41,7 @@ function Services() {
                                     index < 2 && (
                                         <div className="col-md-6 service-item wow zoomIn" data-wow-delay="0.6s">
                                             <div className="rounded-top overflow-hidden">
-                                                <img className="img-fluid" src="/service-1.jpg" alt />
+                                                <img className="img-fluid" src={`/${item?.name}.jpg`} alt />
                                             </div>
                                             <div className="position-relative bg-light rounded-bottom text-center p-4">
                                                 <h5 className="m-0">{item?.name}</h5>
@@ -60,7 +60,7 @@ function Services() {
                                     index >= 2 && index < 4 && (
                                         <div className="col-md-6 service-item wow zoomIn" data-wow-delay="0.3s">
                                         <div className="rounded-top overflow-hidden">
-                                            <img className="img-fluid" src="/service-3.jpg" alt />
+                                            <img className="img-fluid" src={`/${item?.name}.jpg`} alt />
                                         </div>
                                         <div className="position-relative bg-light rounded-bottom text-center p-4">
                                             <h5 className="m-0">{item?.name}</h5>

@@ -27,7 +27,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import ForgotPage from './pages/forgot-password';
 import ResetPage from './pages/reset-password';
 import Information from './components/information';
-import ClinicPage from './pages/clinic-detail';
+import ClinicDetailPage from './pages/clinic-detail';
+import ClinicPage from './pages/clinics';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -100,6 +101,10 @@ function App() {
         {
           path: '/schedule',
           element: <SchedulePage />
+        },
+        {
+          path: '/clinic/id',
+          element: <ClinicDetailPage />
         },
         {
           path: '/clinic',
