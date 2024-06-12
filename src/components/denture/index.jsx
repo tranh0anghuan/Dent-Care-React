@@ -14,9 +14,10 @@ function Dentures() {
             <div id="new-paragraph">
               <h1>What are Dentures?</h1>
               <div>
-                Dentures are artificial teeth used to replace lost or severely damaged natural teeth. They help restore chewing function, improve aesthetics, and enhance your quality of life.
+              Dentures are artificial teeth designed to replace missing or severely damaged natural teeth. They restore chewing function, 
+              improve the aesthetics of your smile and facial structure, boost self-confidence, and maintain the alignment of remaining natural teeth, enhancing overall quality of life.
               </div>
-              <img src="/price-2.jpg" style={{ margin: 'auto', height: 500, width: 1000 }} alt="Dentures Procedure" />
+              <img src="/price-2.jpg" style={{height: '10%', width: '78%', margin:'10px 90px'}} alt="Dentures Procedure" />
               <div>
                 There are different types of dentures available, including:
               </div>
