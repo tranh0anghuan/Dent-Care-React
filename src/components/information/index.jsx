@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Radio, message } from 'antd';
 import axios from 'axios';
-import './Information.css';
 
 const Information = () => {
   const [form] = Form.useForm();
