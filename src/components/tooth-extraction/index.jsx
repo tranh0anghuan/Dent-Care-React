@@ -1,6 +1,5 @@
 import React from 'react'
 import HeroHeader from '../hero-header'
-import "./tooth.css";
 function ToothExtraction() {
   return (
     <>

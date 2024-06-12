@@ -1,6 +1,5 @@
 import React from 'react';
 import HeroHeader from '../hero-header';
-import "./wisdonm_teeth.css";
 
 function Wisdom() {
   return (

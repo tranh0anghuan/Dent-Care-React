@@ -1,6 +1,5 @@
 import React from 'react';
 import HeroHeader from '../hero-header';
-import "./denture_teeth.css";
 function Dentures() {
   return (
     <>

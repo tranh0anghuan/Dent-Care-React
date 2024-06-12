@@ -1,6 +1,5 @@
 import React from 'react';
 import HeroHeader from '../hero-header';
-import "./cearmic_teeth.css";
 function Ceramic() {
   return (
     <>
