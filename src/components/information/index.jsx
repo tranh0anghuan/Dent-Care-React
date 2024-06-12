@@ -1,167 +1,83 @@
-import { Button, Form, Input, Modal, Table } from 'antd'
+import React from 'react';
+import { Button, Form, Input, Radio, message } from 'antd';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import './Information.css';
 
-function Category() {
+const Information = () => {
+  const [form] = Form.useForm();
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const onFinish = async(values) => {
-    console.log('Success:', values);
-    const response = await axios.post("https://665d6f09e88051d604068e77.mockapi.io/category",values)
-
-    setData([...data,  response.data])
-    setIsModalOpen(false);
-    console.log(response);
-
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+  const handleSave = () => {
+    form.validateFields()
+      .then(values => {
+        // Send form data to server
+        axios.post('/api/save', values)
+          .then(response => {
+            message.success('Information saved successfully!');
+          })
+          .catch(error => {
+            message.error('Failed to save information.');
+          });
+      })
+      .catch(errorInfo => {
+        console.log('Validation Failed:', errorInfo);
+      });
   };
 
-  const dataSource = [
-    {
-      key: '1',
-      name: 'Mike',
-      age: 32,
-      address: '10 Downing Street',
-    },
-    {
-      key: '2',
-      name: 'John',
-      age: 42,
-      address: '10 Downing Street',
-    },
-  ];
-
-  const [data,setData]= useState([]);
-
-  const fetchData = async () =>{
-   const response = await axios.get("https://665d6f09e88051d604068e77.mockapi.io/category")
-    console.log(response.data);
-    setData(response.data);
-  };
-
-
-  
-
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const handleDelete = async (values) =>{
-    console.log(values);
-    const response = await axios.delete(`https://665d6f09e88051d604068e77.mockapi.io/category/${values.id}`);
-    setData(data.filter((data) => data.id != values.id)); 
-  };
-  
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'categogy Name',
-      dataIndex: 'categoryName',
-      key: 'categoryName',
-    },
-    {
-        title: 'Action',
-        render: (values) =>(
-            <Button onClick={()=> handleDelete(values)} danger type={'primary'}>
-                Delete
-            </Button>
-        )
-    }
-    
-  ];
-  
   return (
-    <div className="">
+    <div className="container">
+      <div className="sidebar">
+        <a href="#account">Quản lý tài khoản</a>
+        <a href="#password">Đổi mật khẩu</a>
+      </div>
 
-<>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
-      footer={false}
-      >
-      <Form
-      
-    name="basic"
-    labelCol={{
-      span: 8,
-    }}
-    wrapperCol={{
-      span: 16,
-    }}
-    style={{
-      maxWidth: 600,
-    }}
-    initialValues={{
-      remember: true,
-    }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
-    autoComplete="off"
-  >
-    <Form.Item
-      label="UserName"
-      name="categoryName"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your username!',
-        },
-      ]}
-    >
-      <Input />
-    </Form.Item>
+      <div className="content">
+        <div id="image-section">
+          <Button className="btn">Chọn hình</Button>
+          <p>Dùng hình 18+ sẽ bị khóa tài khoản vĩnh viễn.</p>
+        </div>
 
-    <Form.Item
-      label="Password"
-      name="password"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your password!',
-        },
-      ]}
-    >
-      <Input.Password />
-    </Form.Item>
+        <Form form={form} layout="vertical">
+          <h1>Thông tin tài khoản</h1>
+          <Form.Item label="Điểm" name="score" initialValue="33745">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Email" name="email" initialValue="thanhcao643@gmail.com">
+            <Input type="email" />
+          </Form.Item>
 
+          <h1>Thông tin cá nhân</h1>
+          <Form.Item label="Họ" name="lastname" initialValue="Q">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Tên" name="firstname" initialValue="Thank">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Giới tính" name="gender" initialValue="male">
+            <Radio.Group>
+              <Radio value="male">Nam</Radio>
+              <Radio value="female">Nữ</Radio>
+            </Radio.Group>
+          </Form.Item>
 
+          <h1>Chọn Loại Cấp Bậc</h1>
+          <Form.Item name="rank" initialValue="none">
+            <Radio.Group>
+              <Radio value="none">Không Chọn</Radio>
+              <Radio value="game">Game</Radio>
+              <Radio value="phap-su">Pháp Sư</Radio>
+              <Radio value="tu-tien">Tu Tiên</Radio>
+              <Radio value="ma-vuong">Ma Vương</Radio>
+              <Radio value="tinh-khong">Tinh Không</Radio>
+            </Radio.Group>
+          </Form.Item>
 
-    <Form.Item
-      wrapperCol={{
-        offset: 8,
-        span: 16,
-      }}
-    >
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </Form.Item>
-  </Form>
-
-      </Modal>
-
-      <Table dataSource={data} columns={columns} />;
-    </>
+          <Form.Item>
+            <Button type="primary" onClick={handleSave} className="btn">Lưu</Button>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Category
+export default Information;

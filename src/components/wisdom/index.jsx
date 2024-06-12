@@ -32,7 +32,7 @@ function Wisdom() {
                 </ul>
               </div>
               <div className="col-md-6">
-                <img src="/Wisdom.jpg" id="img" alt="Wisdom Tooth" className="h-50" />
+                <img src="/Wisdom.jpg" style={{height: '92%', width: '94%', marginTop: '20px'}} className="h-50" />
               </div>
             </div>
 
