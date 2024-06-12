@@ -33,7 +33,7 @@ function ServicesItem() {
 
                             <div className="col-md-3">
                                 <div className="price-item pb-4">
-                                    <Link to={'/Teeth Whitening'}>
+                                    <Link to={`/${item?.name}`}>
                                         <div className="position-relative">
                                             <img className="img-fluid rounded-top" src={`/${item?.name}.jpg`} alt />
                                             <div className="d-flex align-items-center justify-content-center bg-light rounded pt-2 px-3 position-absolute top-100 start-50 translate-middle" style={{ zIndex: 2 }}>

@@ -27,31 +27,7 @@ function Ceramic() {
               <li><strong>Porcelain Crowns:</strong> A porcelain cap that covers the entire natural tooth, ideal for teeth that are significantly damaged or decayed.</li>
               <li><strong>Porcelain Veneers:</strong> A thin layer of porcelain applied to the front surface of the tooth, best suited for teeth that are largely intact but require cosmetic improvement.</li>
             </ul>
-            <img src="/Creamic1.jpg" id="img" alt="Porcelain Veneers" />
             
-            <h1>Benefits of Aesthetic Porcelain Veneers</h1>
-            
-            <h4>Enhanced Aesthetic Appeal</h4>
-            <div id="new-paragraph">
-              Porcelain veneers are custom-designed to match the color, shape, and size of natural teeth, significantly improving the appearance of teeth that are discolored, chipped, or uneven. The result is a harmonious and radiant smile.
-            </div>
-            
-            <h4>Restored Chewing Function</h4>
-            <div id="new-paragraph">
-              Made from durable materials, porcelain veneers enhance the strength of natural teeth, ensuring they can withstand normal chewing forces. This not only protects the underlying teeth but also improves overall oral function, particularly when used to bridge gaps from missing teeth.
-            </div>
-            
-            <h4>Efficient Procedure</h4>
-            <div id="new-paragraph">
-              Traditionally, the process of applying porcelain veneers could take several days. However, with modern digital technology employed at Kim Dental Clinics, the procedure can be completed in just 8 hours for most cases. This rapid turnaround allows patients to quickly enjoy the benefits of their new smile.
-            </div>
-            
-            <h4>Affordable and Diverse Options</h4>
-            <div id="new-paragraph">
-              Porcelain veneers come in a variety of types and price ranges, making them accessible to a wide range of budgets. This ensures that patients can find an option that meets their aesthetic needs and financial situation.
-            </div>
-            
-            <img src="/carousel-1.jpg" id="img" alt="Porcelain Veneers" />
           </div>
         </div>
       </div>

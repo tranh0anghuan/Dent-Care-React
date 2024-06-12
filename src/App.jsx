@@ -91,7 +91,7 @@ function App() {
           element: <CeramicPage />
         },
         {
-          path: '/Orthdontic',
+          path: '/Orthodontics',
           element: <OrthdonticPage />
         },
         {
