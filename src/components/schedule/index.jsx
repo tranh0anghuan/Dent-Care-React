@@ -14,7 +14,7 @@ function Schedule() {
                 <table className="table bg-white">
                 <thead>
                     <tr>
-                    <th>Routine</th>
+                    <th>Routin</th>
                     <th>10 am</th>
                     <th>11 am</th>
                     <th>03 pm</th>
