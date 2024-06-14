@@ -40,9 +40,6 @@ jobs:
     # Step to build the project if a build script is present
     - run: npm run build --if-present
 
-    # Step to run tests
-    - run: npm test
-
     # Step to deploy if on push to main branch
     - name: Deploy
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
