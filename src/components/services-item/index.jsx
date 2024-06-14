@@ -1,26 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import HeroHeader from '../hero-header'
 import { Link } from 'react-router-dom'
-import api from '../../config/axios';
+import useServices from '../../callApi/services';
 
 
 function ServicesItem() {
 
-    const [service, setService] = useState([])
-
-    const getServices = async () => {
-        try {
-            const res = await api.get('/service')
-            console.log(res.data);
-            setService(res.data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        getServices()
-    }, []);
+    const { service} = useServices();
 
     return (
 
@@ -46,7 +31,7 @@ function ServicesItem() {
                                         <div className="d-flex justify-content-between mb-3"><span>Modern Equipment</span><i className="fa fa-check text-primary pt-1" /></div>
                                         <div className="d-flex justify-content-between mb-3"><span>Professional Dentist</span><i className="fa fa-check text-primary pt-1" /></div>
                                         <div className="d-flex justify-content-between mb-2"><span>24/7 Call Support</span><i className="fa fa-check text-primary pt-1" /></div>
-                                    </Link><Link to={'/appointment'} className="btn btn-primary py-2 px-4 position-absolute top-100 start-50 translate-middle">Appointment</Link>
+                                    </Link><Link to={'/team'} className="btn btn-primary py-2 px-4 position-absolute top-100 start-50 translate-middle">Appointment</Link>
                                     </div>
                                 </div>
                             </div>

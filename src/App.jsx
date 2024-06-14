@@ -103,7 +103,7 @@ function App() {
           element: <SchedulePage />
         },
         {
-          path: '/clinic/id',
+          path: '/clinic/:id',
           element: <ClinicDetailPage />
         },
         {

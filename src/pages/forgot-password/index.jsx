@@ -14,7 +14,7 @@ function ForgotPage() {
     const onFinish = async (values) => {
         console.log(values.email)
 
-        
+
         setLoading(true)
 
         try {
@@ -30,13 +30,13 @@ function ForgotPage() {
 
             setTimeout(() => {
                 navigate("/login")
-              }, 10000);
+            }, 10000);
 
-            
+
 
         } catch (e) {
             toast.error(e.response.data)
-        }finally{
+        } finally {
             setLoading(false)
         }
 
@@ -96,7 +96,7 @@ function ForgotPage() {
                                         {
                                             type: 'email',
                                             message: 'The input is not valid E-mail!',
-                                          },
+                                        },
                                     ]}
                                 >
                                     <Input />

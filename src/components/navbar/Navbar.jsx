@@ -30,14 +30,20 @@ function Navbar() {
           <Link to={"/clinic"} className="nav-item nav-link">Clinic</Link>
           <Link to={"/appointment"} className="nav-item nav-link">Appointment</Link>
           <Link to={"/contact"} className="nav-item nav-link">Contact</Link>
-          <div className="nav-item dropdown">
-            <Link to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
-            <div className="dropdown-menu m-0">
-              <Link to={"/team"} className="dropdown-item">Our Dentist</Link>
-              <Link to={"/record"} className="dropdown-item">Record</Link>
-              <Link to={"/dashboard"} className="dropdown-item">Dashboard</Link>
+          {user && user?.role !== 'CUSTOMER' ? (
+              <div className="nav-item dropdown">
+              <Link to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
+              <div className="dropdown-menu m-0">
+                <Link to={"/schedule"} className="dropdown-item">Schedule</Link>
+                {user?.role === 'DENTIST' ? (
+                <Link to={"/record"} className="dropdown-item">Record</Link>
+                ) : ""}
+                {user?.role === 'ADMIN' ? (
+                <Link to={"/dashboard"} className="dropdown-item">Dashboard</Link>
+                ) : ""}
+              </div>
             </div>
-          </div>
+              ) : (<Link to={"/team"} className="nav-item nav-link">Dentist</Link>)}
 
 
         </div>

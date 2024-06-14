@@ -2,26 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ScrollToTop from '../scrollToTop'
 import api from '../../config/axios'
+import useClinics from '../../callApi/clinic';
 
 function Clinic() {
 
-    const [clinic, setClinic] = useState([])
-
-    const getClinics = async () => {
-        try {
-            const res = await api.get('/clinic')
-            console.log(res.data);
-            setClinic(res.data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    
-
-    useEffect(() => {
-        getClinics()
-    }, []);
+    const { clinic} = useClinics();
 
     return (
 
@@ -42,7 +27,7 @@ function Clinic() {
                         {clinic.map((item, index) => (
 
                             <div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                                <Link to={'/clinic/id'} onClick={ScrollToTop} className="team-item">
+                                <Link to={`/clinic/${item.id}`} onClick={ScrollToTop} className="team-item">
                                     <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
                                         <img className="img-fluid rounded-top w-100" src={`/${item?.clinicName}.jpg`} alt />
                                         <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">

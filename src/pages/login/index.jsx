@@ -8,7 +8,6 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, selectUser } from '../../redux/features/counterSlice';
 import { toast } from 'react-toastify';
-import { setLogLevel } from 'firebase/app';
 
 
 
@@ -114,10 +113,6 @@ function LoginPage() {
                   {
                     required: true,
                     message: 'Please input your Email!',
-                  },
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
                   },
                 ]}
               >
