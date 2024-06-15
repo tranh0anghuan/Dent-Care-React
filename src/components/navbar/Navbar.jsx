@@ -18,7 +18,7 @@ function Navbar() {
   return (
 
     <nav className="navbar navbar-expand-lg bg-white navbar-light shadow-sm px-5 py-3 py-lg-0">
-      <Link to={"/"} className="navbar-brand p-0">
+      <Link  to={"/"} className="navbar-brand p-0">
         <h1 className="m-0 text-primary"><i className="fa fa-tooth me-2" />DentCare</h1>
       </Link>
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -26,24 +26,26 @@ function Navbar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav ms-auto py-0">
-          <Link to={"/"} className="nav-item nav-link">Home</Link>
-          <Link to={"/clinic"} className="nav-item nav-link">Clinic</Link>
-          <Link to={"/appointment"} className="nav-item nav-link">Appointment</Link>
-          <Link to={"/contact"} className="nav-item nav-link">Contact</Link>
-          {user && user?.role !== 'CUSTOMER' ? (
+          <Link  to={"/"} className="nav-item nav-link">Home</Link>
+          <Link  to={"/clinic"} className="nav-item nav-link">Clinic</Link>
+          <Link  to={"/services"} className="nav-item nav-link">Services</Link>
+          <Link  to={"/team"} className="nav-item nav-link">Dentists</Link>
+          <Link  to={"/contact"} className="nav-item nav-link">Contact</Link>
+          {user && user?.role !== '' ? (
               <div className="nav-item dropdown">
-              <Link to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
+              <Link  to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
               <div className="dropdown-menu m-0">
-                <Link to={"/schedule"} className="dropdown-item">Schedule</Link>
+                <Link  to={"/appointment"} className="dropdown-item">Appointment</Link>
+                <Link  to={"/schedule"} className="dropdown-item">Schedule</Link>
                 {user?.role === 'DENTIST' ? (
-                <Link to={"/record"} className="dropdown-item">Record</Link>
+                <Link  to={"/record"} className="dropdown-item">Record</Link>
                 ) : ""}
                 {user?.role === 'ADMIN' ? (
-                <Link to={"/dashboard"} className="dropdown-item">Dashboard</Link>
+                <Link  to={"/dashboard"} className="dropdown-item">Dashboard</Link>
                 ) : ""}
               </div>
             </div>
-              ) : (<Link to={"/team"} className="nav-item nav-link">Dentist</Link>)}
+              ) : (<Link  to={"/appointment"} className="nav-item nav-link">Appointment</Link>)}
 
 
         </div>
@@ -58,14 +60,14 @@ function Navbar() {
             <div className="d-flex justify-content-center align-items-center nav-item dropdown">
               <img src="/logo.png" alt="User" className="header__navbar-user-img dropdown-toggle" data-bs-toggle="dropdown" />
               <div className="dropdown-menu m-0">
-                <Link to={"/team"} className="dropdown-item">Profile</Link>
-                <Link to={"/schedule"} className="dropdown-item">Schedule</Link>
-                <Link to={"/"} className="dropdown-item" onClick={handleLogout}>Log out</Link>
+                <Link  to={"/team"} className="dropdown-item">Profile</Link>
+                <Link  to={"/schedule"} className="dropdown-item">Schedule</Link>
+                <Link  to={"/"} className="dropdown-item" onClick={handleLogout}>Log out</Link>
               </div>
             </div>
           </div>
         ) : (
-          <Link to={"/login"} className="btn btn-primary py-2 px-4 ms-3">Log In</Link>
+          <Link  to={"/login"} className="btn btn-primary py-2 px-4 ms-3">Log In</Link>
         )}
 
       </div>

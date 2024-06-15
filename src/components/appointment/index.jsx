@@ -12,7 +12,7 @@ function Appointment() {
 
     const onOk = (value) => {
         console.log('onOk: ', value);
-      };
+    };
 
 
     return (
@@ -63,33 +63,21 @@ function Appointment() {
                                             <input type="email" className="form-control bg-light border-0" placeholder="Your Email" style={{ height: 55 }} />
                                         </div>
                                         <div className="col-12 col-sm-6">
-                                            <div className="date" id="date1" data-target-input="nearest">
-                                                {/* <input type="text" className="form-control bg-light border-0 datetimepicker-input" placeholder="Appointment Date" data-target="#date1" data-toggle="datetimepicker" style={{ height: 55 }} /> */}
                                                 <Space direction="vertical" size={12}>
-                                            <DatePicker
-                                                showTime
-                                                onChange={(value, dateString) => {
-                                                    console.log('Selected Time: ', value);
-                                                    console.log('Formatted Selected Time: ', dateString);
-                                                }}
-                                                
-                                                onOk={onOk}
-                                            />
-                                            {/* <RangePicker
-                                                showTime={{
-                                                    format: 'HH:mm',
-                                                }}
-                                                format="YYYY-MM-DD HH:mm"
-                                                onChange={(value, dateString) => {
-                                                    console.log('Selected Time: ', value);
-                                                    console.log('Formatted Selected Time: ', dateString);
-                                                }}
-                                                onOk={onOk}
-                                            /> */}
-                                        </Space>
-                                            </div>
+                                                    <DatePicker
+                                                        className='form-control bg-light border-0'
+                                                        style={{padding:'15px 35px'}}
+                                                        showTime
+                                                        onChange={(value, dateString) => {
+                                                            console.log('Selected Time: ', value);
+                                                            console.log('Formatted Selected Time: ', dateString);
+                                                        }}
+
+                                                        onOk={onOk}
+                                                    />
+                                                </Space>
                                         </div>
-                                        
+
                                         <div className="col-12">
                                             <button className="btn btn-dark w-100 py-3" type="submit">Make Appointment</button>
                                         </div>

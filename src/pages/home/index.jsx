@@ -6,6 +6,7 @@ import Team from '../../components/team'
 import About from '../../components/about'
 import Appointment from '../../components/appointment'
 import Clinic from '../../components/clinic'
+import ServicesItem from '../../components/services-item'
 
 function HomePage() {
   return (
@@ -13,7 +14,8 @@ function HomePage() {
         <Carousel/>
         <About/>
         <Appointment/>
-        <Services/>
+        {/* <Services/> */}
+        <ServicesItem/>
         <Offer/>
         <Clinic/>
     </>

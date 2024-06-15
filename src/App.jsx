@@ -29,6 +29,7 @@ import ResetPage from './pages/reset-password';
 import Information from './components/information';
 import ClinicDetailPage from './pages/clinic-detail';
 import ClinicPage from './pages/clinics';
+import ServiceDetailPage from './pages/service-detail';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -109,6 +110,10 @@ function App() {
         {
           path: '/clinic',
           element: <ClinicPage />
+        },
+        {
+          path: '/service/:id',
+          element: <ServiceDetailPage />
         },
       ]
     },

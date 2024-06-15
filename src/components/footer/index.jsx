@@ -102,7 +102,7 @@ function Footer() {
               </div>
               <div className="col-lg-3 col-md-6">
                 <h3 className="text-white mb-4">Get In Touch</h3>
-                <p className="mb-2"><i className="bi bi-geo-alt text-primary me-2" />Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000, Vietnam</p>
+                <p className="mb-2"><i className="bi bi-geo-alt text-primary me-2" />Lot E2a-7, Street D1, D. D1, Long Thanh My, Thu Duc City, Ho Chi Minh City, Vietnam</p>
                 <p className="mb-2"><i className="bi bi-envelope-open text-primary me-2" />dentcare@fpt.edu.vn</p>
                 <p className="mb-0"><i className="bi bi-telephone text-primary me-2" />+012 345 67890</p>
               </div>
