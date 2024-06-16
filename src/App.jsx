@@ -52,7 +52,7 @@ function App() {
           element: <ContactPage />
         },
         {
-          path: '/dentist',
+          path: '/dentist/:id',
           element: <DentistPage />
         },
         {

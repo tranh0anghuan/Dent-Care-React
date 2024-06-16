@@ -25,7 +25,7 @@ function Team() {
                         {dentist.map((item, index) => (
 
                             item?.status !== 'INACTIVE' ? (<div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                                <Link to={'/dentist'} onClick={ScrollToTop} className="team-item">
+                                <Link to={`/dentist/${item.id}`} onClick={ScrollToTop} className="team-item">
                                     <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
                                         <img className="img-fluid rounded-top w-100" src={`/${item?.fullName}.jpg`} alt />
                                         <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">

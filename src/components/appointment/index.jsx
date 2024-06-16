@@ -3,12 +3,14 @@ import useClinics from '../../callApi/clinic';
 import useDentists from '../../callApi/dentists';
 import useServices from '../../callApi/services';
 import { DatePicker, Space } from 'antd';
+import useSlot from '../../callApi/slot';
 
 function Appointment() {
 
     const { clinic } = useClinics();
     const { service } = useServices();
     const { dentist } = useDentists();
+    const {slot} = useSlot();
 
     const onOk = (value) => {
         console.log('onOk: ', value);
@@ -57,17 +59,10 @@ function Appointment() {
                                             </select>
                                         </div>
                                         <div className="col-12 col-sm-6">
-                                            <input type="text" className="form-control bg-light border-0" placeholder="Your Name" style={{ height: 55 }} />
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <input type="email" className="form-control bg-light border-0" placeholder="Your Email" style={{ height: 55 }} />
-                                        </div>
-                                        <div className="col-12 col-sm-6">
                                                 <Space direction="vertical" size={12}>
                                                     <DatePicker
                                                         className='form-control bg-light border-0'
-                                                        style={{padding:'15px 35px'}}
-                                                        showTime
+                                                        style={{padding:'15px 65px'}}
                                                         onChange={(value, dateString) => {
                                                             console.log('Selected Time: ', value);
                                                             console.log('Formatted Selected Time: ', dateString);
@@ -77,6 +72,37 @@ function Appointment() {
                                                     />
                                                 </Space>
                                         </div>
+                                        <div className="col-12 col-sm-6">
+                                            <select className="form-select bg-light border-0" style={{ height: 55 }}>
+                                                <option selected>Select Slot</option>
+                                                {slot.map((item, index) => (
+                                                    <option value={1}>Slot {item.id}: {item.startTime} - {item.endTime} </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="col-12 col-sm-6">
+                                            <input type="text" className="form-control bg-light border-0" placeholder="Name" style={{ height: 55 }} />
+                                        </div>
+                                        <div className="col-12 col-sm-6">
+                                            <input type="text" className="form-control bg-light border-0" placeholder="Age" style={{ height: 55 }} />
+                                        </div>
+                                        <div className="col-12 col-sm-6">
+                                            <select className="form-select bg-light border-0" style={{ height: 55 }}>
+                                                <option selected>Select Gender</option>
+                                                <option value={true}>Male</option>
+                                                <option value={false}>Female</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-12 col-sm-6">
+                                            <input type="text" className="form-control bg-light border-0" placeholder="Address" style={{ height: 55 }} />
+                                        </div>
+                                        <div className="col-12 col-sm-6">
+                                            <input type="text" className="form-control bg-light border-0" placeholder="Phone" style={{ height: 55 }} />
+                                        </div>
+                                        <div className="col-12 col-sm-12">
+                                            <input type="email" className="form-control bg-light border-0" placeholder="Email" style={{ height: 55 }} />
+                                        </div>
+                                        
 
                                         <div className="col-12">
                                             <button className="btn btn-dark w-100 py-3" type="submit">Make Appointment</button>
