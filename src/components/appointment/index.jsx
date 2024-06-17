@@ -1,19 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useClinics from '../../callApi/clinic';
 import useDentists from '../../callApi/dentists';
 import useServices from '../../callApi/services';
-import { DatePicker, Space } from 'antd';
+import { Button, DatePicker, Form, Input, Radio, Select, Space } from 'antd';
 import useSlot from '../../callApi/slot';
+import './style.css'
 
 function Appointment() {
 
     const { clinic } = useClinics();
     const { service } = useServices();
     const { dentist } = useDentists();
-    const {slot} = useSlot();
+    const { slot } = useSlot();
 
-    const onOk = (value) => {
-        console.log('onOk: ', value);
+    const { Option } = Select;
+
+    const layout = {
+        labelCol: { span: 6 },
+        wrapperCol: { span: 16 },
+    };
+
+    const tailLayout = {
+        wrapperCol: { offset: 8, span: 16 },
+    };
+
+    const [form] = Form.useForm();
+
+    const onFinish = (values) => {
+        console.log(values);
     };
 
 
@@ -32,83 +46,138 @@ function Appointment() {
                         <div className="col-lg-6">
                             <div className="appointment-form h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" data-wow-delay="0.6s">
                                 <h1 className="text-white mb-4">Make Appointment</h1>
-                                <form>
-                                    <div className="row g-3">
-                                        <div className="col-12 col-sm-6">
-                                            <select className="form-select bg-light border-0" style={{ height: 55 }}>
-                                                <option selected>Select Clinic</option>
-                                                {clinic.map((item, index) => (
-                                                    <option value={1}>{item?.clinicName}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <select className="form-select bg-light border-0" style={{ height: 55 }}>
-                                                <option selected>Select Service</option>
-                                                {service.map((item, index) => (
-                                                    <option value={1}>{item?.name}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <select className="form-select bg-light border-0" style={{ height: 55 }}>
-                                                <option selected>Select Doctor</option>
-                                                {dentist.map((item, index) => (
-                                                    <option value={1}>{item?.fullName}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                                <Space direction="vertical" size={12}>
-                                                    <DatePicker
-                                                        className='form-control bg-light border-0'
-                                                        style={{padding:'15px 65px'}}
-                                                        onChange={(value, dateString) => {
-                                                            console.log('Selected Time: ', value);
-                                                            console.log('Formatted Selected Time: ', dateString);
-                                                        }}
 
-                                                        onOk={onOk}
-                                                    />
-                                                </Space>
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <select className="form-select bg-light border-0" style={{ height: 55 }}>
-                                                <option selected>Select Slot</option>
-                                                {slot.map((item, index) => (
-                                                    <option value={1}>Slot {item.id}: {item.startTime} - {item.endTime} </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <input type="text" className="form-control bg-light border-0" placeholder="Name" style={{ height: 55 }} />
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <input type="text" className="form-control bg-light border-0" placeholder="Age" style={{ height: 55 }} />
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <select className="form-select bg-light border-0" style={{ height: 55 }}>
-                                                <option selected>Select Gender</option>
-                                                <option value={true}>Male</option>
-                                                <option value={false}>Female</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <input type="text" className="form-control bg-light border-0" placeholder="Address" style={{ height: 55 }} />
-                                        </div>
-                                        <div className="col-12 col-sm-6">
-                                            <input type="text" className="form-control bg-light border-0" placeholder="Phone" style={{ height: 55 }} />
-                                        </div>
-                                        <div className="col-12 col-sm-12">
-                                            <input type="email" className="form-control bg-light border-0" placeholder="Email" style={{ height: 55 }} />
-                                        </div>
-                                        
 
-                                        <div className="col-12">
-                                            <button className="btn btn-dark w-100 py-3" type="submit">Make Appointment</button>
-                                        </div>
-                                    </div>
-                                </form>
+
+                                <Form
+                                    {...layout}
+                                    form={form}
+                                    name="appointment-form"
+                                    onFinish={onFinish}
+                                    style={{ maxWidth: 800 }}
+                                >
+                                    <Form.Item
+                                        name="clinicID"
+                                        label="Select Clinic"
+                                        rules={[{ required: true, message: 'Please select a clinic!' }]}
+                                    >
+                                        <Select placeholder="Select Clinic">
+                                            {clinic.map((item) => (
+                                                <Option key={item.id} value={item.id}>{item.clinicName}</Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="serviceID"
+                                        label="Select Service"
+                                        rules={[{ required: true, message: 'Please select a service!' }]}
+                                    >
+                                        <Select placeholder="Select Service">
+                                            {service.map((item) => (
+                                                <Option key={item.id} value={item.id}>{item.name}</Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="dentistID"
+                                        label="Select Doctor"
+                                        rules={[{ required: true, message: 'Please select a doctor!' }]}
+                                    >
+                                        <Select placeholder="Select Doctor">
+                                            {dentist.map((item) => (
+                                                <Option key={item.id} value={item.id}>{item.fullName}</Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="date"
+                                        label="Select Date"
+                                        rules={[{ required: true, message: 'Please select a date!' }]}
+                                    >
+                                        <DatePicker
+                                            style={{ width: '100%' }}
+                                            onChange={(date, dateString) => console.log('Selected Date:', dateString)}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="slotID"
+                                        label="Select Slot"
+                                        rules={[{ required: true, message: 'Please select a slot!' }]}
+                                    >
+                                        <Select placeholder="Select Slot">
+                                            {slot.map((item) => (
+                                                <Option key={item.id} value={item.id}>
+                                                    Slot {item.id}: {item.startTime} - {item.endTime}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="name"
+                                        label="Name"
+                                        rules={[{ required: true, message: 'Please enter your name!' }]}
+                                    >
+                                        <Input placeholder="Name" />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="age"
+                                        label="Age"
+                                        rules={[{ required: true, message: 'Please enter your age!' }]}
+                                    >
+                                        <Input placeholder="Age" />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="gender"
+                                        label="Select Gender"
+                                        rules={[{ required: true, message: 'Please select your gender!' }]}
+                                    >
+                                        <Select placeholder="Select Gender">
+                                            <Option value="male">Male</Option>
+                                            <Option value="female">Female</Option>
+                                        </Select>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="address"
+                                        label="Address"
+                                        rules={[{ required: true, message: 'Please enter your address!' }]}
+                                    >
+                                        <Input placeholder="Address" />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="phone"
+                                        label="Phone"
+                                        rules={[{ required: true, message: 'Please enter your phone number!' }]}
+                                    >
+                                        <Input placeholder="Phone" />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="email"
+                                        label="Email"
+                                        rules={[{ required: true, message: 'Please enter your email!' }]}
+                                    >
+                                        <Input placeholder="Email" />
+                                    </Form.Item>
+
+                                    <Form.Item {...tailLayout}>
+                                        <Space>
+                                            <Button type="primary" htmlType="submit" className="btn btn-primary btn-lg appointment-btn" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }}>
+                                                Make Appointment
+                                            </Button>
+                                        </Space>
+                                    </Form.Item>
+                                </Form>
+
+
                             </div>
                         </div>
                     </div>

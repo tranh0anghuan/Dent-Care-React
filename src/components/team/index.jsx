@@ -29,7 +29,7 @@ function Team() {
                                     <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
                                         <img className="img-fluid rounded-top w-100" src={`/${item?.fullName}.jpg`} alt />
                                         <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                            <Link to={'/appointment'} className="btn btn-primary py-2 px-3">Appointment</Link>
+                                            <Link to={`/dentist/${item.id}`} className="btn btn-primary py-2 px-3">Appointment</Link>
 
                                         </div>
                                     </div>
