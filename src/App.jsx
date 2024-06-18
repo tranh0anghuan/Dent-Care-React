@@ -11,14 +11,6 @@ import TeamPage from './pages/team';
 import AppointmentPage from './pages/appointment';
 import RecordPage from './pages/record';
 import SignupPage from './pages/signup';
-import TeethWhiteningPage from './pages/teethwhitening';
-import ToothExtractionPage from './pages/tooth-extraction';
-import RoutinePage from './pages/rountine';
-import ImplantPage from './pages/implant';
-import WisdomPage from './pages/wisdom';
-import CeramicPage from './pages/ceramic';
-import OrthdonticPage from './pages/orthdontic';
-import DenturesPage from './pages/dentures';
 import SchedulePage from './pages/schedule';
 import Dashboard from './pages/dashboard';
 import Category from './components/category';
@@ -68,38 +60,6 @@ function App() {
         {
           path: '/record',
           element: <RecordPage />
-        },
-        {
-          path: '/Teeth Whitening',
-          element: <TeethWhiteningPage />
-        },
-        {
-          path: '/Tooth Extraction',
-          element: <ToothExtractionPage />
-        },
-        {
-          path: '/Routine Check',
-          element: <RoutinePage />
-        },
-        {
-          path: '/Dental Implant',
-          element: <ImplantPage />
-        },
-        {
-          path: '/Wisdom Teeth',
-          element: <WisdomPage />
-        },
-        {
-          path: '/Ceramic Tooth',
-          element: <CeramicPage />
-        },
-        {
-          path: '/Orthodontics',
-          element: <OrthdonticPage />
-        },
-        {
-          path: '/Dentures',
-          element: <DenturesPage />
         },
         {
           path: '/schedule',
