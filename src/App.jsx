@@ -30,6 +30,8 @@ import Information from './components/information';
 import ClinicDetailPage from './pages/clinic-detail';
 import ClinicPage from './pages/clinics';
 import ServiceDetailPage from './pages/service-detail';
+import DentistByClinic from './pages/teamByClinic';
+import PersonalProfile from './pages/profile';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -104,6 +106,26 @@ function App() {
           element: <SchedulePage />
         },
         {
+          path: 'clinic/:id/service/:sid',
+          element: <DentistByClinic />
+        },
+        {
+          path: 'service/:sid/clinic/:id',
+          element: <DentistByClinic />
+        },
+        {
+          path: 'clinic/:id/service/:sid/dentist/:did',
+          element: <AppointmentPage />
+        },
+        {
+          path: 'clinic/:id/service/:sid/dentist',
+          element: <AppointmentPage />
+        },
+        {
+          path: 'service/:sid/clinic/:id/dentist/:did',
+          element: <AppointmentPage />
+        },
+        {
           path: '/clinic/:id',
           element: <ClinicDetailPage />
         },
@@ -112,8 +134,12 @@ function App() {
           element: <ClinicPage />
         },
         {
-          path: '/service/:id',
+          path: '/service/:sid',
           element: <ServiceDetailPage />
+        },
+        {
+          path: '/profile',
+          element: <PersonalProfile />
         },
       ]
     },

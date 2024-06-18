@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import './style.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, logout } from '../../redux/features/counterSlice';
+import './style.css'
 
 
 function Navbar() {
@@ -60,7 +61,7 @@ function Navbar() {
             <div className="d-flex justify-content-center align-items-center nav-item dropdown">
               <img src="/logo.png" alt="User" className="header__navbar-user-img dropdown-toggle" data-bs-toggle="dropdown" />
               <div className="dropdown-menu m-0">
-                <Link  to={"/team"} className="dropdown-item">Profile</Link>
+                <Link  to={"/profile"} className="dropdown-item">Profile</Link>
                 <Link  to={"/schedule"} className="dropdown-item">Schedule</Link>
                 <Link  to={"/"} className="dropdown-item" onClick={handleLogout}>Log out</Link>
               </div>

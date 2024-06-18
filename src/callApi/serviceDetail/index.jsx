@@ -4,13 +4,13 @@ import { useParams } from "react-router-dom";
 
 const useServiceDetail = () => {
 
-    const { id } = useParams()
+    const { sid } = useParams()
 
 
     const [service, setService] = useState({})
     const getServiceDetail = async () => {
         try {
-            const res = await api.get(`/service/${id}`)
+            const res = await api.get(`/service/${sid}`)
             setService(res.data)
         } catch (error) {
             console.log(error);

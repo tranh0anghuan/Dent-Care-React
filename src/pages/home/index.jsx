@@ -13,8 +13,6 @@ function HomePage() {
     <>
         <Carousel/>
         <About/>
-        <Appointment/>
-        {/* <Services/> */}
         <ServicesItem/>
         <Offer/>
         <Clinic/>

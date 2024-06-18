@@ -4,13 +4,13 @@ import { useParams } from 'react-router-dom';
 
 const useClinicByServicesID = () => {
 
-    const {id} = useParams()
+    const {sid} = useParams()
 
     const [clinic, setClinic] = useState([])
 
     const getClinics = async () => {
         try {
-            const res = await api.get(`/service-clinic/search-clinic-by-service-id/${id}`)
+            const res = await api.get(`/service-clinic/search-clinic-by-service-id/${sid}`)
             setClinic(res.data)
         } catch (error) {
             console.log(error)

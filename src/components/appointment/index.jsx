@@ -1,17 +1,85 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useClinics from '../../callApi/clinic';
 import useDentists from '../../callApi/dentists';
 import useServices from '../../callApi/services';
 import { Button, DatePicker, Form, Input, Radio, Select, Space } from 'antd';
 import useSlot from '../../callApi/slot';
 import './style.css'
+import { useParams } from 'react-router-dom';
+import useClinicByID from '../../callApi/cliByID';
+import api from '../../config/axios';
+import { useForm } from 'antd/es/form/Form';
+import useServiceByID from '../../callApi/serviceByID';
+import useDentistByID from '../../callApi/dentistByID';
+import useDentistsByClinicAndService from '../../callApi/dentByCliandSer';
+import { toast } from 'react-toastify';
 
 function Appointment() {
+    const { id, sid, did } = useParams()
+    const [form] = Form.useForm();
 
-    const { clinic } = useClinics();
-    const { service } = useServices();
-    const { dentist } = useDentists();
-    const { slot } = useSlot();
+    const { clinic } = useClinicByID(id);
+    const { service } = useServiceByID(sid);
+    const { dentist } = useDentistByID(did);
+    // const {slot} = useSlot();
+
+
+    // const [service, setService] = useState([])
+
+    // const [clinic, setClinic] = useState({})
+    // const [dentist, setDentist] = useState([]);
+    // const role = 'DENTIST';
+
+    // const [slot, setSlot] = useState([])
+
+    // const getSlot = async () => {
+    //     try {
+    //         const res = await api.get('/slot')
+    //         setSlot(res.data)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    // const getDentists = async () => {
+    //     try {
+    //         const res = await api.get(`/account/role/${role}`);
+    //         setDentist(res.data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+
+
+    // const getClinics = async () => {
+    //     try {
+    //         const res = await api.get(`/clinic/${id}`)
+    //         const services = res.data.serviceDetails
+    //         setClinic(res.data)
+    //         setService(services.filter(item => item.id == sid)[0])
+    //         form.setFieldValue("clinicID",res.data.clinicName)
+    //         form.setFieldValue("serviceID",services.filter(item => item.id == sid)[0].name)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    // form.setFieldValue("clinicID",clinic.clinicName)
+    // form.setFieldValue("serviceID",service.name)
+    // form.setFieldValue("dentistID",dentist.fullName)
+    form.setFieldValue("clinicID", clinic.id)
+    form.setFieldValue("serviceID", service.id)
+    form.setFieldValue("dentistID", dentist.id)
+    // useEffect(() => {
+    // }, []);
+
+    // useEffect(() => {
+    //     if (clinic && clinic.id) {
+    //         form.setFieldsValue({ clinicID: clinic.clinicName });
+    //     }
+    // }, [clinic, form]);
+
+
 
     const { Option } = Select;
 
@@ -24,16 +92,17 @@ function Appointment() {
         wrapperCol: { offset: 8, span: 16 },
     };
 
-    const [form] = Form.useForm();
 
     const onFinish = (values) => {
+
+        toast.success('Booking service successfully!')
+
         console.log(values);
     };
 
 
     return (
         <>
-
             <div className="container-fluid bg-primary bg-appointment my-5 wow fadeInUp" data-wow-delay="0.1s">
                 <div className="container">
                     <div className="row gx-5">
@@ -55,42 +124,66 @@ function Appointment() {
                                     name="appointment-form"
                                     onFinish={onFinish}
                                     style={{ maxWidth: 800 }}
+                                // initialValues={{
+                                //     clinicID: clinic.clinicName, 
+                                // }}
                                 >
                                     <Form.Item
                                         name="clinicID"
                                         label="Select Clinic"
                                         rules={[{ required: true, message: 'Please select a clinic!' }]}
+
                                     >
-                                        <Select placeholder="Select Clinic">
+                                        {/* <Select placeholder="Select Clinic">
                                             {clinic.map((item) => (
                                                 <Option key={item.id} value={item.id}>{item.clinicName}</Option>
                                             ))}
-                                        </Select>
+                                        </Select> */}
+                                        {/* <Input readOnly /> */}
+                                        <div
+                                            className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
+                                            style={{ textAlign: 'start' }}
+                                        >{clinic.clinicName}</div>
+                                        <Input type='hidden' />
                                     </Form.Item>
 
                                     <Form.Item
                                         name="serviceID"
                                         label="Select Service"
+
                                         rules={[{ required: true, message: 'Please select a service!' }]}
                                     >
-                                        <Select placeholder="Select Service">
+                                        {/* <Input readOnly /> */}
+                                        {/* <Select placeholder="Select Clinic">
                                             {service.map((item) => (
-                                                <Option key={item.id} value={item.id}>{item.name}</Option>
+                                                <Option value={item.id}>{item.name}</Option>
                                             ))}
-                                        </Select>
-                                    </Form.Item>
+                                        </Select> */}
+                                        {/* <Input readOnly/> */}
+                                        <div
+                                            className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
+                                            style={{ textAlign: 'start' }}
+                                        >{service.name}</div>
+                                        <Input type='hidden' />
+                                    </Form.Item >
 
-                                    <Form.Item
+                                    {did && <Form.Item
                                         name="dentistID"
                                         label="Select Doctor"
                                         rules={[{ required: true, message: 'Please select a doctor!' }]}
                                     >
-                                        <Select placeholder="Select Doctor">
+                                        {/* <Select placeholder="Select Doctor">
                                             {dentist.map((item) => (
                                                 <Option key={item.id} value={item.id}>{item.fullName}</Option>
                                             ))}
-                                        </Select>
-                                    </Form.Item>
+                                        </Select> */}
+                                        {/* <Input readOnly /> */}
+                                        <div
+                                            className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
+                                            style={{ textAlign: 'start' }}
+                                        >{dentist.fullName}</div>
+                                        <Input type='hidden' />
+                                    </Form.Item>}
 
                                     <Form.Item
                                         name="date"
@@ -103,7 +196,7 @@ function Appointment() {
                                         />
                                     </Form.Item>
 
-                                    <Form.Item
+                                    {/* <Form.Item
                                         name="slotID"
                                         label="Select Slot"
                                         rules={[{ required: true, message: 'Please select a slot!' }]}
@@ -115,7 +208,7 @@ function Appointment() {
                                                 </Option>
                                             ))}
                                         </Select>
-                                    </Form.Item>
+                                    </Form.Item> */}
 
                                     <Form.Item
                                         name="name"

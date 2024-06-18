@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../config/axios';
 
 const useSlot = () => {
+  
     const [slot, setSlot] = useState([])
 
     const getSlot = async () => {
