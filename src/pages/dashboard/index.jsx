@@ -85,7 +85,7 @@ const Dashboard = () => {
       setItems([
         getItem("Product", "product", <PlusOutlined />),
         getItem("Category", "category", <AppstoreAddOutlined />),
-        getItem("Hồ sơ", "profile", <ProfileOutlined />),
+        getItem("Hồ sơ", "information", <ProfileOutlined />),
         getItem("Quản lý Clubs", "clubs", <HeartOutlined />, [
           getItem("Club 1", "club1"),
           getItem("Club 2", "club2"),
