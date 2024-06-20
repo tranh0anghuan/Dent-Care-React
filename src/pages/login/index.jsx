@@ -15,15 +15,20 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    const res = await api.post('/login', {
-      email: values.email,
-      password: values.password,
-    });
-    const user = res.data;
-    toast.success('Login successfully!');
-    localStorage.setItem('token', user.token);
-    dispatch(login(user));
-    navigate('/');
+try {
+  const res = await api.post('/login', {
+    email: values.email,
+    password: values.password,
+  });
+  const user = res.data;
+  toast.success('Login successfully!');
+  localStorage.setItem('token', user.token);
+  dispatch(login(user));
+  navigate('/');
+} catch (error) {
+  console.log(error)
+  toast.error(error.response.data)
+}
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -90,6 +95,13 @@ function LoginPage() {
           <Form.Item>
             <Link to="/signup" className="signup-link">
                Register New Account
+            </Link>
+            
+          </Form.Item>
+
+          <Form.Item>
+            <Link to="/" className="signup-link">
+               Home
             </Link>
           </Form.Item>
         </Form>

@@ -36,7 +36,6 @@ function Navbar() {
               <div className="nav-item dropdown">
               <Link  to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
               <div className="dropdown-menu m-0">
-                <Link  to={"/appointment"} className="dropdown-item">Appointment</Link>
                 <Link  to={"/schedule"} className="dropdown-item">Schedule</Link>
                 {user?.role === 'DENTIST' ? (
                 <Link  to={"/record"} className="dropdown-item">Record</Link>
@@ -46,15 +45,15 @@ function Navbar() {
                 ) : ""}
               </div>
             </div>
-              ) : (<Link  to={"/appointment"} className="nav-item nav-link">Appointment</Link>)}
+              ) : ("")}
 
 
         </div>
 
-        <form action>
+        {/* <form action>
           <input type="text" className="nav-input" />
           <button type="button" className="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i className="fa-solid fa-magnifying-glass fs-5" /></button>
-        </form>
+        </form> */}
 
         {user ? (
           <div className="navbar-nav py-0" style={{ marginRight: '80px', marginLeft: '20px' }}>

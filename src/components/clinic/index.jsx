@@ -1,12 +1,49 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ScrollToTop from '../scrollToTop'
 import api from '../../config/axios'
 import useClinics from '../../callApi/clinic';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
+import { Button, Modal } from 'antd';
 
 function Clinic() {
 
-    const { clinic} = useClinics();
+    const { clinic } = useClinics();
+
+    const user = useSelector(selectUser)
+
+    const navigate= useNavigate();
+
+    const show = () => {
+        Modal.confirm({
+            title: 'Info',
+            content: 'Before booking service, you need log in',
+            footer: (_, { OkBtn, CancelBtn }) => (
+                <>
+                    <Button
+                         className='btn btn-primary'
+                     style={{borderRadius: '6px'}}
+                        onClick={()=>{
+                            navigate('/login')
+                            Modal.destroyAll(); // Close the modal
+                        }}
+                    >Log in</Button>
+                    <CancelBtn />
+                </>
+            ),
+        });
+    }
+
+    const modal = () => {
+        window.$('#modal').modal('show');
+    }
+
+    const hiddenModal = () => {
+        window.$('#modal').modal('hidden');
+
+    }
+
 
     return (
 
@@ -19,7 +56,6 @@ function Clinic() {
                             <div className="section-title bg-light rounded h-100 p-5">
                                 <h5 className="position-relative d-inline-block text-primary text-uppercase">Our Dentist</h5>
                                 <h1 className="display-6 mb-4">Cutting-edge equipment ensures optimal treatment</h1>
-                                <Link to={'/appointment'} className="btn btn-primary py-3 px-5">Appointment</Link>
                             </div>
                         </div>
 
@@ -27,7 +63,7 @@ function Clinic() {
                         {clinic.map((item, index) => (
 
                             <div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                                <Link to={`/clinic/${item.id}`} onClick={ScrollToTop} className="team-item">
+                                {/* <Link to={`/clinic/${item.id}`} onClick={ScrollToTop} className="team-item">
                                     <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
                                         <img className="img-fluid rounded-top w-100" src={`/${item?.clinicName}.jpg`} alt />
                                         <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
@@ -41,13 +77,66 @@ function Clinic() {
                                         <h4 className="mb-2">{item?.clinicName}</h4>
                                         <p className="text-primary mb-0">{item?.address}</p>
                                     </div>
-                                </Link>
+                                </Link> */}
+
+                                {
+                                    user ? (<Link to={`/clinic/${item.id}`} onClick={ScrollToTop} className="team-item">
+                                        <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
+                                            <img className="img-fluid rounded-top w-100" src={`/${item?.clinicName}.jpg`} alt />
+                                            <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-twitter fw-normal" /></a>
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-facebook-f fw-normal" /></a>
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-linkedin-in fw-normal" /></a>
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-instagram fw-normal" /></a>
+                                            </div>
+                                        </div>
+                                        <div className="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
+                                            <h4 className="mb-2">{item?.clinicName}</h4>
+                                            <p className="text-primary mb-0">{item?.address}</p>
+                                        </div>
+                                    </Link>) : 
+                                    (<div onClick={show} className="team-item">
+                                        <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
+                                            <img className="img-fluid rounded-top w-100" src={`/${item?.clinicName}.jpg`} alt />
+                                            <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-twitter fw-normal" /></a>
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-facebook-f fw-normal" /></a>
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-linkedin-in fw-normal" /></a>
+                                                <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-instagram fw-normal" /></a>
+                                            </div>
+                                        </div>
+                                        <div className="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
+                                            <h4 className="mb-2">{item?.clinicName}</h4>
+                                            <p className="text-primary mb-0">{item?.address}</p>
+                                        </div>
+                                    </div>)
+                                }
+
                             </div>
 
                         ))}
                     </div>
                 </div>
             </div>
+
+            <div className="modal fade" id="modal" tabIndex={-1}>
+                <div className="modal-dialog modal-fullscreen">
+
+                    <div className="modal-content" style={{ background: 'rgba(9, 30, 62, .7)' }}>
+                        <div className="modal-header border-0">
+                            <button type="button" className="btn bg-white btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div
+                            className="modal-body d-flex flex-column align-items-center justify-content-center"
+                            style={{ margin: 'auto', width: '500px', maxHeight: '200px', backgroundColor: 'rgba(6, 163, 218, .7)' }}>
+                            <p className="text-white mb-5">Before making appointment, you need to log in account</p>
+                            <Link to={'/login'} onClick={hiddenModal} className="btn btn-primary px-4"><i className="bi bi-search" />Log in</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
 
         </>

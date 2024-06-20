@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/counterSlice';
+import { Button } from 'antd';
 
 export default function PersonalProfile() {
 
     const user = useSelector(selectUser);
 
     const [passwordVisible, setPasswordVisible] = useState(false);
-
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
-    };
-
 
     return (
         <section className="vh-100" >
@@ -53,15 +49,13 @@ export default function PersonalProfile() {
                                                 <input
                                                     type={passwordVisible ? 'text' : 'password'}
                                                     className="form-control text-muted"
-                                                    value="info@example.com"
+                                                    value={'huan'}
                                                     readOnly
                                                 />
-                                                
+                                            
                                             </MDBCol>
                                             <MDBCol size="6" className="mb-3">
-                                                    <MDBBtn color="link" onClick={togglePasswordVisibility} style={{marginTop: '25px'}}>
-                                                        {passwordVisible ? 'Hide' : 'Show'}
-                                                    </MDBBtn>
+                                                    <Button className='btn btn-primary' onClick={()=> setPasswordVisible(!passwordVisible)} style={{marginTop: '30px'}}>SHOW</Button>
                                                 </MDBCol>
                                             {/* <MDBCol size="6" className="mb-3">
                         <MDBTypography tag="h6">Phone</MDBTypography>

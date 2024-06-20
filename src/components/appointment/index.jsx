@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import useClinics from '../../callApi/clinic';
 import useDentists from '../../callApi/dentists';
 import useServices from '../../callApi/services';
-import { Button, DatePicker, Form, Input, Radio, Select, Space } from 'antd';
+import { Button, DatePicker, Form, Input, Modal, Radio, Select, Space } from 'antd';
 import useSlot from '../../callApi/slot';
 import './style.css'
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import useClinicByID from '../../callApi/cliByID';
 import api from '../../config/axios';
 import { useForm } from 'antd/es/form/Form';
@@ -13,15 +13,36 @@ import useServiceByID from '../../callApi/serviceByID';
 import useDentistByID from '../../callApi/dentistByID';
 import useDentistsByClinicAndService from '../../callApi/dentByCliandSer';
 import { toast } from 'react-toastify';
+import { setLogLevel } from 'firebase/app';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
+import useSlotByDentistID from '../../callApi/slotByDen';
 
 function Appointment() {
+
+    const user = useSelector(selectUser)
+
+
     const { id, sid, did } = useParams()
     const [form] = Form.useForm();
 
     const { clinic } = useClinicByID(id);
     const { service } = useServiceByID(sid);
     const { dentist } = useDentistByID(did);
-    // const {slot} = useSlot();
+
+    const [open, setOpen] = useState(false);
+    const showModal = () => {
+        setOpen(true);
+    };
+    const handleOk = () => {
+        setOpen(false);
+    };
+    const handleCancel = () => {
+        setOpen(false);
+    };
+
+
+    const {slot} = useSlotByDentistID(did);
 
 
     // const [service, setService] = useState([])
@@ -90,14 +111,62 @@ function Appointment() {
 
     const tailLayout = {
         wrapperCol: { offset: 8, span: 16 },
+
+
+    };
+
+    // const handleOnFinish = (values) => {
+    //     show();
+    //     console.log(values)
+    // };
+
+    // const show = () => {
+    //     Modal.confirm({
+    //         title: 'Confirm',
+    //         content: 'Bla bla ...',
+    //         footer: (_, { OkBtn, CancelBtn }) => (
+    //             <>
+    //                 <Button>Custom Button</Button>
+    //                 <CancelBtn />
+    //                 <OkBtn />
+    //             </>
+    //         ),
+    //     });
+    // }
+
+    const onFinish = (values) => {
+        // console.log(values);
+        show(values); // Pass the values to the show function
+    };
+    
+    const show = (values) => {
+        Modal.confirm({
+            title: 'Confirm',
+            content: 'Before booking service, you need to pay deposit in advance 100,000 VND',
+            footer: (_, { CancelBtn }) => (
+                <>
+                    <Button
+                     className='btn btn-primary'
+                     style={{borderRadius: '6px'}}
+                        onClick={() => {
+                            // Log values or perform any other operations here
+                            console.log(values);
+                            Modal.destroyAll(); // Close the modal
+                        }}
+                    >
+                        OK
+                    </Button>
+                    <CancelBtn />
+                </>
+            ),
+        });
     };
 
 
-    const onFinish = (values) => {
+  
 
-        toast.success('Booking service successfully!')
-
-        console.log(values);
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
     };
 
 
@@ -123,10 +192,8 @@ function Appointment() {
                                     form={form}
                                     name="appointment-form"
                                     onFinish={onFinish}
+                                    onFinishFailed={onFinishFailed}
                                     style={{ maxWidth: 800 }}
-                                // initialValues={{
-                                //     clinicID: clinic.clinicName, 
-                                // }}
                                 >
                                     <Form.Item
                                         name="clinicID"
@@ -196,7 +263,7 @@ function Appointment() {
                                         />
                                     </Form.Item>
 
-                                    {/* <Form.Item
+                                    <Form.Item
                                         name="slotID"
                                         label="Select Slot"
                                         rules={[{ required: true, message: 'Please select a slot!' }]}
@@ -208,7 +275,7 @@ function Appointment() {
                                                 </Option>
                                             ))}
                                         </Select>
-                                    </Form.Item> */}
+                                    </Form.Item>
 
                                     <Form.Item
                                         name="name"
@@ -263,7 +330,12 @@ function Appointment() {
 
                                     <Form.Item {...tailLayout}>
                                         <Space>
-                                            <Button type="primary" htmlType="submit" className="btn btn-primary btn-lg appointment-btn" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }}>
+                                            <Button
+                                                type="primary"
+                                                htmlType="submit"
+                                                className="btn btn-primary btn-lg appointment-btn"
+                                                style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }}
+                                            >
                                                 Make Appointment
                                             </Button>
                                         </Space>
@@ -276,6 +348,10 @@ function Appointment() {
                     </div>
                 </div>
             </div>
+
+
+
+
 
 
         </>
