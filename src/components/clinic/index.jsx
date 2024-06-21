@@ -35,14 +35,7 @@ function Clinic() {
         });
     }
 
-    const modal = () => {
-        window.$('#modal').modal('show');
-    }
 
-    const hiddenModal = () => {
-        window.$('#modal').modal('hidden');
-
-    }
 
 
     return (
@@ -119,22 +112,7 @@ function Clinic() {
                 </div>
             </div>
 
-            <div className="modal fade" id="modal" tabIndex={-1}>
-                <div className="modal-dialog modal-fullscreen">
-
-                    <div className="modal-content" style={{ background: 'rgba(9, 30, 62, .7)' }}>
-                        <div className="modal-header border-0">
-                            <button type="button" className="btn bg-white btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                        </div>
-                        <div
-                            className="modal-body d-flex flex-column align-items-center justify-content-center"
-                            style={{ margin: 'auto', width: '500px', maxHeight: '200px', backgroundColor: 'rgba(6, 163, 218, .7)' }}>
-                            <p className="text-white mb-5">Before making appointment, you need to log in account</p>
-                            <Link to={'/login'} onClick={hiddenModal} className="btn btn-primary px-4"><i className="bi bi-search" />Log in</Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
 
 

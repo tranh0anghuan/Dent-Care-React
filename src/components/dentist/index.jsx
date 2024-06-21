@@ -1,10 +1,12 @@
 import React from 'react'
 import HeroHeader from '../hero-header'
 import useDentistDetail from '../../callApi/dentistDetail';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useServiceByDentistID from '../../callApi/serByDen';
 
 function Dentist() {
+
+    const{did} = useParams();
 
     const { dentist } = useDentistDetail();
 
@@ -60,7 +62,7 @@ function Dentist() {
                                     item?.status !== 'INACTIVE' ? (
                                         <div className="col-md-3">
                                             <div className="price-item pb-4">
-                                                <Link to={`/service/${item.id}`}>
+                                                <Link to={`/dentist/${did}/service/${item.id}`}>
                                                     <div className="position-relative">
                                                         <img className="img-fluid rounded-top" src={`/${item?.serviceDetail.name}.jpg`} alt />
                                                         <div className="d-flex align-items-center justify-content-center bg-light rounded pt-2 px-3 position-absolute top-100 start-50 translate-middle" style={{ zIndex: 2 }}>
@@ -69,7 +71,7 @@ function Dentist() {
                                                     </div>
                                                 </Link><div className="position-relative text-center bg-light border-bottom border-primary py-5 p-4">
                                                     
-                                                <Link to={`/service/${item.id}`}>
+                                                <Link to={`/dentist/${did}/service/${item.id}`}>
                                                     <h4>{item?.serviceDetail.name}</h4>
                                                     <hr className="text-primary w-50 mx-auto mt-0" />
                                                     <div className="d-flex justify-content-between mb-3"><span>Modern Equipment</span><i className="fa fa-check text-primary pt-1" /></div>
@@ -77,7 +79,7 @@ function Dentist() {
                                                     <div className="d-flex justify-content-between mb-2"><span>24/7 Call Support</span><i className="fa fa-check text-primary pt-1" /></div>
                                                 </Link>
                                                 
-                                                <Link to={`/service/${item.id}`} className="btn btn-primary py-2 px-4 position-absolute top-100 start-50 translate-middle">Appointment</Link>
+                                                <Link to={`/dentist/${did}/service/${item.id}`} className="btn btn-primary py-2 px-4 position-absolute top-100 start-50 translate-middle">Appointment</Link>
                                                 </div>
                                             </div>
                                         </div>
