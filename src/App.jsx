@@ -25,6 +25,9 @@ import ServiceDetailPage from './pages/service-detail';
 import DentistByClinic from './pages/teamByClinic';
 import PersonalProfile from './pages/profile';
 import ClinicByServiceAndDentistPage from './pages/cliBySerandDen';
+import Patient from './pages/patient';
+import PatientSchedule from './pages/patientSchedule';
+import DentistSchedule from './pages/dentistSchedule';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -109,6 +112,18 @@ function App() {
         {
           path: '/profile',
           element: <PersonalProfile />
+        },
+        {
+          path: '/patient',
+          element: <Patient />
+        },
+        {
+          path: '/patient-schedule/:pid',
+          element: <PatientSchedule />
+        },
+        {
+          path: '/dentist-schedule',
+          element: <DentistSchedule />
         },
       ]
     },

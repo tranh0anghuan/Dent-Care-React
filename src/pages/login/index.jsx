@@ -15,20 +15,20 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-try {
-  const res = await api.post('/login', {
-    email: values.email,
-    password: values.password,
-  });
-  const user = res.data;
-  toast.success('Login successfully!');
-  localStorage.setItem('token', user.token);
-  dispatch(login(user));
-  navigate('/');
-} catch (error) {
-  console.log(error)
-  toast.error(error.response.data)
-}
+    try {
+      const res = await api.post('/login', {
+        email: values.email,
+        password: values.password,
+      });
+      const user = res.data;
+      toast.success('Login successfully!');
+      localStorage.setItem('token', user.token);
+      dispatch(login(user));
+      navigate('/');
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data)
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -51,7 +51,7 @@ try {
   return (
     <div className="login-container">
       <div className="login-box">
-      <h2 style={{ color: '#06A3DA' }}>LOGIN HERE</h2>
+        <h2 style={{ color: '#06A3DA' }}>LOGIN HERE</h2>
         <Form
           name="basic"
           initialValues={{ remember: true }}
@@ -94,14 +94,14 @@ try {
 
           <Form.Item>
             <Link to="/signup" className="signup-link">
-               Register New Account
+              Register New Account
             </Link>
-            
+
           </Form.Item>
 
           <Form.Item>
             <Link to="/" className="signup-link">
-               Home
+              Home
             </Link>
           </Form.Item>
         </Form>

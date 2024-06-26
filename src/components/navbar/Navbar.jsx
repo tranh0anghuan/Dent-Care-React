@@ -36,7 +36,9 @@ function Navbar() {
               <div className="nav-item dropdown">
               <Link  to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
               <div className="dropdown-menu m-0">
-                <Link  to={"/schedule"} className="dropdown-item">Schedule</Link>
+                {user?.role === 'DENTIST' ? (
+                <Link  to={"/dentist-schedule"} className="dropdown-item">Schedule</Link>
+                ) : (<Link  to={"/patient"} className="dropdown-item">Schedule</Link>)}
                 {user?.role === 'DENTIST' ? (
                 <Link  to={"/record"} className="dropdown-item">Record</Link>
                 ) : ""}
