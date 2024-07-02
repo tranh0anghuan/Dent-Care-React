@@ -17,7 +17,7 @@ const useRecordByAppointmentID = (id) => {
 
     useEffect(() => {
         getRecord()
-    }, []);
+    }, [id]);
 
     return { record};
 };

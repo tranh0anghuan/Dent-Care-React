@@ -40,7 +40,7 @@ function CreateRecord() {
 
     const onFinish = (values) => {
         console.log(values)
-        // createRecord(values)
+        createRecord(values)
         navigate(`/treatment-plan/${appointment.id}`)
     }
 
