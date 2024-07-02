@@ -5,7 +5,7 @@ import useServices from '../../callApi/services';
 import { Button, DatePicker, Form, Input, Modal, Radio, Select, Space } from 'antd';
 import useSlot from '../../callApi/slot';
 import './style.css'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link,  useParams } from 'react-router-dom';
 import useClinicByID from '../../callApi/cliByID';
 import api from '../../config/axios';
 import { useForm } from 'antd/es/form/Form';
@@ -20,6 +20,9 @@ import useSlotByDentistID from '../../callApi/slotByDen';
 import useSlotByDentistIDAndDate from '../../callApi/slotByDate';
 import useSerAndDenByID from '../../callApi/den-ser';
 import usePatientByPhone, { getPatient } from '../../callApi/patientByPhone';
+import FormAppointment from './formAppointment';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function Appointment() {
@@ -32,7 +35,9 @@ function Appointment() {
 
     const { id, sid, did } = useParams()
     const [form1] = Form.useForm();
-    const [form2] = Form.useForm();
+
+    const navigate= useNavigate()
+
 
 
     const { clinic } = useClinicByID(id);
@@ -40,80 +45,6 @@ function Appointment() {
     const { dentist } = useDentistByID(did);
     const { denSer } = useSerAndDenByID(sid, did);
 
-
-    const [open, setOpen] = useState(false);
-    const showModal = () => {
-        setOpen(true);
-    };
-    const handleOk = () => {
-        setOpen(false);
-    };
-    const handleCancel = () => {
-        setOpen(false);
-    };
-
-
-    // const {slot} = useSlotByDentistID(did);
-
-
-    // const [service, setService] = useState([])
-
-    // const [clinic, setClinic] = useState({})
-    // const [dentist, setDentist] = useState([]);
-    // const role = 'DENTIST';
-
-    // const [slot, setSlot] = useState([])
-
-    // const getSlot = async () => {
-    //     try {
-    //         const res = await api.get('/slot')
-    //         setSlot(res.data)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
-    // const getDentists = async () => {
-    //     try {
-    //         const res = await api.get(`/account/role/${role}`);
-    //         setDentist(res.data);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
-
-    // const getClinics = async () => {
-    //     try {
-    //         const res = await api.get(`/clinic/${id}`)
-    //         const services = res.data.serviceDetails
-    //         setClinic(res.data)
-    //         setService(services.filter(item => item.id == sid)[0])
-    //         form.setFieldValue("clinicID",res.data.clinicName)
-    //         form.setFieldValue("serviceID",services.filter(item => item.id == sid)[0].name)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
-
-        // form1.setFieldValue("name", patient.name)
-        // form1.setFieldValue("serviceID", denSer.id)
-        // form1.setFieldValue("dentistID", dentist.id)
-
-
-    // useEffect(() => {
-    // }, []);
-
-    // useEffect(() => {
-    //     if (clinic && clinic.id) {
-    //         form.setFieldsValue({ clinicID: clinic.clinicName });
-    //     }
-    // }, [clinic, form]);
-
-
-
-    const { Option } = Select;
 
     const layout = {
         labelCol: { span: 6 },
@@ -126,16 +57,15 @@ function Appointment() {
 
     };
 
-    // const handleOnFinish = (values) => {
-    //     show();
-    //     console.log(values)
-    // };
 
     const handlePhoneSubmit = async (values) => {
         setIsFullFormVisible(true);
-        setPatient( await getPatient(values.phone))
-        console.log(patient)
+        const patien = await getPatient(values.phone)
+        setPatient(patien)
+        // form1.setFieldValue("name", patien.name)
     };
+
+
 
     const handleBackClick = () => {
         setIsFullFormVisible(false);
@@ -147,39 +77,10 @@ function Appointment() {
         const phone = await createPatient(values)
         const { id } = await getPatient(phone)
         await makeAppointment(values, id)
+        show(values)
     };
 
-    const onFinishAppointmentAgain = async (values) => {
-        console.log(patient.id)
-        console.log(values)
-        await makeAppointment(values, patient.id)
-    }
 
-    const show = (values) => {
-        Modal.confirm({
-            title: 'Confirm',
-            content: 'Before booking service, you need to pay deposit in advance 100,000 VND',
-            footer: (_, { CancelBtn }) => (
-                <>
-                    <Button
-                        className='btn btn-primary'
-                        style={{ borderRadius: '6px' }}
-                        onClick={() => {
-                            // Log values or perform any other operations here
-                            console.log(values);
-                            Modal.destroyAll(); // Close the modal
-                            toast.success('Make appointment successfully!');
-                            // createPatient(values)
-
-                        }}
-                    >
-                        OK
-                    </Button>
-                    <CancelBtn />
-                </>
-            ),
-        });
-    };
 
     const createPatient = async (values) => {
         try {
@@ -217,23 +118,10 @@ function Appointment() {
 
     const [date, setDate] = useState('');
 
-    const getDate = (value) => {
-        setDate(value.format('YYYY-MM-DD'))
 
-    }
-
-
-    useEffect(() => {
-
-
-        getSlot()
-
-
-    }, [date])
-
-    const [slot, setSlot] = useState([])
-
-    const getSlot = async () => {
+    const getDate = async (value) => {
+        const dateCurrent = value.format('YYYY-MM-DD')
+        setDate(dateCurrent);
         try {
             const res = await api.get(`/slot/available/dentist/${did}/day-off/${date}`)
             setSlot(res.data)
@@ -241,7 +129,62 @@ function Appointment() {
         } catch (error) {
             console.log(error)
         }
+
     }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString(undefined, options);
+    };
+
+    const show = (values) => {
+        Modal.info({
+            title: 'Confirm',
+            content:
+                <div className="appointment-card d-flex flex-column justify-content-center align-items-center">
+                    <i className="fa-regular fa-calendar-check" style={{ fontSize: '100px', marginBottom: '20px', color: '#06A3DA' }} />
+                    <p className='text-center fw-normal' style={{ fontSize: '20px' }}>{values.name}, we've got you confirmed for your appointment.</p>
+                    <h3 className="time">
+                        {slot.map(item => (item.id == values.slotID) ? `${item.startTime}  ` : '')}
+
+                        | {dentist.fullName}</h3>
+                    <p className="location text-center" style={{ fontSize: '20px', fontWeight:'100' }}>{formatDate(date)} 
+                        <br/> {clinic.clinicName}
+                    </p>
+                    <Button
+                        className='btn btn-primary px-5'
+                        style={{ borderRadius: '20px', paddingLeft:'10px' }}
+                        onClick={() => {
+                            console.log(values);
+                            Modal.destroyAll();
+                            navigate('/patient')
+                        }}
+                    >
+                        MY APPOINTMENT
+                    </Button>
+                    <hr style={{color:'black', width:'200px', marginTop:'20px'}}/>
+                </div>
+            ,
+            footer: (_, { CancelBtn }) => (
+                <>
+                    <Button
+                        className='btn btn-primary px-5'
+                        style={{ borderRadius: '20px', marginRight:'100px', marginTop:'-20px' }}
+                        onClick={() => {
+                            console.log(values);
+                            Modal.destroyAll();
+                            navigate('/')
+                        }}
+                    >
+                        HOME
+                    </Button>
+                </>
+            ),
+        });
+    };
+    const [slot, setSlot] = useState([])
+
 
     const onFinishFailed = (errorInfo, values) => {
         console.log('Failed:', errorInfo);
@@ -264,7 +207,6 @@ function Appointment() {
             sm: { span: 14, offset: 6 },
         },
     };
-
 
     return (
         <>
@@ -307,11 +249,18 @@ function Appointment() {
                                     <h1 className="text-white mb-4">Make Appointment</h1>
 
                                     {patient ? (
+                                        <div>
+                                            <FormAppointment clinic={clinic} service={service}
+                                                denSer={denSer} dentist={dentist}
+                                                patient={patient} did={did}
+                                                setIsFullFormVisible={setIsFullFormVisible} />
+                                        </div>
+                                    ) : (
                                         <Form
                                             {...layout}
                                             form={form1}
                                             name="appointment-form"
-                                            onFinish={onFinishAppointmentAgain}
+                                            onFinish={onFinish}
                                             onFinishFailed={onFinishFailed}
                                             style={{ maxWidth: 800 }}
                                         >
@@ -346,7 +295,7 @@ function Appointment() {
                                                 name="dentistID"
                                                 label="Select Doctor"
                                                 rules={[{ required: true, message: 'Please select a doctor!' }]}
-                                                initialValue={dentist.id}
+                                                initialValue={dentist.fullName}
 
                                             >
                                                 <div
@@ -374,7 +323,7 @@ function Appointment() {
                                                 rules={[{ required: true, message: 'Please select a slot!' }]}
                                             >
                                                 <Select placeholder="Select Slot">
-                                                    {slot.map((item) => (
+                                                    {slot?.map((item) => (
                                                         <Option key={item.id} value={item.id}>
                                                             Slot {item.id}: {item.startTime} - {item.endTime}
                                                         </Option>
@@ -386,77 +335,51 @@ function Appointment() {
                                                 name="name"
                                                 label="Name"
                                                 rules={[{ required: true, message: 'Please enter your name!' }]}
-                                                initialValue={patient.id}
-                                            >   
-                                                <div
-                                                    className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                    style={{ textAlign: 'start' }}
-                                                >{patient.name}</div>
+                                            >
+                                                <Input placeholder="Name" />
                                             </Form.Item>
 
                                             <Form.Item
                                                 name="age"
                                                 label="Age"
                                                 rules={[{ required: true, message: 'Please enter your age!' }]}
-                                                initialValue={patient.age}
                                             >
-                                                <div
-                                                    className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                    style={{ textAlign: 'start' }}
-                                                >{patient.age}</div>
-                                                <Input type='hidden' value={patient.age} />
+                                                <Input placeholder="Age" />
                                             </Form.Item>
 
                                             <Form.Item
                                                 name="gender"
-                                                label="Gender"
+                                                label="Select Gender"
                                                 rules={[{ required: true, message: 'Please select your gender!' }]}
-                                                initialValue={patient.gender}
                                             >
-                                                <div
-                                                    className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                    style={{ textAlign: 'start' }}
-                                                >{patient.gender == true ? ('Male') : ("Female")}</div>
-                                                <Input type='hidden' value={patient.gender} />
+                                                <Select placeholder="Select Gender">
+                                                    <Option value={true}>Male</Option>
+                                                    <Option value={false}>Female</Option>
+                                                </Select>
                                             </Form.Item>
 
                                             <Form.Item
                                                 name="address"
                                                 label="Address"
                                                 rules={[{ required: true, message: 'Please enter your address!' }]}
-                                                initialValue={patient.address}
                                             >
-                                                <div
-                                                    className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                    style={{ textAlign: 'start' }}
-                                                >{patient.address}</div>
-                                                <Input type='hidden' value={patient.address} />
+                                                <Input placeholder="Address" />
                                             </Form.Item>
 
                                             <Form.Item
                                                 name="phone"
                                                 label="Phone"
                                                 rules={[{ required: true, message: 'Please enter your phone number!' }]}
-                                                initialValue={patient.phoneNumber}
                                             >
-                                                <div
-                                                    className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                    style={{ textAlign: 'start' }}
-                                                >{patient.phoneNumber}</div>
-                                                <Input type='hidden' value={patient.phoneNumber} />
+                                                <Input placeholder="Phone" />
                                             </Form.Item>
 
                                             <Form.Item
                                                 name="email"
                                                 label="Email"
                                                 rules={[{ required: true, message: 'Please enter your email!' }]}
-                                                initialValue={patient.email}
                                             >
-                                                <div
-                                                    className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                    style={{ textAlign: 'start' }}
-                                                >{patient.email}</div>
-                                                <Input type='hidden' value={patient.email} />
+                                                <Input placeholder="Email" />
                                             </Form.Item>
 
                                             <Form.Item {...tailLayout}>
@@ -477,440 +400,12 @@ function Appointment() {
                                                     </Button>
                                                 </Space>
                                             </Form.Item>
-                                        </Form>
-                                    ) : (<Form
-                                        {...layout}
-                                        form={form2}
-                                        name="appointment-form"
-                                        onFinish={onFinish}
-                                        onFinishFailed={onFinishFailed}
-                                        style={{ maxWidth: 800 }}
-                                    >
-                                        <Form.Item
-                                            name="clinicID"
-                                            label="Select Clinic"
-                                            rules={[{ required: true, message: 'Please select a clinic!' }]}
-
-                                        >
-                                            <div
-                                                className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                style={{ textAlign: 'start' }}
-                                            >{clinic.clinicName}</div>
-                                            <Input type='hidden' />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="serviceID"
-                                            label="Select Service"
-
-                                            rules={[{ required: true, message: 'Please select a service!' }]}
-                                        >
-                                            <div
-                                                className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                style={{ textAlign: 'start' }}
-                                            >{service.name}</div>
-                                            <Input type='hidden' />
-                                        </Form.Item >
-
-                                        {did && <Form.Item
-                                            name="dentistID"
-                                            label="Select Doctor"
-                                            rules={[{ required: true, message: 'Please select a doctor!' }]}
-                                        >
-                                            <div
-                                                className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                style={{ textAlign: 'start' }}
-                                            >{dentist.fullName}</div>
-                                            <Input type='hidden' />
-                                        </Form.Item>}
-
-                                        <Form.Item
-                                            name="date"
-                                            label="Select Date"
-                                            rules={[{ required: true, message: 'Please select a date!' }]}
-                                        >
-                                            <DatePicker
-                                                style={{ width: '100%' }}
-
-                                                onChange={getDate}
-                                            />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="slotID"
-                                            label="Select Slot"
-                                            rules={[{ required: true, message: 'Please select a slot!' }]}
-                                        >
-                                            <Select placeholder="Select Slot">
-                                                {slot.map((item) => (
-                                                    <Option key={item.id} value={item.id}>
-                                                        Slot {item.id}: {item.startTime} - {item.endTime}
-                                                    </Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="name"
-                                            label="Name"
-                                            rules={[{ required: true, message: 'Please enter your name!' }]}
-                                        >
-                                            <Input placeholder="Name" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="age"
-                                            label="Age"
-                                            rules={[{ required: true, message: 'Please enter your age!' }]}
-                                        >
-                                            <Input placeholder="Age" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="gender"
-                                            label="Select Gender"
-                                            rules={[{ required: true, message: 'Please select your gender!' }]}
-                                        >
-                                            <Select placeholder="Select Gender">
-                                                <Option value={true}>Male</Option>
-                                                <Option value={false}>Female</Option>
-                                            </Select>
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="address"
-                                            label="Address"
-                                            rules={[{ required: true, message: 'Please enter your address!' }]}
-                                        >
-                                            <Input placeholder="Address" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="phone"
-                                            label="Phone"
-                                            rules={[{ required: true, message: 'Please enter your phone number!' }]}
-                                        >
-                                            <Input placeholder="Phone" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="email"
-                                            label="Email"
-                                            rules={[{ required: true, message: 'Please enter your email!' }]}
-                                        >
-                                            <Input placeholder="Email" />
-                                        </Form.Item>
-
-                                        <Form.Item {...tailLayout}>
-                                            <Space>
-                                                <Button
-                                                    type="primary"
-                                                    htmlType="submit"
-                                                    className="btn btn-primary btn-lg appointment-btn"
-                                                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem', marginRight: '10px' }}
-                                                >
-                                                    Make Appointment
-                                                </Button>
-                                                <Button onClick={handleBackClick}
-                                                    className="btn btn-secondary btn-lg appointment-btn"
-                                                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }}
-                                                >
-                                                    Back
-                                                </Button>
-                                            </Space>
-                                        </Form.Item>
-                                    </Form>)}
-
-                                    {/* <Form
-                                        {...layout}
-                                        form={form1}
-                                        name="appointment-form"
-                                        onFinish={onFinish}
-                                        onFinishFailed={onFinishFailed}
-                                        style={{ maxWidth: 800 }}
-                                    >
-                                        <Form.Item
-                                            name="clinicID"
-                                            label="Select Clinic"
-                                            rules={[{ required: true, message: 'Please select a clinic!' }]}
-                                            initialValue={clinic.id}
-                                        >
-                                            <div
-                                                className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                style={{ textAlign: 'start' }}
-                                            >{clinic.clinicName}</div>
-                                            <Input type='hidden'/>
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="serviceID"
-                                            label="Select Service"
-                                            rules={[{ required: true, message: 'Please select a service!' }]}
-                                            initialValue={denSer.id}
-
-                                        >
-                                            <div
-                                                className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                style={{ textAlign: 'start' }}
-                                            >{service.name}</div>
-                                            <Input type='hidden' />
-                                        </Form.Item >
-
-                                        {did && <Form.Item
-                                            name="dentistID"
-                                            label="Select Doctor"
-                                            rules={[{ required: true, message: 'Please select a doctor!' }]}
-                                            initialValue={dentist.id}
-
-                                        >
-                                            <div
-                                                className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                                style={{ textAlign: 'start' }}
-                                            >{dentist.fullName}</div>
-                                            <Input type='hidden' />
-                                        </Form.Item>}
-
-                                        <Form.Item
-                                            name="date"
-                                            label="Select Date"
-                                            rules={[{ required: true, message: 'Please select a date!' }]}
-                                        >
-                                            <DatePicker
-                                                style={{ width: '100%' }}
-
-                                                onChange={getDate}
-                                            />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="slotID"
-                                            label="Select Slot"
-                                            rules={[{ required: true, message: 'Please select a slot!' }]}
-                                        >
-                                            <Select placeholder="Select Slot">
-                                                {slot.map((item) => (
-                                                    <Option key={item.id} value={item.id}>
-                                                        Slot {item.id}: {item.startTime} - {item.endTime}
-                                                    </Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="name"
-                                            label="Name"
-                                            rules={[{ required: true, message: 'Please enter your name!' }]}
-                                        >
-                                            <Input placeholder="Name" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="age"
-                                            label="Age"
-                                            rules={[{ required: true, message: 'Please enter your age!' }]}
-                                        >
-                                            <Input placeholder="Age" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="gender"
-                                            label="Select Gender"
-                                            rules={[{ required: true, message: 'Please select your gender!' }]}
-                                        >
-                                            <Select placeholder="Select Gender">
-                                                <Option value={true}>Male</Option>
-                                                <Option value={false}>Female</Option>
-                                            </Select>
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="address"
-                                            label="Address"
-                                            rules={[{ required: true, message: 'Please enter your address!' }]}
-                                        >
-                                            <Input placeholder="Address" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="phone"
-                                            label="Phone"
-                                            rules={[{ required: true, message: 'Please enter your phone number!' }]}
-                                        >
-                                            <Input placeholder="Phone" />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="email"
-                                            label="Email"
-                                            rules={[{ required: true, message: 'Please enter your email!' }]}
-                                        >
-                                            <Input placeholder="Email" />
-                                        </Form.Item>
-
-                                        <Form.Item {...tailLayout}>
-                                            <Space>
-                                                <Button
-                                                    type="primary"
-                                                    htmlType="submit"
-                                                    className="btn btn-primary btn-lg appointment-btn"
-                                                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem', marginRight:'10px' }}
-                                                >
-                                                    Make Appointment
-                                                </Button>
-                                                <Button onClick={handleBackClick}
-                                                    className="btn btn-secondary btn-lg appointment-btn"
-                                                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }}
-                                                >
-                                                    Back
-                                                </Button>
-                                            </Space>
-                                        </Form.Item>
-                                    </Form> */}
+                                        </Form>)}
                                 </div>
                             </div>
                         )}
 
-                        {/* <div className="col-lg-6">
-                            <div className="appointment-form h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" data-wow-delay="0.6s">
-                                <h1 className="text-white mb-4">Make Appointment</h1>
-                                <Form
-                                    {...layout}
-                                    form={form}
-                                    name="appointment-form"
-                                    onFinish={onFinish}
-                                    onFinishFailed={onFinishFailed}
-                                    style={{ maxWidth: 800 }}
-                                >
-                                    <Form.Item
-                                        name="clinicID"
-                                        label="Select Clinic"
-                                        rules={[{ required: true, message: 'Please select a clinic!' }]}
 
-                                    >
-                                        <div
-                                            className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                            style={{ textAlign: 'start' }}
-                                        >{clinic.clinicName}</div>
-                                        <Input type='hidden' />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="serviceID"
-                                        label="Select Service"
-
-                                        rules={[{ required: true, message: 'Please select a service!' }]}
-                                    >
-                                        <div
-                                            className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                            style={{ textAlign: 'start' }}
-                                        >{service.name}</div>
-                                        <Input type='hidden' />
-                                    </Form.Item >
-
-                                    {did && <Form.Item
-                                        name="dentistID"
-                                        label="Select Doctor"
-                                        rules={[{ required: true, message: 'Please select a doctor!' }]}
-                                    >
-                                        <div
-                                            className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
-                                            style={{ textAlign: 'start' }}
-                                        >{dentist.fullName}</div>
-                                        <Input type='hidden' />
-                                    </Form.Item>}
-
-                                    <Form.Item
-                                        name="date"
-                                        label="Select Date"
-                                        rules={[{ required: true, message: 'Please select a date!' }]}
-                                    >
-                                        <DatePicker
-                                            style={{ width: '100%' }}
-
-                                            onChange={getDate}
-                                        />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="slotID"
-                                        label="Select Slot"
-                                        rules={[{ required: true, message: 'Please select a slot!' }]}
-                                    >
-                                        <Select placeholder="Select Slot">
-                                            {slot.map((item) => (
-                                                <Option key={item.id} value={item.id}>
-                                                    Slot {item.id}: {item.startTime} - {item.endTime}
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="name"
-                                        label="Name"
-                                        rules={[{ required: true, message: 'Please enter your name!' }]}
-                                    >
-                                        <Input placeholder="Name" />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="age"
-                                        label="Age"
-                                        rules={[{ required: true, message: 'Please enter your age!' }]}
-                                    >
-                                        <Input placeholder="Age" />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="gender"
-                                        label="Select Gender"
-                                        rules={[{ required: true, message: 'Please select your gender!' }]}
-                                    >
-                                        <Select placeholder="Select Gender">
-                                            <Option value={true}>Male</Option>
-                                            <Option value={false}>Female</Option>
-                                        </Select>
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="address"
-                                        label="Address"
-                                        rules={[{ required: true, message: 'Please enter your address!' }]}
-                                    >
-                                        <Input placeholder="Address" />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="phone"
-                                        label="Phone"
-                                        rules={[{ required: true, message: 'Please enter your phone number!' }]}
-                                    >
-                                        <Input placeholder="Phone" />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="email"
-                                        label="Email"
-                                        rules={[{ required: true, message: 'Please enter your email!' }]}
-                                    >
-                                        <Input placeholder="Email" />
-                                    </Form.Item>
-
-                                    <Form.Item {...tailLayout}>
-                                        <Space>
-                                            <Button
-                                                type="primary"
-                                                htmlType="submit"
-                                                className="btn btn-primary btn-lg appointment-btn"
-                                                style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem' }}
-                                            >
-                                                Make Appointment
-                                            </Button>
-                                        </Space>
-                                    </Form.Item>
-                                </Form>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div>

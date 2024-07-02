@@ -32,7 +32,7 @@ function Navbar() {
           <Link  to={"/services"} className="nav-item nav-link">Services</Link>
           <Link  to={"/team"} className="nav-item nav-link">Dentists</Link>
           <Link  to={"/contact"} className="nav-item nav-link">Contact</Link>
-          {user && user?.role !== '' ? (
+          {user && user?.role !== 'STAFF' ? (
               <div className="nav-item dropdown">
               <Link  to={"/"} className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</Link>
               <div className="dropdown-menu m-0">
@@ -40,14 +40,14 @@ function Navbar() {
                 <Link  to={"/dentist-schedule"} className="dropdown-item">Schedule</Link>
                 ) : (<Link  to={"/patient"} className="dropdown-item">Schedule</Link>)}
                 {user?.role === 'DENTIST' ? (
-                <Link  to={"/record"} className="dropdown-item">Record</Link>
-                ) : ""}
+                <Link  to={"/view-record"} className="dropdown-item">Record</Link>
+                ) : (<Link  to={"/patient-app-record"} className="dropdown-item">Record</Link>)}
                 {user?.role === 'ADMIN' ? (
                 <Link  to={"/dashboard"} className="dropdown-item">Dashboard</Link>
                 ) : ""}
               </div>
             </div>
-              ) : ("")}
+              ) : (<Link  to={"/check-in"} className="nav-item nav-link">Check In</Link>)}
 
 
         </div>

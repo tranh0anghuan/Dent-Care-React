@@ -62,12 +62,8 @@ export default function PersonalProfile() {
                         <MDBCardText className="text-muted">123 456 789</MDBCardText>
                       </MDBCol> */}
                                         </MDBRow>
-                                        <hr className="mt-0 mb-4" />
 
-                                        <div className="d-flex justify-content-start">
-                                            <i class="fa-solid fa-wallet" style={{color: '#06A3DA'}}></i>
-                                            <MDBCardText className="text-muted" style={{marginLeft:'10px', marginTop:'-5px'}}>100,000 VND</MDBCardText>
-                                        </div>
+                                        
                                     </MDBCardBody>
                                 </MDBCol>
                             </MDBRow>
