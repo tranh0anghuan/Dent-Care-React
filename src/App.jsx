@@ -13,12 +13,17 @@ import RecordPage from './pages/record';
 import SignupPage from './pages/signup';
 import SchedulePage from './pages/schedule';
 import Dashboard from './pages/dashboard';
+import Manager from './pages/manager';
+import Managerappointment from './components/managerappointment';
+import ManagerPatient from './components/manager-patient';
+import Room from './components/room';
 import Category from './components/category';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ForgotPage from './pages/forgot-password';
 import ResetPage from './pages/reset-password';
 import Information from './components/information';
+import Product from './components/product';
 import ClinicDetailPage from './pages/clinic-detail';
 import ClinicPage from './pages/clinics';
 import ServiceDetailPage from './pages/service-detail';
@@ -170,6 +175,7 @@ function App() {
       path: '/signup',
       element: <SignupPage />,
     },
+
     {
       path: '/dashboard',
       element: <Dashboard />,
@@ -181,9 +187,34 @@ function App() {
         {
           path: '/dashboard/information',
           element: <Information />,
+        },
+        {
+          path: '/dashboard/product',
+          element:<Product />
         }
       ],
     },
+    
+    {
+      path: '/manager',
+      element:<Manager />,
+      children: [
+        {
+          path: '/manager/managerappointment',
+          element: <Managerappointment />,
+        },
+        {
+          path: '/manager/room',
+          element: <Room />,
+        },
+        {
+          path: '/manager/manager-patient',
+          element:<ManagerPatient />
+        },
+        
+      ],
+    },
+
     {
       path: '/forgot',
       element: <ForgotPage />

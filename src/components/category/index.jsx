@@ -1,36 +1,12 @@
-import { Button, Form, Input, Modal, Table, Menu, Dropdown, Popconfirm, message } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Button, Input, Table, Menu, Dropdown, Popconfirm, message, Modal } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
 
 function Category() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState([]);
   const [roleFilter, setRoleFilter] = useState('all');
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const onFinish = async (values) => {
-    const response = await api.post("/account", values);
-    setData([...data, response.data]);
-    setIsModalOpen(false);
-    console.log(response.data);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+  const [searchText, setSearchText] = useState('');
 
   const fetchData = async () => {
     const response = await api.get("/account");
@@ -41,14 +17,14 @@ function Category() {
   useEffect(() => {
     fetchData();
   }, []);
-    // Thêm try-catch để xử lý lỗi khi xóa không thành công.
+
   const handleDelete = async (record) => {
     try {
       await api.delete(`/account/${record.id}`);
       setData(data.filter((item) => item.id !== record.id));
       message.success('Deleted successfully');
     } catch (error) {
-      console.error('Failed to delete:', error);
+      console.error('Failed to delete:', error.response); // Thêm .response để lấy chi tiết phản hồi lỗi
       message.error('Failed to delete');
     }
   };
@@ -57,10 +33,15 @@ function Category() {
     setRoleFilter(e.key);
   };
 
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="all">All</Menu.Item>
       <Menu.Item key="ADMIN">Admin</Menu.Item>
+      <Menu.Item key="Manager">Manager</Menu.Item>
       <Menu.Item key="dentist">Dentist</Menu.Item>
       <Menu.Item key="customer">Customer</Menu.Item>
     </Menu>
@@ -69,6 +50,51 @@ function Category() {
   const filteredData = roleFilter === 'all'
     ? data
     : data.filter((item) => item.role.toLowerCase() === roleFilter.toLowerCase());
+
+  const searchedData = filteredData.filter((item) =>
+    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const handleDetail = (record) => {
+    Modal.info({
+      title: 'Detail',
+      width: 1200,
+      centered: true,
+      content: (
+        <div>
+          <p><strong>ID:</strong> {record.id}</p>
+          <p><strong>FullName:</strong> {record.fullName}</p>
+          <p><strong>Email:</strong> {record.email}</p>
+          <p><strong>Phone:</strong> {record.phone}</p>
+          <p><strong>Role:</strong> {record.role}</p>
+          <p><strong>Status:</strong> {record.status}</p>
+          <h3>Dental Clinic Information:</h3>
+          {record.dentalClinic && (
+            <div>
+              <p><strong>ID:</strong> {record.dentalClinic.id}</p>
+              <p><strong>Clinic Name:</strong> {record.dentalClinic.clinicName}</p>
+              <p><strong>Address:</strong> {record.dentalClinic.address}</p>
+              <p><strong>Open Hours:</strong> {record.dentalClinic.openHours}</p>
+              <p><strong>Close Hours:</strong> {record.dentalClinic.closeHours}</p>
+              <p><strong>Clinic Status:</strong> {record.dentalClinic.clinicEnum}</p>
+            </div>
+          )}
+          <p><strong>Enabled:</strong> {record.enabled ? 'Yes' : 'No'}</p>
+          <p><strong>Username:</strong> {record.username}</p>
+          <h3>Authorities:</h3>
+          <ul>
+            {record.authorities.map((auth, index) => (
+              <li key={index}>{auth.authority}</li>
+            ))}
+          </ul>
+          <p><strong>Account Non-Expired:</strong> {record.accountNonExpired ? 'Yes' : 'No'}</p>
+          <p><strong>Account Non-Locked:</strong> {record.accountNonLocked ? 'Yes' : 'No'}</p>
+          <p><strong>Credentials Non-Expired:</strong> {record.credentialsNonExpired ? 'Yes' : 'No'}</p>
+        </div>
+      ),
+      onOk() {},
+    });
+  };
 
   const columns = [
     {
@@ -99,61 +125,39 @@ function Category() {
     {
       title: 'Action',
       render: (record) => (
-        <Popconfirm
-          title="Are you sure to delete this account?"
-          onConfirm={() => handleDelete(record)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button danger type="primary">Delete</Button>
-        </Popconfirm>
+        <>
+          <Button type="primary" onClick={() => handleDetail(record)}>
+            Detail
+          </Button>
+          <Popconfirm
+            title="Are you sure to delete this account?"
+            onConfirm={() => handleDelete(record)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger type="primary" style={{ marginLeft: 8 }}>Delete</Button>
+          </Popconfirm>
+        </>
       ),
     },
   ];
 
   return (
-    <div className="">
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
-      <Dropdown overlay={menu}>
-        <Button style={{ marginLeft: 8 }}>
-          Filter by Role <DownOutlined />
-        </Button>
-      </Dropdown>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={false}>
-        <Form
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="UserName"
-            name="categoryName"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-      <Table dataSource={filteredData} columns={columns} />
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Search FullName"
+          value={searchText}
+          onChange={handleSearch}
+          style={{ width: 200, marginRight: 16 }}
+        />
+        <Dropdown overlay={menu}>
+          <Button>
+            Filter by Role <DownOutlined />
+          </Button>
+        </Dropdown>
+      </div>
+      <Table dataSource={searchedData} columns={columns} />
     </div>
   );
 }
