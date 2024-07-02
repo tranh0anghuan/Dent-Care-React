@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import HeroHeader from '../hero-header'
-import './style.css'
 import {
     Button,
     DatePicker,
@@ -15,8 +13,9 @@ import api from '../../config/axios';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/counterSlice';
+import HeroHeader from '../../components/hero-header';
 
-function Record() {
+function CheckIn() {
 
     const [isFullFormVisible, setIsFullFormVisible] = useState(false);
 
@@ -48,7 +47,7 @@ function Record() {
 
     const getAppointment = async (id) => {
         try {
-            const res = await api.get(`/appointment-patient/patient/${id}/dentist/${user.id}/date/${getToDay()}`)
+            const res = await api.get(`/appointment-patient/patient/${id}/date/${getToDay()}`)
             setAppointment(res.data)
         } catch (error) {
             console.log(error)
@@ -150,7 +149,7 @@ function Record() {
                                             <th scope="col">Age</th>
                                             <th scope="col">Address</th>
                                             <th scope="col">Room</th>
-                                            <th scope="col">Action</th>
+                                            {/* <th scope="col">Action</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -166,9 +165,9 @@ function Record() {
                                                     <td>{item.patient.age}</td>
                                                     <td>{item.patient.address}</td>
                                                     <td>{item.dentistServices.account.room?.name}</td>
-                                                    <td>
+                                                    {/* <td>
                                                         <Link to={`/create-record/${item.id}`} className='btn btn-primary'>Create</Link>
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             ) : ""
 
@@ -198,4 +197,4 @@ function Record() {
     )
 }
 
-export default Record
+export default CheckIn
