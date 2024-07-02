@@ -22,6 +22,7 @@ import useSerAndDenByID from '../../callApi/den-ser';
 import usePatientByPhone, { getPatient } from '../../callApi/patientByPhone';
 import FormAppointment from './formAppointment';
 import { useNavigate } from 'react-router-dom';
+import usePatientForSelect from '../../callApi/patientForSelect';
 
 
 
@@ -45,6 +46,9 @@ function Appointment() {
     const { dentist } = useDentistByID(did);
     const { denSer } = useSerAndDenByID(sid, did);
 
+    const {patientSelect} = usePatientForSelect(user.id)
+
+
 
     const layout = {
         labelCol: { span: 6 },
@@ -62,7 +66,12 @@ function Appointment() {
         setIsFullFormVisible(true);
         const patien = await getPatient(values.phone)
         setPatient(patien)
-        // form1.setFieldValue("name", patien.name)
+    };
+
+    const handleSelectSubmit = async (values) => {
+        setIsFullFormVisible(true);
+        const patien = await getPatient(values.phone)
+        setPatient(patien)
     };
 
 
@@ -224,6 +233,33 @@ function Appointment() {
                             <div className="col-lg-6">
                                 <div className="appointment-form h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" data-wow-delay="0.6s">
                                     <h1 className="text-white mb-4">Make Appointment</h1>
+
+                                    <Form
+                                        {...formItemLayout}
+                                        onFinish={handleSelectSubmit}
+                                    >
+                                        <Form.Item
+                                            label="Patient"
+                                            name="phone"
+                                            rules={[{ required: true, message: 'Please input your phone number!' }]}
+                                        >
+                                            <Select placeholder="Select Slot">
+                                                    {patientSelect.map((item) => (
+                                                        <Option key={item.phoneNumber}>
+                                                            {item.name} - {item.phoneNumber}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+                                        </Form.Item>
+                                        <Form.Item {...tailFormItemLayout}>
+                                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                                                Next
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
+                                    
+                                    <hr className='bg-light m-4'/>
+
                                     <Form
                                         {...formItemLayout}
                                         onFinish={handlePhoneSubmit}
@@ -234,6 +270,7 @@ function Appointment() {
                                             rules={[{ required: true, message: 'Please input your phone number!' }]}
                                         >
                                             <Input />
+                                            <p className='mt-3'>Enter phone if it's your first time to be here</p>
                                         </Form.Item>
                                         <Form.Item {...tailFormItemLayout}>
                                             <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>

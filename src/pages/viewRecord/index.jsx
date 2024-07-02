@@ -9,33 +9,6 @@ import HeroHeader from '../../components/hero-header';
 
 function ViewRecord() {
 
-    const { clinic } = useClinics();
-
-    const user = useSelector(selectUser)
-
-    const navigate = useNavigate();
-
-    const show = () => {
-        Modal.confirm({
-            title: 'Info',
-            content: 'Before booking service, you need log in',
-            footer: (_, { OkBtn, CancelBtn }) => (
-                <>
-                    <Button
-                        className='btn btn-primary'
-                        style={{ borderRadius: '6px' }}
-                        onClick={() => {
-                            navigate('/login')
-                            Modal.destroyAll(); // Close the modal
-                        }}
-                    >Log in</Button>
-                    <CancelBtn />
-                </>
-            ),
-        });
-    }
-
-
 
 
     return (
@@ -63,11 +36,11 @@ function ViewRecord() {
                             </Link>
                         </div>
                         <div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                            <div onClick={show} className="team-item">
+                            <Link to={`/record-dentist`}  className="team-item">
                                 <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
                                     <img className="img-fluid rounded-top w-100" src={`/View Record.avif`} alt />
                                     <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                        <Link to={`/dentist/`} className="btn btn-primary py-2 px-3">VIEW</Link>
+                                        <Link to={`/record-dentist`} className="btn btn-primary py-2 px-3">VIEW</Link>
 
                                     </div>
                                 </div>
@@ -75,7 +48,7 @@ function ViewRecord() {
                                     <h4 className="mb-2"></h4>
                                     <p className="text-primary mb-0"></p>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
 
                     </div>

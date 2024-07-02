@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './style.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, logout } from '../../redux/features/counterSlice';
@@ -64,7 +64,7 @@ function Navbar() {
               <div className="dropdown-menu m-0">
                 <Link  to={"/profile"} className="dropdown-item">Profile</Link>
                 <Link  to={"/schedule"} className="dropdown-item">Schedule</Link>
-                <Link  to={"/"} className="dropdown-item" onClick={handleLogout}>Log out</Link>
+                <Link  to={"/login"} className="dropdown-item" onClick={handleLogout}>Log out</Link>
               </div>
             </div>
           </div>

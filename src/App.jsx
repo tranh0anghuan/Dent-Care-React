@@ -40,6 +40,7 @@ import CreateTreatment from './pages/create-treatment';
 import PatientAppointmentRecord from './pages/patient-app-record';
 import AppointmentRecord from './pages/appointment-record';
 import CheckIn from './pages/check-in';
+import RecordByDentist from './pages/see-record';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -164,6 +165,10 @@ function App() {
         {
           path: '/check-in',
           element: <CheckIn />
+        },
+        {
+          path: '/record-dentist',
+          element: <RecordByDentist />
         },
       ]
     },

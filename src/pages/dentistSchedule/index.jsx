@@ -40,16 +40,6 @@ function DentistSchedule() {
                                                 <td>{item.dentistServices.account.room?.name}</td>
                                             </tr>
                                         ) : ""
-
-
-                                        // <tr>
-                                        //     <td>{item.date}</td>
-                                        //     <td>{item.dentistServices.account.dentalClinic.address}</td>
-                                        //     <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>
-                                        //     <td>{item.dentistServices.serviceDetail.name}</td>
-                                        //     <td>{item.patient.name}</td>
-                                        //     <td>{item.dentistServices.account.room?.name}</td>
-                                        // </tr>
                                     ))}
 
                                 </tbody>
