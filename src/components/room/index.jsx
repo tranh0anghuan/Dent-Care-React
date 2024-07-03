@@ -9,8 +9,6 @@ const { Option } = Select;
 function Room() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState([]);
-  const [clinics, setClinics] = useState([]);
-
   const user = useSelector(selectUser);
   console.log(user);
 
@@ -44,7 +42,7 @@ function Room() {
 
   const fetchData = async () => {
     try {
-      const response = await api.get("/room");
+      const response = await api.get(`/room/clinic/${user.dentalClinic?.id}`);
       setData(response.data);
     } catch (error) {
       console.error('Failed to fetch rooms:', error);
@@ -52,29 +50,26 @@ function Room() {
     }
   };
 
-  const fetchClinics = async () => {
-    try {
-      const response = await api.get("/clinic");
-      setClinics(response.data); // Assuming response.data is an array of clinic objects
-    } catch (error) {
-      console.error('Failed to fetch clinics:', error);
-      message.error('Failed to fetch clinics');
-    }
-  };
-
   useEffect(() => {
-    fetchClinics();
     fetchData();
-  }, []);
+  }, [user.dentalClinic?.id]);
 
+  
+//  xóa Room và active lại status của ROOM
   const handleDelete = async (record) => {
     try {
-      await api.delete(`/room/${record.id}`);
-      setData(data.filter(item => item.id !== record.id));
-      message.success('Room deleted successfully!');
+      if (record.roomEnum === 'INACTIVE') {
+        await api.patch(`/room/active/room/${record.id}`, { roomEnum: 'ACTIVE' });
+        setData(data.map(item => item.id === record.id ? { ...item, roomEnum: 'ACTIVE' } : item));
+        message.success('Room activated successfully!');
+      } else {
+        await api.delete(`/room/${record.id}`);
+        setData(data.filter(item => item.id !== record.id));
+        message.success('Room deleted successfully!');
+      }
     } catch (error) {
-      console.error('Failed to delete room:', error);
-      message.error('Failed to delete room');
+      console.error('Failed to update room:', error);
+      message.error('Failed to update room');
     }
   };
 
@@ -97,8 +92,8 @@ function Room() {
     {
       title: 'Action',
       render: (record) => (
-        <Button onClick={() => handleDelete(record)} danger>
-          Delete
+        <Button onClick={() => handleDelete(record)} danger={record.roomEnum !== 'INACTIVE'}>
+          {record.roomEnum === 'INACTIVE' ? 'Activate' : 'Delete'}
         </Button>
       ),
     },
@@ -128,17 +123,15 @@ function Room() {
             >
               <Input />
             </Form.Item>
-            
 
             <Form.Item
               label="Clinic"
               name="clinicId"
-              rules={[{ required: true, message: 'Please select the clinic!' }]}
+              initialValue={user.dentalClinic?.id}
+              // rules={[{ required: true, message: 'Please select the clinic!' }]}
             >
-              <Select placeholder="Select a clinic">
-                {clinics.map((clinic) => (
-                  <Option key={clinic?.id} value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
-                ))}
+              <Select disabled>
+                <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
               </Select>
             </Form.Item>
 

@@ -15,14 +15,14 @@ const Manager = () => {
   const [key, setKey] = useState();
   const location = useLocation();
   const currentURI = location.pathname.split("/").pop();
-  const role = "dentist"; // Assume admin role for now
+  const role = "manager"; // Assume admin role for now
 
   const dataOpen = JSON.parse(localStorage.getItem("keys")) ?? [];
   const [openKeys, setOpenKeys] = useState(dataOpen);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (role === "dentist") {
+    if (role === "manager") {
       setItems([
         { key: "room", label: "Room", icon: <PlusOutlined /> },
         { key: "managerappointment", label: "View Appointment", icon: <ProfileOutlined /> },
