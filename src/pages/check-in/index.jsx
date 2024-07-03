@@ -156,7 +156,7 @@ function CheckIn() {
                                         {appointment.map((item, index) => (
 
 
-                                            item?.status == 'PROCESSING' ? (
+                                            item?.status != 'CANCEL' ? (
                                                 <tr>
                                                     <td>{formatDate(item.date)}</td>
                                                     <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>

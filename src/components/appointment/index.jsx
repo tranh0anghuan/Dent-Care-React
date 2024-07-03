@@ -69,6 +69,7 @@ function Appointment() {
     };
 
     const handleSelectSubmit = async (values) => {
+        console.log(values.phone)
         setIsFullFormVisible(true);
         const patien = await getPatient(values.phone)
         setPatient(patien)
@@ -243,9 +244,9 @@ function Appointment() {
                                             name="phone"
                                             rules={[{ required: true, message: 'Please input your phone number!' }]}
                                         >
-                                            <Select placeholder="Select Slot">
+                                            <Select placeholder="Select Patient">
                                                     {patientSelect.map((item) => (
-                                                        <Option key={item.phoneNumber}>
+                                                        <Option key={item.phoneNumber} value={item.phoneNumber}>
                                                             {item.name} - {item.phoneNumber}
                                                         </Option>
                                                     ))}
@@ -264,14 +265,7 @@ function Appointment() {
                                         {...formItemLayout}
                                         onFinish={handlePhoneSubmit}
                                     >
-                                        <Form.Item
-                                            label="Phone"
-                                            name="phone"
-                                            rules={[{ required: true, message: 'Please input your phone number!' }]}
-                                        >
-                                            <Input />
-                                            <p className='mt-3'>Enter phone if it's your first time to be here</p>
-                                        </Form.Item>
+                                        <p className='mt-3'>If it's your first time to be here, click below button</p>
                                         <Form.Item {...tailFormItemLayout}>
                                             <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
                                                 Next

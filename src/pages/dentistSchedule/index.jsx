@@ -1,16 +1,80 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HeroHeader from '../../components/hero-header'
 import { Link } from 'react-router-dom'
 import useAppointmentByDentistID from '../../callApi/appointmentByDentistID'
+import { Button, DatePicker, Form, Select } from 'antd';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
+import api from '../../config/axios';
 
 function DentistSchedule() {
 
-    const { appointment } = useAppointmentByDentistID()
+    const { Option } = Select;
+    const { RangePicker  } = DatePicker;
+
+    const user = useSelector(selectUser)
 
 
+
+    const [date,setDate] = useState([])
+    // const [appointment, setAppointment] = useState([])
+
+
+    const [appointment, setAppointment] = useState([])
+
+    const getAppointment = async () => {
+        try {
+            const res = await api.get(`/appointment-patient/dentist/${user.id}`)
+            setAppointment(res.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getAppointment()
+    }, [date]);
+
+
+
+    const getAppointmentByDate = async () => {
+        try {
+            const res = await api.get(`/appointment-patient/date/between/${date[0]}/${date[1]}/dentist/${user.id}`)
+            console.log(res)
+            setAppointment(res.data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+   
+
+
+
+
+
+    console.log(date[0])
+    console.log(date[1])
     return (
         <>
             <HeroHeader content="Dentist Schedule" />
+
+            <div className='d-flex justify-content-center'>
+                <Form layout="inline"
+                        onFinish={getAppointmentByDate}>
+                    <Form.Item label="Select Week">
+                    <RangePicker   onChange={(value, dateString) => {
+                 console.log('Formatted Selected Time: ', setDate(dateString));
+                 
+      }} />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType='submit' >
+                            Add Schedule
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
 
             <div className="row  wow zoomIn" style={{ margin: '20px 50px' }} data-wow-delay="0.6s">
                 <div className="col-lg-12">
@@ -28,9 +92,9 @@ function DentistSchedule() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {appointment.map((item, index) => (
+                                    {appointment?.map((item, index) => (
 
-                                        item?.status == 'PROCESSING' ? (
+                                        item?.status != 'CANCEL' ? (
                                             <tr>
                                                 <td>{item.date}</td>
                                                 <td>{item.dentistServices.account.dentalClinic.address}</td>
@@ -46,8 +110,6 @@ function DentistSchedule() {
                             </table>
                         </main>
                     </div></div></div>
-
-
 
         </>
     )

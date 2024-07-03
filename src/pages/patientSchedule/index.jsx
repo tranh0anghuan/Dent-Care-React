@@ -56,7 +56,7 @@ function PatientSchedule() {
                                     {appointment.map((item, index) => (
 
 
-                                        item?.status == 'PROCESSING' ? (
+                                        item?.status != 'CANCEL' ? (
                                             <tr>
                                                 <td>{formatDate(item.date)}</td>
                                                 <td>{item.dentistServices.account.dentalClinic.address}</td>
