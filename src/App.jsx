@@ -43,6 +43,8 @@ import CheckIn from './pages/check-in';
 import RecordByDentist from './pages/see-record';
 import DentistRecord from './pages/dentist-view-record';
 import UpdateTreatment from './pages/treatment-update';
+import RegularCheckUpSchedule from './pages/regular-check-up-schedule';
+import RegisterDayOff from './pages/register-day-off';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -179,6 +181,14 @@ function App() {
         {
           path: '/update-treatment/appoinmnet/:aid/treatment/:tid',
           element: <UpdateTreatment />
+        },
+        {
+          path: '/regular-schedule/:aid',
+          element: <RegularCheckUpSchedule />
+        },
+        {
+          path: '/register-day-off',
+          element: <RegisterDayOff />
         },
       ]
     },

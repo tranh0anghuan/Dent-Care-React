@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import HeroHeader from '../../components/hero-header'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import useAppointmentByDentistID from '../../callApi/appointmentByDentistID'
 import { Button, DatePicker, Form, Select } from 'antd';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ function DentistSchedule() {
 
     const user = useSelector(selectUser)
 
-
+    const navigate= useNavigate()
 
     const [date,setDate] = useState([])
     // const [appointment, setAppointment] = useState([])
@@ -89,6 +89,7 @@ function DentistSchedule() {
                                         <th scope="col">Service</th>
                                         <th scope="col">Patient</th>
                                         <th scope="col">Room</th>
+                                        <th scope="col">Regular Schedule</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,6 +103,9 @@ function DentistSchedule() {
                                                 <td>{item.dentistServices.serviceDetail.name}</td>
                                                 <td>{item.patient.name}</td>
                                                 <td>{item.dentistServices.account.room?.name}</td>
+                                                <td>
+                                                    <Link  onClick={()=>{navigate(`/regular-schedule/${item?.id}`)}}  className='btn btn-primary'>Create</Link>
+                                                </td>
                                             </tr>
                                         ) : ""
                                     ))}

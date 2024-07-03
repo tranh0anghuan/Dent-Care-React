@@ -27,13 +27,7 @@ function CheckIn() {
 
     const [form] = Form.useForm();
 
-    const handlePhoneSubmit = async (values) => {
-        setIsFullFormVisible(true);
-        const { id } = await getPatient(values.phone);
-        console.log(id)
-        await getAppointment(id)
-        // setPatient(patient)
-    };
+
 
     const getToDay = () => {
         const today = new Date();
@@ -45,18 +39,19 @@ function CheckIn() {
     };
 
 
-    const getAppointment = async (id) => {
+    const getAppointment = async () => {
         try {
-            const res = await api.get(`/appointment-patient/patient/${id}/date/${getToDay()}`)
+            const res = await api.get(`/appointment-patient/date/${getToDay()}`)
             setAppointment(res.data)
         } catch (error) {
             console.log(error)
         }
     }
 
-    const handleBackClick = () => {
-        setIsFullFormVisible(false);
-    };
+    useEffect(() => {
+        getAppointment()
+    })
+
 
     // console.log(patient.id)
 
@@ -107,91 +102,83 @@ function CheckIn() {
         return date.toLocaleDateString(undefined, options);
     };
 
+    const handleCheckIn = ()=>{
+
+    }
+
+    const cancelAppointment = async (id)=>{
+        console.log(id)
+        try {
+            await api.delete(`/appointment-patient/${id}`);
+            toast.success("Cancel appoinment success")
+          } catch (error) {
+            console.log(error)
+            toast.error(error.response.data)
+          }
+    }
+
     return (
         <>
 
             <HeroHeader content="Record" />
 
-            {!isFullFormVisible ? (
-                <div className='container bg-light'>
-                    <div style={{ maxWidth: 600, margin: '0 auto', padding: '40px' }}>
-                        <Form
-                            {...formItemLayout}
-                            onFinish={handlePhoneSubmit}
-                        >
-                            <Form.Item
-                                label="Phone"
-                                name="phone"
-                                rules={[{ required: true, message: 'Please input your phone number!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item {...tailFormItemLayout}>
-                                <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
-                                    Next
-                                </Button>
-                            </Form.Item>
-                        </Form>
+
+            <div className="row  wow zoomIn" style={{ margin: '20px 50px' }} data-wow-delay="0.6s">
+                <div className="col-lg-12">
+                    <div className="row">
+                        <main className="col-lg-12 mb-5" style={{ fontSize: 15, marginTop: 40 }}>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Slot</th>
+                                        <th scope="col">Service</th>
+                                        <th scope="col">Patient</th>
+                                        <th scope="col">Room</th>
+                                        <th scope="col">Action</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {appointment.map((item, index) => (
+
+
+                                        item?.status != 'CANCEL' ? (
+                                            <tr>
+                                                <td>{formatDate(item.date)}</td>
+                                                <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>
+                                                <td>{item.dentistServices.serviceDetail.name}</td>
+                                                <td>{item.patient.name}</td>
+                                                <td>{item.dentistServices.account.room?.name}</td>
+                                                <td>
+                                                    <Link  className='btn btn-primary'>Check In</Link>
+                                                </td>
+                                                <td>
+                                                    <Link onClick={() => cancelAppointment(item?.id)}  className='btn btn-primary'>Cancel</Link>
+                                                </td>
+                                            </tr>
+                                        ) : ""
+
+                                        // <tr>
+                                        //     <td>{formatDate(item.date)}</td>
+                                        //     <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>
+                                        //     <td>{item.dentistServices.serviceDetail.name}</td>
+                                        //     <td>{item.patient.name}</td>
+                                        //     <td>{item.patient.age}</td>
+                                        //     <td>{item.patient.address}</td>
+                                        //     <td>{item.dentistServices.account.room?.name}</td>
+                                        //     <td>
+                                        //         <Link to={`/create-record/${item.id}`} className='btn btn-primary'>Create</Link>
+                                        //     </td>
+                                        // </tr>
+                                    ))}
+
+                                </tbody>
+                            </table>
+                        </main>
                     </div>
                 </div>
-            ) : (
-                <div className="row  wow zoomIn" style={{ margin: '20px 50px' }} data-wow-delay="0.6s">
-                    <div className="col-lg-12">
-                        <div className="row">
-                            <main className="col-lg-12 mb-5" style={{ fontSize: 15, marginTop: 40 }}>
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Slot</th>
-                                            <th scope="col">Service</th>
-                                            <th scope="col">Patient</th>
-                                            <th scope="col">Age</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Room</th>
-                                            {/* <th scope="col">Action</th> */}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {appointment.map((item, index) => (
-
-
-                                            item?.status != 'CANCEL' ? (
-                                                <tr>
-                                                    <td>{formatDate(item.date)}</td>
-                                                    <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>
-                                                    <td>{item.dentistServices.serviceDetail.name}</td>
-                                                    <td>{item.patient.name}</td>
-                                                    <td>{item.patient.age}</td>
-                                                    <td>{item.patient.address}</td>
-                                                    <td>{item.dentistServices.account.room?.name}</td>
-                                                    {/* <td>
-                                                        <Link to={`/create-record/${item.id}`} className='btn btn-primary'>Create</Link>
-                                                    </td> */}
-                                                </tr>
-                                            ) : ""
-
-                                            // <tr>
-                                            //     <td>{formatDate(item.date)}</td>
-                                            //     <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>
-                                            //     <td>{item.dentistServices.serviceDetail.name}</td>
-                                            //     <td>{item.patient.name}</td>
-                                            //     <td>{item.patient.age}</td>
-                                            //     <td>{item.patient.address}</td>
-                                            //     <td>{item.dentistServices.account.room?.name}</td>
-                                            //     <td>
-                                            //         <Link to={`/create-record/${item.id}`} className='btn btn-primary'>Create</Link>
-                                            //     </td>
-                                            // </tr>
-                                        ))}
-
-                                    </tbody>
-                                </table>
-                            </main>
-                        </div>
-                    </div>
-                </div>
-            )}
+            </div>
 
         </>
     )

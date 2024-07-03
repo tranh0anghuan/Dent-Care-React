@@ -19,7 +19,7 @@ const useAppointmentByID = (aid) => {
 
     useEffect(() => {
         getAppointment()
-    }, []);
+    }, [aid]);
 
     return { appointment};
 };
