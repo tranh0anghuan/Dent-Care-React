@@ -24,7 +24,7 @@ function RecordByDentist() {
 
     return (
         <>
-            <HeroHeader content="Patient Schedule" />
+            <HeroHeader content="Dentist Record" />
 
             <div className="row  wow zoomIn" style={{ margin: '20px 50px' }} data-wow-delay="0.6s">
                 <div className="col-lg-12">
@@ -51,7 +51,7 @@ function RecordByDentist() {
                                                 <td>{item.appointmentPatient.dentistServices.account.room.name}</td>
                                                 
                                                 <td>
-                                                    <Link to={`/patient-record/${item.id}`} className='btn btn-primary'>View</Link>
+                                                    <Link to={`/dentist-record/${item.id}`} className='btn btn-primary'>View</Link>
                                                 </td>
                                             </tr>
                                     ))}

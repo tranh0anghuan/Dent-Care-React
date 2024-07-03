@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../redux/features/counterSlice'
 import HeroHeader from '../../components/hero-header'
@@ -6,19 +6,24 @@ import { Link, useParams } from 'react-router-dom'
 import useRecordByAppointmentID from '../../callApi/recordByAppointmentID'
 import { Button, Form, Input } from 'antd'
 import useTreatmentByRecordName from '../../callApi/treatmentByRecordName'
+import useRecordByID from '../../callApi/recordByID'
+import api from '../../config/axios'
+import { toast } from 'react-toastify'
 
-function PatientRecord
+function DentistRecord
     () {
 
     const user = useSelector(selectUser)
 
-    const { aid } = useParams()
+    const { rid } = useParams()
 
-    const { record } = useRecordByAppointmentID(aid)
+    const { record } = useRecordByID(rid)
+
+    const [form] = Form.useForm();
 
     console.log(record.name)
 
-    const {treatment} = useTreatmentByRecordName(record.name)
+    const { treatment } = useTreatmentByRecordName(record.name)
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -28,7 +33,7 @@ function PatientRecord
 
     const onFinish = (values) => {
         console.log(values)
-        createRecord(values)
+        updateRecord(values)
     }
 
     const formItemLayout = {
@@ -49,6 +54,32 @@ function PatientRecord
         },
     };
 
+    useEffect(() => {
+        form.setFieldsValue({
+            note: record.note,
+            diagnosis: record.diagnosis
+        })
+
+
+
+    }, [record]);
+
+    const updateRecord = async (values) => {
+
+        try {
+            await api.put('/medical-record', {
+                id: record.id,
+                name: record.name,
+                note: values.note,
+                diagnosis: values.diagnosis
+            })
+            toast.success("Update record success")
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response.data)
+        }
+    }
+
     return (
         <>
             <HeroHeader content=" Record Details" />
@@ -59,6 +90,7 @@ function PatientRecord
                     <Form
                         {...formItemLayout}
                         onFinish={onFinish}
+                        form={form}
                     >
                         <Form.Item
                             label="Record Name"
@@ -66,7 +98,7 @@ function PatientRecord
                             <div
                                 className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
                                 style={{ textAlign: 'start' }}>
-                                    {record.name}
+                                {record.name}
                             </div>
                         </Form.Item>
 
@@ -76,7 +108,7 @@ function PatientRecord
                             <div
                                 className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
                                 style={{ textAlign: 'start' }}>
-                                    {record.appointmentPatient?.date}
+                                {record.appointmentPatient?.date}
 
                             </div>
                         </Form.Item>
@@ -87,7 +119,7 @@ function PatientRecord
                             <div
                                 className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
                                 style={{ textAlign: 'start' }}>
-                                    {record.appointmentPatient?.dentistServices.serviceDetail.name}
+                                {record.appointmentPatient?.dentistServices.serviceDetail.name}
 
                             </div>
                         </Form.Item>
@@ -98,25 +130,32 @@ function PatientRecord
                             <div
                                 className='ant-input css-dev-only-do-not-override-3rel02 ant-input-outlined'
                                 style={{ textAlign: 'start' }}>
-                                    {record.appointmentPatient?.dentistServices.account.fullName}
+                                {record.appointmentPatient?.dentistServices.account.fullName}
 
                             </div>
                         </Form.Item>
 
                         <Form.Item
                             label="Note"
+                            name="note"
                         >
-                            <Input.TextArea value={record.note} readOnly/>
+                            <Input.TextArea />
                         </Form.Item>
 
                         <Form.Item
                             label="Diagnosis"
+                            name="diagnosis"
                         >
-                            <Input.TextArea value={record.diagnosis} readOnly/>
+                            <Input.TextArea />
+                        </Form.Item>
+
+                        <Form.Item {...tailFormItemLayout}>
+                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                                Update
+                            </Button>
                         </Form.Item>
 
 
-                       
                     </Form>
                 </div>
             </div>
@@ -134,6 +173,7 @@ function PatientRecord
                                         <th scope="col">Name</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Frequency</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -142,11 +182,20 @@ function PatientRecord
                                             <td>{item?.name}</td>
                                             <td>{item?.description}</td>
                                             <td>{item?.frequency}</td>
-                                            {/* <td>
-                                                <Link to={`/patient-schedule/${item.id}`} className='btn btn-primary'>View</Link>
-                                            </td> */}
+                                            <td>
+                                                <Link to={`/update-treatment/appoinmnet/${record.appointmentPatient?.id}/treatment/${item.id}`} className='btn btn-primary'>Update</Link>
+                                            </td>
                                         </tr>
                                     ))}
+
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <Link to={`/treatment-plan/${record.appointmentPatient?.id}`} className='btn btn-primary'>Create</Link>
+                                            </td>
+                                        </tr>
 
                                 </tbody>
                             </table>
@@ -155,11 +204,11 @@ function PatientRecord
                 </div>
             </div>
 
-            
+
 
 
         </>
     )
 }
 
-export default PatientRecord
+export default DentistRecord

@@ -41,6 +41,8 @@ import PatientAppointmentRecord from './pages/patient-app-record';
 import AppointmentRecord from './pages/appointment-record';
 import CheckIn from './pages/check-in';
 import RecordByDentist from './pages/see-record';
+import DentistRecord from './pages/dentist-view-record';
+import UpdateTreatment from './pages/treatment-update';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -169,6 +171,14 @@ function App() {
         {
           path: '/record-dentist',
           element: <RecordByDentist />
+        },
+        {
+          path: '/dentist-record/:rid',
+          element: <DentistRecord />
+        },
+        {
+          path: '/update-treatment/appoinmnet/:aid/treatment/:tid',
+          element: <UpdateTreatment />
         },
       ]
     },
