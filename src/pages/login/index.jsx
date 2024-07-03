@@ -24,7 +24,12 @@ function LoginPage() {
       toast.success('Login successfully!');
       localStorage.setItem('token', user.token);
       dispatch(login(user));
-      navigate('/');
+      if(user.role == "ADMIN"){
+        navigate('/dashboard')
+      }else{
+
+        navigate('/');
+      }
     } catch (error) {
       console.log(error)
       toast.error(error.response.data)
