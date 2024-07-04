@@ -209,7 +209,7 @@ function FormAppointment({ clinic, service, denSer, dentist, patient, did, setIs
                 >
                     <Select placeholder="Select Slot">
                         {slot?.map((item) => (
-                            <Select.Option key={item.id} value={item.id} disable>
+                            <Select.Option key={item.id} value={item.id} disabled={!item.available}>
                                 Slot {item.id}: {item.startTime} - {item.endTime}
                             </Select.Option>
                         ))}

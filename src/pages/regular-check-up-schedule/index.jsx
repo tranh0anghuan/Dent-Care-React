@@ -23,13 +23,18 @@ function RegularCheckUpSchedule() {
 
     const [form] = Form.useForm();
 
+    const [date, setDate] = useState('');
+
+    const [slot, setSlot] = useState([]);
+
 
     const onFinish = (values) => {
-        console.log(appointment.patient.id)
-        console.log(appointment.dentistServices.id)
-        console.log(values.date.format('YYYY-MM-DD'))
-        console.log(appointment.patient.account.id)
+        // console.log(appointment.patient.id)
+        // console.log(appointment.dentistServices.id)
+        // console.log(values.date.format('YYYY-MM-DD'))
+        // console.log(appointment.patient.account.id)
 
+        // console.log(values.slotID)
 
         makeAppointment(values)
 
@@ -40,18 +45,20 @@ function RegularCheckUpSchedule() {
         try {
             await api.post('/appointment-patient', {
                 id: 0,
-                slotId: 1,
+                // slotId: 1,
+                slotId: values.slotID,
                 patientId: appointment.patient.id,
                 dentistServiceId: appointment.dentistServices.id,
-                date: values.date.format('YYYY-MM-DD'),
+                // date: values.date.format('YYYY-MM-DD'),
+                date: date,
                 cusId: appointment.patient.account.id,
                 status: "ALREADY",
             });
-        toast.success('Make appointment successfully!');
+            toast.success('Make appointment successfully!');
         } catch (error) {
             console.log(error)
             toast.error(error.response.data)
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
@@ -72,6 +79,18 @@ function RegularCheckUpSchedule() {
             xs: { span: 24, offset: 0 },
             sm: { span: 14, offset: 6 },
         },
+    };
+
+    const getDate = async (value) => {
+        const datee = value.format('YYYY-MM-DD');
+        setDate(datee);
+        try {
+            const res = await api.get(`/slot/available/dentist/${appointment.dentistServices.account.id}/day-off/${datee}`);
+            console.log(res.data)
+            setSlot(res.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 
@@ -125,22 +144,22 @@ function RegularCheckUpSchedule() {
                             label="Select Date"
                             rules={[{ required: true, message: 'Please select a date!' }]}
                         >
-                            <DatePicker style={{ width: '100%' }} />
+                            <DatePicker style={{ width: '100%' }} onChange={getDate} />
                         </Form.Item>
 
-                        {/* <Form.Item
+                        <Form.Item
                             name="slotID"
                             label="Select Slot"
                             rules={[{ required: true, message: 'Please select a slot!' }]}
                         >
                             <Select placeholder="Select Slot">
                                 {slot?.map((item) => (
-                                    <Select.Option key={item.id} value={item.id} disable>
+                                    <Select.Option key={item.id} value={item.id} disabled={!item.available}>
                                         Slot {item.id}: {item.startTime} - {item.endTime}
                                     </Select.Option>
                                 ))}
                             </Select>
-                        </Form.Item> */}
+                        </Form.Item>
 
 
                         <Form.Item

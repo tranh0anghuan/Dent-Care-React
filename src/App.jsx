@@ -45,6 +45,7 @@ import DentistRecord from './pages/dentist-view-record';
 import UpdateTreatment from './pages/treatment-update';
 import RegularCheckUpSchedule from './pages/regular-check-up-schedule';
 import RegisterDayOff from './pages/register-day-off';
+import CheckInHistory from './pages/check-in-history';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -189,6 +190,10 @@ function App() {
         {
           path: '/register-day-off',
           element: <RegisterDayOff />
+        },
+        {
+          path: '/check-in-history',
+          element: <CheckInHistory />
         },
       ]
     },

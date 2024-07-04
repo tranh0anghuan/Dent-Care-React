@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import HeroHeader from '../../components/hero-header'
 import { Link, useNavigate } from 'react-router-dom'
 import useAppointmentByDentistID from '../../callApi/appointmentByDentistID'
-import { Button, DatePicker, Form, Select } from 'antd';
+import { Button, DatePicker, Form, Pagination, Select } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/counterSlice';
 import api from '../../config/axios';
@@ -13,15 +13,9 @@ function DentistSchedule() {
     const { RangePicker  } = DatePicker;
 
     const user = useSelector(selectUser)
-
-    const navigate= useNavigate()
-
-    const [date,setDate] = useState([])
-    // const [appointment, setAppointment] = useState([])
-
-
     const [appointment, setAppointment] = useState([])
-
+    const navigate= useNavigate()
+    const [date,setDate] = useState([])
     const getAppointment = async () => {
         try {
             const res = await api.get(`/appointment-patient/dentist/${user.id}`)
@@ -30,12 +24,22 @@ function DentistSchedule() {
             console.log(error)
         }
     }
-
+      
     useEffect(() => {
         getAppointment()
     }, [date]);
 
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 7;
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentData = appointment.slice(indexOfFirstItem, indexOfLastItem);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    // const [appointment, setAppointment] = useState([])
 
     const getAppointmentByDate = async () => {
         try {
@@ -93,7 +97,7 @@ function DentistSchedule() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {appointment?.map((item, index) => (
+                                    {currentData.map((item, index) => (
 
                                         item?.status != 'CANCEL' ? (
                                             <tr>
@@ -114,7 +118,14 @@ function DentistSchedule() {
                             </table>
                         </main>
                     </div></div></div>
-
+                    <Pagination
+                            className='d-flex justify-content-center mt-5'
+                            current={currentPage}
+                            total={appointment?.length}
+                            pageSize={itemsPerPage}
+                            onChange={handlePageChange}
+                            
+                        />
         </>
     )
 }
