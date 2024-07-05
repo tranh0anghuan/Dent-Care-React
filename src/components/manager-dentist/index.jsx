@@ -1,84 +1,80 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Select, Modal, Table, Menu, Dropdown, Popconfirm } from 'antd';
+import { Button, Table, message, Modal, Dropdown, Menu, Input, Select, Form } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
 
 const { Option } = Select;
 
-const Category = () => {
+const ManagerDentist = () => {
   const [data, setData] = useState([]);
-  const [roleFilter, setRoleFilter] = useState('all');
-  const [searchText, setSearchText] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [clinic, setClinic] = useState([]);
-  const [room, setRoom] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [form] = Form.useForm();
+  const user = useSelector(selectUser);
+  const [roleFilter, setRoleFilter] = useState(['DENTIST', 'STAFF']); // Default role filter
 
   const fetchData = async () => {
-    const response = await api.get("/account");
-    setData(response.data);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchRoom = async () => {
+    setLoading(true);
     try {
-      const res = await api.get("/room");
-      setRoom(res.data);
+      console.log(`Fetching data for roles ${roleFilter.join(', ')} and clinic ${user.dentalClinic?.id}`);
+      const responses = await Promise.all(
+        roleFilter.map(role => api.get(`/account/role/${role}/clinic/${user.dentalClinic?.id}`))
+      );
+      const combinedData = responses.flatMap(response => response.data);
+      setData(Array.isArray(combinedData) ? combinedData : []);
     } catch (error) {
-      console.error(error);
+      console.error('Failed to fetch data:', error.response ? error.response.data : error.message);
+      message.error('Failed to fetch data');
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRoom();
-  }, []);
+    if (user?.dentalClinic?.id) {
+      fetchData();
+    }
+  }, [user?.dentalClinic?.id, roleFilter]);
 
   const fetchClinic = async () => {
     try {
-      const res = await api.get("/clinic");
-      setClinic(res.data);
+      const clinicResponse = await api.get(`/clinic/${user.dentalClinic?.id}`);
+      setClinic(clinicResponse.data);
+
+      const roomsResponse = await api.get(`/room/clinic/${user.dentalClinic?.id}`);
+      setRooms(roomsResponse.data);
     } catch (error) {
-      console.error(error);
+      console.error('Failed to fetch clinic or rooms:', error.response ? error.response.data : error.message);
+      message.error('Failed to fetch clinic or rooms');
     }
   };
 
   useEffect(() => {
     fetchClinic();
-  }, []);
+  }, [user?.dentalClinic?.id]);
 
-  const handleDelete = async (record) => {
-    try {
-      await api.delete(`/account/${record.id}`);
-      setData(data.filter((item) => item.id !== record.id));
-      message.success('Deleted successfully');
-    } catch (error) {
-      console.error('Failed to delete:', error.response);
-      message.error('Failed to delete');
+  const handleSearch = (value) => {
+    if (value.key === 'ALL') {
+      setRoleFilter(['DENTIST', 'STAFF']);
+    } else {
+      setRoleFilter([value.key]);
     }
-  };
-
-  const handleMenuClick = (e) => {
-    setRoleFilter(e.key);
-  };
-
-  const handleSearch = (e) => {
-    setSearchText(e.target.value);
   };
 
   const handleDetail = (record) => {
     Modal.info({
       title: 'Detail',
-      width: 1200,
+      width: 800,
       centered: true,
       content: (
         <div>
           <p><strong>ID:</strong> {record.id}</p>
-          <p><strong>FullName:</strong> {record.fullName}</p>
+          <h3>Account Information:</h3>
+          <p><strong>Full Name:</strong> {record.fullName}</p>
           <p><strong>Email:</strong> {record.email}</p>
           <p><strong>Phone:</strong> {record.phone}</p>
           <p><strong>Role:</strong> {record.role}</p>
@@ -86,7 +82,7 @@ const Category = () => {
           <h3>Dental Clinic Information:</h3>
           {record.dentalClinic && (
             <div>
-              <p><strong>ID:</strong> {record.dentalClinic.id}</p>
+              <p><strong>Clinic ID:</strong> {record.dentalClinic.id}</p>
               <p><strong>Clinic Name:</strong> {record.dentalClinic.clinicName}</p>
               <p><strong>Address:</strong> {record.dentalClinic.address}</p>
               <p><strong>Open Hours:</strong> {record.dentalClinic.openHours}</p>
@@ -94,17 +90,14 @@ const Category = () => {
               <p><strong>Clinic Status:</strong> {record.dentalClinic.clinicEnum}</p>
             </div>
           )}
-          <p><strong>Enabled:</strong> {record.enabled ? 'Yes' : 'No'}</p>
-          <p><strong>Username:</strong> {record.username}</p>
-          <h3>Authorities:</h3>
-          <ul>
-            {record.authorities.map((auth, index) => (
-              <li key={index}>{auth.authority}</li>
-            ))}
-          </ul>
-          <p><strong>Account Non-Expired:</strong> {record.accountNonExpired ? 'Yes' : 'No'}</p>
-          <p><strong>Account Non-Locked:</strong> {record.accountNonLocked ? 'Yes' : 'No'}</p>
-          <p><strong>Credentials Non-Expired:</strong> {record.credentialsNonExpired ? 'Yes' : 'No'}</p>
+          {record.room && (
+            <div>
+              <h3>Room Information:</h3>
+              <p><strong>Room ID:</strong> {record.room.id}</p>
+              <p><strong>Room Name:</strong> {record.room.name}</p>
+              <p><strong>Room Status:</strong> {record.room.roomEnum}</p>
+            </div>
+          )}
         </div>
       ),
       onOk() {},
@@ -113,7 +106,6 @@ const Category = () => {
 
   const handleCreateAccount = async (values) => {
     setLoading(true);
-
     try {
       await api.post('/register-by-admin', {
         email: values.email,
@@ -122,9 +114,8 @@ const Category = () => {
         phone: values.phone,
         role: values.role,
         clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
-        // roomId: values.role === 'DENTIST' ? Number(values.roomId) : undefined,
+        roomId: values.roomId,
       });
-
       message.success('Account created successfully!');
       fetchData(); // Refresh the data to include the new account
       setIsModalOpen(false);
@@ -154,25 +145,16 @@ const Category = () => {
   };
 
   const handleRoleChange = (value) => {
-    setRole(value);
+    // Handle role change if needed
   };
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="all">All</Menu.Item>
-      <Menu.Item key="ADMIN">Admin</Menu.Item>
-      <Menu.Item key="Manager">Manager</Menu.Item>
-      <Menu.Item key="dentist">Dentist</Menu.Item>
-      <Menu.Item key="customer">Customer</Menu.Item>
+    <Menu onClick={handleSearch}>
+      <Menu.Item key="ALL">All</Menu.Item>
+      <Menu.Item key="DENTIST">Dentist</Menu.Item>
+      <Menu.Item key="STAFF">Staff</Menu.Item>
+      {/* Add other roles as needed */}
     </Menu>
-  );
-
-  const filteredData = roleFilter === 'all'
-    ? data
-    : data.filter((item) => item.role.toLowerCase() === roleFilter.toLowerCase());
-
-  const searchedData = filteredData.filter((item) =>
-    item.fullName.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const columns = [
@@ -182,14 +164,9 @@ const Category = () => {
       key: 'id',
     },
     {
-      title: 'FullName',
+      title: 'Full Name',
       dataIndex: 'fullName',
       key: 'fullName',
-    },
-    {
-      title: 'Phone',
-      dataIndex: 'phone',
-      key: 'phone',
     },
     {
       title: 'Email',
@@ -197,9 +174,24 @@ const Category = () => {
       key: 'email',
     },
     {
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
+    },
+    {
+      title: 'Clinic Name',
+      dataIndex: ['dentalClinic', 'clinicName'],
+      key: 'clinicName',
+    },
+    {
+      title: 'Room Name',
+      dataIndex: ['room', 'name'],
+      key: 'roomName',
     },
     {
       title: 'Status',
@@ -209,19 +201,9 @@ const Category = () => {
     {
       title: 'Action',
       render: (record) => (
-        <>
-          <Button type="primary" onClick={() => handleDetail(record)}>
-            Detail
-          </Button>
-          <Popconfirm
-            title="Are you sure to delete this account?"
-            onConfirm={() => handleDelete(record)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button danger type="primary" style={{ marginLeft: 8 }}>Delete</Button>
-          </Popconfirm>
-        </>
+        <Button type="primary" onClick={() => handleDetail(record)}>
+          Detail
+        </Button>
       ),
     },
   ];
@@ -229,24 +211,23 @@ const Category = () => {
   return (
     <div>
       <div style={{ marginBottom: 16 }}>
-        <Input
-          placeholder="Search FullName"
-          value={searchText}
-          onChange={handleSearch}
-          style={{ width: 200, marginRight: 16 }}
-        />
         <Dropdown overlay={menu}>
           <Button>
             Filter by Role <DownOutlined />
           </Button>
         </Dropdown>
-        <Button type="primary" onClick={showModal} style={{ marginLeft: 16 }}>
+        <Button type="primary" onClick={showModal}>
           Create Account
         </Button>
       </div>
-      <Table dataSource={searchedData} columns={columns} />
+      <Table dataSource={data} columns={columns} rowKey="id" loading={loading} />
 
-      <Modal title="Create New Account" visible={isModalOpen} onCancel={handleCancel} footer={null}>
+      <Modal
+        title="Create New Account"
+        visible={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+      >
         <Form
           form={form}
           layout="vertical"
@@ -289,47 +270,43 @@ const Category = () => {
             name="role"
             rules={[{ required: true, message: 'Please select a role!' }]}
           >
-            <Select onChange={handleRoleChange}>
-            <Option value="MANAGER">Manager</Option>
-              {/* <Option value="DENTIST">Dentist</Option>
-              <Option value="STAFF">Staff</Option> */}
+            <Select onChange={handleRoleChange} >
+              <Option value="DENTIST">Dentist</Option>
+              <Option value="STAFF">Staff</Option>
+              {/* Add other roles as needed */}
             </Select>
           </Form.Item>
-          {/* {(role === 'DENTIST' || role === 'STAFF' || role === 'MANAGER') && ( */}
+          {[ 'DENTIST'].includes(form.getFieldValue('role')) && (
             <Form.Item
-              label="Clinic"
-              name="clinicId"
-              rules={[{ required: true, message: 'Please select a clinic ID!' }]}
-            >
-              <Select>
-                {clinic.map((item) => (
-                  <Option key={item.id} value={item.id}>{item.clinicName}</Option>
-                ))}
-              </Select>
-            </Form.Item>
-          {/* )} */}
-          {/* {role === 'DENTIST' && (
-            <Form.Item
-              label="Room ID"
+              label="Room"
               name="roomId"
-              rules={[{ required: true, message: 'Please select the room ID!' }]}
+              rules={[{ required: true, message: 'Please select a room!' }]}
             >
               <Select>
-                {room.map((item) => (
-                  <Option key={item.id} value={item.id}>{item.name}</Option>
+                {rooms.map((room) => (
+                  <Option key={room.id} value={room.id}>{room.name}</Option>
                 ))}
               </Select>
             </Form.Item>
-          )} */}
+          )}
+          <Form.Item
+            label="Clinic"
+            name="clinicId"
+            initialValue={user.dentalClinic?.id}
+          >
+            <Select disabled>
+              <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
+            </Select>
+          </Form.Item>
           <Form.Item>
             <Button loading={loading} type="primary" htmlType="submit">
               Create Account
             </Button>
           </Form.Item>
-        </Form>
+        </Form> 
       </Modal>
     </div>
   );
 };
 
-export default Category;
+export default ManagerDentist;

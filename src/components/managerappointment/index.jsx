@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, Modal, message, DatePicker } from 'antd';
 import api from '../../config/axios';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
 
 function ManagerAppointment() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [dateRange, setDateRange] = useState([]);
+  const user = useSelector(selectUser);
+  console.log(user);
 
   // Function to fetch appointment data from API
   const fetchData = async () => {
     try {
-      const response = await api.get("/appointment-patient");
+      const response = await api.get(`/appointment-patient/clinic/${user.dentalClinic?.id}`);
       setData(response.data);
       setFilteredData(response.data); // Set initial filtered data
     } catch (error) {
