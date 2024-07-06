@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Input, message, Table } from 'antd';
 import api from '../../config/axios';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
 
 const Managerpatient = () => {
   const [patients, setPatients] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [filteredPatients, setFilteredPatients] = useState([]);
+  const user = useSelector(selectUser);
+  console.log(user);
 
   const fetchPatients = async () => {
     try {
-      const response = await api.get('/appointment-patient');
+      const response = await api.get(`/appointment-patient/clinic/${user.dentalClinic?.id}`);
       setPatients(response.data);
       setFilteredPatients(response.data); // Initialize filteredPatients with all patients
     } catch (error) {
@@ -19,8 +23,10 @@ const Managerpatient = () => {
   };
 
   useEffect(() => {
-    fetchPatients();
-  }, []);
+    if (user.dentalClinic?.id) {
+      fetchPatients();
+    }
+  }, [user.dentalClinic?.id]);
 
   const handleSearch = (event) => {
     const value = event.target.value;

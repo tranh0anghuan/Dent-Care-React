@@ -51,25 +51,20 @@ function Room() {
   };
 
   useEffect(() => {
-    fetchData();
+    if (user.dentalClinic?.id) {
+      fetchData();
+    }
   }, [user.dentalClinic?.id]);
 
-  
-//  xóa Room và active lại status của ROOM
-  const handleDelete = async (record) => {
+  const handleDeleteOrActivate = async (record) => {
     try {
-      if (record.roomEnum === 'INACTIVE') {
-        await api.patch(`/room/active/room/${record.id}`, { roomEnum: 'ACTIVE' });
-        setData(data.map(item => item.id === record.id ? { ...item, roomEnum: 'ACTIVE' } : item));
-        message.success('Room activated successfully!');
-      } else {
-        await api.delete(`/room/${record.id}`);
-        setData(data.filter(item => item.id !== record.id));
-        message.success('Room deleted successfully!');
-      }
+      const newStatus = record.roomEnum === 'INACTIVE' ? 'ACTIVE' : 'INACTIVE';
+      await api.patch(`/room/active/room/${record.id}`, { roomEnum: newStatus });
+      setData(data.map(item => item.id === record.id ? { ...item, roomEnum: newStatus } : item));
+      message.success(`Room ${newStatus === 'ACTIVE' ? 'activated' : 'deactivated'} successfully!`);
     } catch (error) {
-      console.error('Failed to update room:', error);
-      message.error('Failed to update room');
+      console.error(`Failed to ${record.roomEnum === 'INACTIVE' ? 'activate' : 'deactivate'} room:`, error);
+      message.error(`Failed to ${record.roomEnum === 'INACTIVE' ? 'activate' : 'deactivate'} room`);
     }
   };
 
@@ -92,7 +87,7 @@ function Room() {
     {
       title: 'Action',
       render: (record) => (
-        <Button onClick={() => handleDelete(record)} danger={record.roomEnum !== 'INACTIVE'}>
+        <Button onClick={() => handleDeleteOrActivate(record)} danger={record.roomEnum !== 'INACTIVE'}>
           {record.roomEnum === 'INACTIVE' ? 'Activate' : 'Delete'}
         </Button>
       ),
@@ -128,7 +123,6 @@ function Room() {
               label="Clinic"
               name="clinicId"
               initialValue={user.dentalClinic?.id}
-              // rules={[{ required: true, message: 'Please select the clinic!' }]}
             >
               <Select disabled>
                 <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>

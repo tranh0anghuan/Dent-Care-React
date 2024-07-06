@@ -17,6 +17,7 @@ import Manager from './pages/manager';
 import Managerappointment from './components/managerappointment';
 import ManagerPatient from './components/manager-patient';
 import Room from './components/room';
+import ManagerDentist from './components/manager-dentist';
 import Category from './components/category';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -255,6 +256,10 @@ function App() {
         {
           path: '/manager/manager-patient',
           element:<ManagerPatient />
+        },
+        {
+          path: '/manager/manager-dentist',
+          element:<ManagerDentist />
         },
         
       ],
