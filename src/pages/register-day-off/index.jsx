@@ -14,15 +14,39 @@ import HeroHeader from '../../components/hero-header';
 import useRecordByAppointmentID from '../../callApi/recordByAppointmentID';
 import useTreatmentByID from '../../callApi/treatmentPlanByID';
 import useAppointmentByID from '../../callApi/appointmentByID';
+import useSlot from '../../callApi/slot';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
 
 function RegisterDayOff() {
 
 
     const [form] = Form.useForm();
 
+    const { slot } = useSlot()
+
+    const user = useSelector(selectUser);
+
+    const navigate= useNavigate()
+
 
     const onFinish = (values) => {
         console.log(values.date.format('YYYY-MM-DD'))
+        register(values)
+    }
+
+    const register = async(values)=>{
+        try {
+            await api.post('/working-day-off',{
+                dayOff: values.date.format('YYYY-MM-DD'),
+                dentistId: user.id,
+                slotId: values.slotID
+            })
+            toast.success('Register day off successfully')
+            navigate('/day-off')
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -64,6 +88,20 @@ function RegisterDayOff() {
                             rules={[{ required: true, message: 'Please select a date!' }]}
                         >
                             <DatePicker style={{ width: '100%' }} />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="slotID"
+                            label="Select Slot"
+                            rules={[{ required: true, message: 'Please select a slot!' }]}
+                        >
+                            <Select placeholder="Select Slot">
+                                {slot?.map((item) => (
+                                    <Select.Option key={item.id} value={item.id}>
+                                        Slot {item.id}: {item.startTime} - {item.endTime}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
 
 

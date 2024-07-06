@@ -13,7 +13,7 @@ function PatientSchedule() {
 
     const { pid } = useParams()
 
-    const { appointment } = useAppointmentByPatientID(pid)
+    const { appointment,setAppointment } = useAppointmentByPatientID(pid)
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -24,12 +24,13 @@ function PatientSchedule() {
     const cancelAppointment = async (id)=>{
         console.log(id)
         try {
-            await api.delete(`/appointment-patient/${id}`);
-            toast.success("Delete record success")
+            await api.delete(`/appointment-patient/${id}`);    
+            setAppointment(appointment.filter(item => item.id != id));
+            toast.success("Cancel appointment success")
           } catch (error) {
             console.log(error)
             toast.error(error.response.data)
-          }
+          } 
     }
 
     return (
@@ -50,6 +51,7 @@ function PatientSchedule() {
                                         <th scope="col">Dentist</th>
                                         <th scope="col">Room</th>
                                         <th scope="col">Action</th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,8 +67,15 @@ function PatientSchedule() {
                                                 <td>{item.dentistServices.account.fullName}</td>
                                                 <td>{item.dentistServices.account.room?.name}</td>
                                                 <td>
-                                                    <Link to={`/patient-schedule/${pid}`} onClick={() => cancelAppointment(item?.id)} className='btn btn-primary'>Cancel</Link>
+                                                    <Link to={`/appointment-details/${item?.id}`} className='btn btn-primary'>View</Link>
+                                                    
                                                 </td>
+
+                                                <td>
+                                                    <Link to={`/patient-schedule/${pid}`} onClick={() => cancelAppointment(item?.id)} className='btn btn-primary'>Cancel</Link>
+                                                    
+                                                </td>
+
                                             </tr>
                                         ) : ""
 

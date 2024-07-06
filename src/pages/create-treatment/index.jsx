@@ -44,6 +44,7 @@ function CreateTreatment() {
     const onFinish = (values) => {
         console.log(values)
         createTreatment(values)
+        navigate(`/dentist-record/${record.id}`)
     }
 
     const formItemLayout = {

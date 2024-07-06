@@ -34,7 +34,7 @@ function CheckIn() {
 
     const getAppointment = async () => {
         try {
-            const res = await api.get(`/appointment-patient/date/${getToDay()}`)
+            const res = await api.get(`/appointment-patient/clinic/${user.dentalClinic.id}/date/${getToDay()}`)
             setAppointment(res.data)
         } catch (error) {
             console.log(error)

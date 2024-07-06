@@ -43,7 +43,7 @@ function Navbar() {
                   <Link to={"/view-record"} className="dropdown-item">Record</Link>
                 ) : (<Link to={"/patient-app-record"} className="dropdown-item">Record</Link>)}
                 {user?.role === 'DENTIST' ? (
-                  <Link to={"/register-day-off"} className="dropdown-item">Day Off</Link>
+                  <Link to={"/day-off"} className="dropdown-item">Day Off</Link>
                 ) : ""}
               </div>
             </div>

@@ -18,7 +18,7 @@ const usePatientForSelect = (id) => {
 
     useEffect(() => {
         getPatient()
-    }, []);
+    }, [id]);
 
     return { patientSelect};
 };

@@ -19,7 +19,7 @@ const useAppointmentByPatientID = (id) => {
         getAppointment()
     }, []);
 
-    return { appointment};
+    return { appointment,setAppointment};
 };
 
 export default useAppointmentByPatientID;

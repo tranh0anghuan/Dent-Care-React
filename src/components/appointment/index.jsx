@@ -133,7 +133,7 @@ function Appointment() {
         const dateCurrent = value.format('YYYY-MM-DD')
         setDate(dateCurrent);
         try {
-            const res = await api.get(`/slot/available/dentist/${did}/day-off/${date}`)
+            const res = await api.get(`/slot/available/dentist/${did}/day-off/${dateCurrent}`)
             setSlot(res.data)
 
         } catch (error) {
@@ -355,7 +355,7 @@ function Appointment() {
                                             >
                                                 <Select placeholder="Select Slot">
                                                     {slot?.map((item) => (
-                                                        <Option key={item.id} value={item.id}>
+                                                        <Option key={item.id} value={item.id} disabled={!item.available}>
                                                             Slot {item.id}: {item.startTime} - {item.endTime}
                                                         </Option>
                                                     ))}

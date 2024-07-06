@@ -143,7 +143,7 @@ function FormAppointment({ clinic, service, denSer, dentist, patient, did, setIs
     };
 
     return (
-        <div>
+        <div className='appoinment'>
 
             <Form
                 {...layout}

@@ -46,6 +46,9 @@ import UpdateTreatment from './pages/treatment-update';
 import RegularCheckUpSchedule from './pages/regular-check-up-schedule';
 import RegisterDayOff from './pages/register-day-off';
 import CheckInHistory from './pages/check-in-history';
+import AppointmentDetails from './pages/appointment-details';
+import DayOff from './pages/day-off';
+import ViewDayOff from './pages/view-day-off';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -194,6 +197,18 @@ function App() {
         {
           path: '/check-in-history',
           element: <CheckInHistory />
+        },
+        {
+          path: '/appointment-details/:aid',
+          element: <AppointmentDetails />
+        },
+        {
+          path: '/day-off',
+          element: <DayOff />
+        },
+        {
+          path: '/view-day-off',
+          element: <ViewDayOff />
         },
       ]
     },
