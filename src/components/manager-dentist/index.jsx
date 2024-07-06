@@ -145,7 +145,12 @@ const ManagerDentist = () => {
   };
 
   const handleRoleChange = (value) => {
-    // Handle role change if needed
+    form.setFieldsValue({ roomId: undefined }); // Reset room value when role changes
+    if (value === 'DENTIST') {
+      fetchClinic(); // Fetch the rooms again
+    } else {
+      setRooms([]); // Clear the rooms if the role is not DENTIST
+    }
   };
 
   const menu = (
@@ -276,7 +281,7 @@ const ManagerDentist = () => {
               {/* Add other roles as needed */}
             </Select>
           </Form.Item>
-          {[ 'DENTIST'].includes(form.getFieldValue('role')) && (
+          {form.getFieldValue('role') === 'DENTIST' && (
             <Form.Item
               label="Room"
               name="roomId"
