@@ -153,6 +153,20 @@ const ManagerDentist = () => {
     }
   };
 
+  const handleDeleteAccount = async (accountId) => {
+    setLoading(true);
+    try {
+      await api.delete(`/account/${accountId}`);
+      message.success('Account deleted successfully!');
+      fetchData(); // Refresh the data to reflect the updated list
+    } catch (error) {
+      console.error('Failed to delete account:', error.response ? error.response.data : error.message);
+      message.error('Failed to delete account');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const menu = (
     <Menu onClick={handleSearch}>
       <Menu.Item key="ALL">All</Menu.Item>
@@ -206,9 +220,27 @@ const ManagerDentist = () => {
     {
       title: 'Action',
       render: (record) => (
-        <Button type="primary" onClick={() => handleDetail(record)}>
-          Detail
-        </Button>
+        <div>
+          <Button type="primary" onClick={() => handleDetail(record)}>
+            Detail
+          </Button>
+          {/* {record.status === 'INACTIVE' && (
+            <Button
+              onClick={() => handleDeleteActive(record, 'activate')}
+              style={{ marginLeft: 8 }}
+            >
+              Activate
+            </Button>
+          )} */}
+          {
+            record.status !== 'INACTIVE' && (
+              <Button danger type="primary" style={{ marginLeft: 8 }} onClick={() => handleDeleteAccount(record.id)}>
+            Delete
+          </Button>
+            )
+          }
+          
+        </div>
       ),
     },
   ];
