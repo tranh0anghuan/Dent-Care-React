@@ -51,16 +51,26 @@ const Category = () => {
     fetchClinic();
   }, []);
 
-  const handleDelete = async (record) => {
+  const handleDeleteActive = async (record, action) => {
     try {
-      await api.delete(`/account/${record.id}`);
-      setData(data.filter((item) => item.id !== record.id));
-      message.success('Deleted successfully');
+      let endpoint = '';
+      if (action === 'delete') {
+        endpoint = `/account/${record.id}`;
+        await api.delete(endpoint);
+        setData(data.filter((item) => item.id !== record.id));
+        message.success('Deleted successfully');
+      // } else if (action === 'activate') {
+      //   endpoint = `/account/${record.id}/activate`;
+      //   await api.put(endpoint);
+      //   fetchData(); // Refresh the data to include the updated status
+      //   message.success('Activated successfully');
+      }
     } catch (error) {
-      console.error('Failed to delete:', error.response);
-      message.error('Failed to delete');
+      console.error('Failed:', error.response);
+      message.error('Failed operation');
     }
   };
+  
 
   const handleMenuClick = (e) => {
     setRoleFilter(e.key);
@@ -122,7 +132,6 @@ const Category = () => {
         phone: values.phone,
         role: values.role,
         clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
-        // roomId: values.role === 'DENTIST' ? Number(values.roomId) : undefined,
       });
 
       message.success('Account created successfully!');
@@ -213,14 +222,24 @@ const Category = () => {
           <Button type="primary" onClick={() => handleDetail(record)}>
             Detail
           </Button>
-          <Popconfirm
-            title="Are you sure to delete this account?"
-            onConfirm={() => handleDelete(record)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button danger type="primary" style={{ marginLeft: 8 }}>Delete</Button>
-          </Popconfirm>
+          {/* {record.status === 'INACTIVE' && (
+            <Button
+              onClick={() => handleDeleteActive(record, 'activate')}
+              style={{ marginLeft: 8 }}
+            >
+              Activate
+            </Button>
+          )} */}
+          {record.status !== 'INACTIVE' && (
+            <Popconfirm
+              title="Are you sure to delete this account?"
+              onConfirm={() => handleDeleteActive(record, 'delete')}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger type="primary" style={{ marginLeft: 8 }}>Delete</Button>
+            </Popconfirm>
+          )}
         </>
       ),
     },
@@ -244,6 +263,7 @@ const Category = () => {
           Create Account
         </Button>
       </div>
+
       <Table dataSource={searchedData} columns={columns} />
 
       <Modal title="Create New Account" visible={isModalOpen} onCancel={handleCancel} footer={null}>
@@ -290,23 +310,23 @@ const Category = () => {
             rules={[{ required: true, message: 'Please select a role!' }]}
           >
             <Select onChange={handleRoleChange}>
-            <Option value="MANAGER">Manager</Option>
+              <Option value="MANAGER">Manager</Option>
               {/* <Option value="DENTIST">Dentist</Option>
               <Option value="STAFF">Staff</Option> */}
             </Select>
           </Form.Item>
           {/* {(role === 'DENTIST' || role === 'STAFF' || role === 'MANAGER') && ( */}
-            <Form.Item
-              label="Clinic"
-              name="clinicId"
-              rules={[{ required: true, message: 'Please select a clinic ID!' }]}
-            >
-              <Select>
-                {clinic.map((item) => (
-                  <Option key={item.id} value={item.id}>{item.clinicName}</Option>
-                ))}
-              </Select>
-            </Form.Item>
+          <Form.Item
+            label="Clinic"
+            name="clinicId"
+            rules={[{ required: true, message: 'Please select a clinic ID!' }]}
+          >
+            <Select>
+              {clinic.map((item) => (
+                <Option key={item.id} value={item.id}>{item.clinicName}</Option>
+              ))}
+            </Select>
+          </Form.Item>
           {/* )} */}
           {/* {role === 'DENTIST' && (
             <Form.Item
