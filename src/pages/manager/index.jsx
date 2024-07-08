@@ -135,7 +135,7 @@ const Manager = () => {
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          DATSAN79 ©{new Date().getFullYear()} Created by DEMI
+          MANAGER FANPAGE ©{new Date().getFullYear()} DENTCARE CLINIC
         </Footer>
       </Layout>
     </Layout>

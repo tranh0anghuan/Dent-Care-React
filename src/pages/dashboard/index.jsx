@@ -85,9 +85,9 @@ const Dashboard = () => {
 
     if (role === "admin") {
       setItems([
-        getItem("Product", "product", <PlusOutlined />),
-        getItem("Hồ sơ", "information", <PlusOutlined />),
-        getItem("Category", "category", <ProfileOutlined />),
+        getItem("New clinic", "product", <PlusOutlined />),
+        // getItem("Hồ sơ", "information", <PlusOutlined />),
+        getItem("Account", "category", <ProfileOutlined />),
         
         // getItem("Quản lý Clubs", "clubs", <HeartOutlined />, [
         //   getItem("Club 1", "club1"),
@@ -218,7 +218,7 @@ const Dashboard = () => {
           </div>
         </Content>
         <Footer style={{ textAlign: "center", backgroundColor: "#E3F2EE" }}>
-          DATSAN79 ©{new Date().getFullYear()} Created by DEMI
+          ADMIN FANPAGE ©{new Date().getFullYear()} DENTCARE CLINIC
         </Footer>
       </Layout>
     </Layout>
