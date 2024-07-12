@@ -19,6 +19,7 @@ const ManagerDentist = () => {
   const [form] = Form.useForm();
   const user = useSelector(selectUser);
   const [roleFilter, setRoleFilter] = useState(['DENTIST', 'STAFF']); // Default role filter
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState([
@@ -56,6 +57,7 @@ const ManagerDentist = () => {
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
     });
+
 
   const fetchData = async () => {
     setLoading(true);
@@ -143,7 +145,7 @@ const ManagerDentist = () => {
       onOk() {},
     });
   };
-
+ 
   const handleCreateAccount = async (values) => {
     setLoading(true);
     const url = await uploadFile(values.url.file.originFileObj)
@@ -170,20 +172,57 @@ const ManagerDentist = () => {
     }
   };
 
+  const handleUpdateAccount = async (values) => {
+    setLoading(true);
+    try {
+      await api.put(`/account/${currentRecord.id}`, {
+        email: values.email,
+        // password: values.password,
+        fullName: values.fullName,
+        phone: values.phone,
+        role: values.role,
+        clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
+        roomId: values.roomId,
+      });
+      message.success('Account updated successfully!');
+      fetchData(); // Refresh the data to reflect the updated account
+      setIsModalOpen(false);
+    } catch (e) {
+      console.error('Error:', e.response ? e.response.data : e.message);
+      const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to update account.';
+      message.error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onFinish = (values) => {
-    handleCreateAccount(values);
+    if (isEdit) {
+      handleUpdateAccount(values);
+    } else {
+      handleCreateAccount(values);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
 
-  const showModal = () => {
+  const showModal = (record = null) => {
+    setIsEdit(!!record);
+    setCurrentRecord(record);
+    if (record) {
+      form.setFieldsValue(record);
+    } else {
+      form.resetFields();
+    }
     setIsModalOpen(true);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setCurrentRecord(null);
+    setIsEdit(false);
   };
 
   const handleRoleChange = (value) => {
@@ -266,22 +305,14 @@ const ManagerDentist = () => {
           <Button type="primary" onClick={() => handleDetail(record)}>
             Detail
           </Button>
-          {/* {record.status === 'INACTIVE' && (
-            <Button
-              onClick={() => handleDeleteActive(record, 'activate')}
-              style={{ marginLeft: 8 }}
-            >
-              Activate
-            </Button>
-          )} */}
-          {
-            record.status !== 'INACTIVE' && (
-              <Button danger type="primary" style={{ marginLeft: 8 }} onClick={() => handleDeleteAccount(record.id)}>
-            Delete
+          <Button type="primary" style={{ marginLeft: 8 }} onClick={() => showModal(record)}>
+            Update
           </Button>
-            )
-          }
-          
+          {record.status !== 'INACTIVE' && (
+            <Button danger type="primary" style={{ marginLeft: 8 }} onClick={() => handleDeleteAccount(record.id)}>
+              Delete
+            </Button>
+          )}
         </div>
       ),
     },
@@ -295,14 +326,14 @@ const ManagerDentist = () => {
             Filter by Role <DownOutlined />
           </Button>
         </Dropdown>
-        <Button type="primary" onClick={showModal}>
+        <Button type="primary" onClick={() => showModal()}>
           Create Account
         </Button>
       </div>
       <Table dataSource={data} columns={columns} rowKey="id" loading={loading} />
 
       <Modal
-        title="Create New Account"
+        title={isEdit ? "Update Account" : "Create New Account"}
         visible={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -390,7 +421,7 @@ const ManagerDentist = () => {
           </Form.Item>
           <Form.Item>
             <Button loading={loading} type="primary" htmlType="submit">
-              Create Account
+              {isEdit ? "Update Account" : "Create Account"}
             </Button>
           </Form.Item>
         </Form> 
