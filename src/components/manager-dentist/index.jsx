@@ -19,7 +19,8 @@ const ManagerDentist = () => {
   const [form] = Form.useForm();
   const user = useSelector(selectUser);
   const [roleFilter, setRoleFilter] = useState(['DENTIST', 'STAFF']); // Default role filter
-
+  const [isEdit, setIsEdit] = useState(false);
+  const [currentRecord, setCurrentRecord] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState([
@@ -75,7 +76,7 @@ const ManagerDentist = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     if (user?.dentalClinic?.id) {
       fetchData();
@@ -146,44 +147,60 @@ const ManagerDentist = () => {
     });
   };
  
-  const handleCreateAccount = async (values) => {
-    setLoading(true);
-    const url = await uploadFile(values.url.file.originFileObj)
-    try {
-      await api.post('/register-by-admin', {
-        email: values.email,
-        password: values.password,
-        fullName: values.fullName,
-        phone: values.phone,
-        role: values.role,
-        clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
-        roomId: values.roomId,
-        url: url
-      });
-      message.success('Account created successfully!');
-      fetchData(); // Refresh the data to include the new account
-      setIsModalOpen(false);
-    } catch (e) {
-      console.error('Error:', e.response ? e.response.data : e.message);
-      const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to create account.';
-      message.error(errorMsg);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleCreateAccount = async (values) => {
+  //   setLoading(true);
+  //   const url = await uploadFile(values.url.file.originFileObj)
+  //   try {
+  //     await api.post('/register-by-admin', {
+  //       email: values.email,
+  //       password: values.password,
+  //       fullName: values.fullName,
+  //       phone: values.phone,
+  //       role: values.role,
+  //       clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
+  //       roomId: values.roomId,
+  //       url: url
+  //     });
+  //     message.success('Account created successfully!');
+  //     fetchData(); // Refresh the data to include the new account
+  //     setIsModalOpen(false);
+  //   } catch (e) {
+  //     console.error('Error:', e.response ? e.response.data : e.message);
+  //     const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to create account.';
+  //     message.error(errorMsg);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
 
   const handleUpdateAccount = async (values) => {
     setLoading(true);
+    let url = null;
+  
+    if (values.url && values.url.file && values.url.file.originFileObj) {
+      try {
+        url = await uploadFile(values.url.file.originFileObj);
+      } catch (error) {
+        console.error('File upload failed:', error);
+        message.error('File upload failed');
+        setLoading(false);
+        return;
+      }
+    }
+  
+    // Prepare data for the API call
+    const dataToUpdate = {
+      id: values.id,
+      fullName: values.fullName,
+      phone: values.phone,
+      role: values.role,
+      clinicID: values.clinicId,
+      url: url, // Include the uploaded file URL or null
+    };
+  
     try {
-      await api.put(`/account/${currentRecord.id}`, {
-        email: values.email,
-        // password: values.password,
-        fullName: values.fullName,
-        phone: values.phone,
-        role: values.role,
-        clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
-        roomId: values.roomId,
-      });
+      await api.put(`/account`, dataToUpdate);
       message.success('Account updated successfully!');
       fetchData(); // Refresh the data to reflect the updated account
       setIsModalOpen(false);
@@ -195,7 +212,7 @@ const ManagerDentist = () => {
       setLoading(false);
     }
   };
-
+  
   const onFinish = (values) => {
     if (isEdit) {
       handleUpdateAccount(values);
@@ -326,9 +343,9 @@ const ManagerDentist = () => {
             Filter by Role <DownOutlined />
           </Button>
         </Dropdown>
-        <Button type="primary" onClick={() => showModal()}>
+        {/* <Button type="primary" onClick={() => showModal()}>
           Create Account
-        </Button>
+        </Button> */}
       </div>
       <Table dataSource={data} columns={columns} rowKey="id" loading={loading} />
 
@@ -344,6 +361,11 @@ const ManagerDentist = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
+          
+        <Form.Item   name="id">
+          <Input disabled/>
+        </Form.Item>
+
           <Form.Item
             label="Full Name"
             name="fullName"
@@ -361,20 +383,16 @@ const ManagerDentist = () => {
           <Form.Item
             label="Email"
             name="email"
-            rules={[
-              { required: true, message: 'Please input your Email!' },
-              { type: 'email', message: 'The input is not valid E-mail!' },
-            ]}
           >
-            <Input type="email" />
+            <Input type="email" readOnly/>
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             label="Password"
             name="password"
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
             <Input.Password />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="Role"
             name="role"
@@ -386,7 +404,7 @@ const ManagerDentist = () => {
               {/* Add other roles as needed */}
             </Select>
           </Form.Item>
-          {form.getFieldValue('role') === 'DENTIST' && (
+          {/* {form.getFieldValue('role') === 'DENTIST' && (
             <Form.Item
               label="Room"
               name="roomId"
@@ -398,7 +416,7 @@ const ManagerDentist = () => {
                 ))}
               </Select>
             </Form.Item>
-          )}
+          )} */}
           <Form.Item
             label="Clinic"
             name="clinicId"
