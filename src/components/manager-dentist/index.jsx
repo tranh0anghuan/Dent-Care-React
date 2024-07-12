@@ -19,8 +19,10 @@ const ManagerDentist = () => {
   const [form] = Form.useForm();
   const user = useSelector(selectUser);
   const [roleFilter, setRoleFilter] = useState(['DENTIST', 'STAFF']); // Default role filter
+
   const [isEdit, setIsEdit] = useState(false);
   const [currentRecord, setCurrentRecord] = useState(null);
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState([
