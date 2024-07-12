@@ -29,8 +29,8 @@ function LoginPage() {
       }else if(user.role == "MANAGER"){
        navigate('/manager');
 
-      }else{
-
+      }
+      else{ 
         navigate('/');
       }
     } catch (error) {
