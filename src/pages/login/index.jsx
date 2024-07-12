@@ -26,6 +26,8 @@ function LoginPage() {
       dispatch(login(user));
       if(user.role == "ADMIN"){
         navigate('/dashboard')
+      }else if(user.role == "MANAGER"){
+        navigate('/manager');
       }
       else{ 
         navigate('/');
