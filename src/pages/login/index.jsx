@@ -26,6 +26,9 @@ function LoginPage() {
       dispatch(login(user));
       if(user.role == "ADMIN"){
         navigate('/dashboard')
+      }else if(user.role == "MANAGER"){
+       navigate('/manager');
+
       }else{
 
         navigate('/');
@@ -40,18 +43,44 @@ function LoginPage() {
     console.log('Failed:', errorInfo);
   };
 
-  const loginGoogle = async () => {
-    const result = await signInWithPopup(auth, googleProvider);
-    const token = result.user.accessToken;
+  // const loginGoogle = async () => {
+  //   const result = await signInWithPopup(auth, googleProvider);
+  //   const token = result.user.accessToken;
+  //   console.log(token)
+  //   const res = await api.post('/login-google', {
+  //     token: token,
+  //   });
+  //   const user = res.data;
+  //   localStorage.setItem('token', user.token);
+  //   dispatch(login(user));
+  //   navigate('/');
+  // };
 
-    const res = await api.post('/login-google', {
-      token: token,
-    });
-    const user = res.data;
-    localStorage.setItem('token', user.token);
-    dispatch(login(user));
-    navigate('/');
+  const loginGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const token = result.user.accessToken;
+      console.log("Google Token:", token);
+  
+      const res = await api.post('/login-google', {
+        token: token,
+      });
+  
+      const user = res.data;
+      console.log("User Data:", user);
+      localStorage.setItem('token', user.token);
+      dispatch(login(user));
+      navigate('/');
+    } catch (error) {
+      console.error("Google Login Error:", error);
+      if (error.response && error.response.data) {
+        toast.error(error.response.data);
+      } else {
+        toast.error('Google login failed!');
+      }
+    }
   };
+  
 
   return (
     <div className="login-container">

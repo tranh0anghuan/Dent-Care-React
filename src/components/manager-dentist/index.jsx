@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, message, Modal, Dropdown, Menu, Input, Select, Form } from 'antd';
+import { Button, Table, message, Modal, Dropdown, Menu, Input, Select, Form, Upload, Image } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/counterSlice';
+import { PlusOutlined } from '@ant-design/icons';
+import uploadFile from '../../util/file';
+
 
 const { Option } = Select;
 
@@ -16,6 +19,43 @@ const ManagerDentist = () => {
   const [form] = Form.useForm();
   const user = useSelector(selectUser);
   const [roleFilter, setRoleFilter] = useState(['DENTIST', 'STAFF']); // Default role filter
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState([
+  ]);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: 'none',
+      }}
+      type="button"
+    >
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   const fetchData = async () => {
     setLoading(true);
@@ -106,6 +146,7 @@ const ManagerDentist = () => {
 
   const handleCreateAccount = async (values) => {
     setLoading(true);
+    const url = await uploadFile(values.url.file.originFileObj)
     try {
       await api.post('/register-by-admin', {
         email: values.email,
@@ -115,6 +156,7 @@ const ManagerDentist = () => {
         role: values.role,
         clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
         roomId: values.roomId,
+        url: url
       });
       message.success('Account created successfully!');
       fetchData(); // Refresh the data to include the new account
@@ -303,6 +345,17 @@ const ManagerDentist = () => {
               <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
             </Select>
           </Form.Item>
+          <Form.Item label="Image" name="url">
+          <Upload
+        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+        listType="picture-card"
+        fileList={fileList}
+        onPreview={handlePreview}
+        onChange={handleChange}
+      >
+        {fileList.length >= 8 ? null : uploadButton}
+      </Upload>
+          </Form.Item>
           <Form.Item>
             <Button loading={loading} type="primary" htmlType="submit">
               Create Account
@@ -310,6 +363,19 @@ const ManagerDentist = () => {
           </Form.Item>
         </Form> 
       </Modal>
+      {previewImage && (
+        <Image
+          wrapperStyle={{
+            display: 'none',
+          }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+          }}
+          src={previewImage}
+        />
+      )}
     </div>
   );
 };
