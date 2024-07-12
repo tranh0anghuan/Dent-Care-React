@@ -26,8 +26,8 @@ const Manager = () => {
       setItems([
         { key: "room", label: "Room", icon: <PlusOutlined /> },
         { key: "managerappointment", label: "View Appointment", icon: <ProfileOutlined /> },
-        { key: "manager-patient", label: "ManagerPatient", icon: <ProfileOutlined /> },
-        { key: "manager-dentist", label: "ManagerDentist", icon: <PlusOutlined />},
+        { key: "manager-patient", label: "Manage Patient", icon: <ProfileOutlined /> },
+        { key: "manager-dentist", label: "Manage Dentist", icon: <PlusOutlined />},
       ]);
     }
   }, [role]);
