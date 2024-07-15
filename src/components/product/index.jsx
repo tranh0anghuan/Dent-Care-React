@@ -1,17 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, message, Table, Modal, Popconfirm, TimePicker } from 'antd';
+import { Form, Input, Button, message, Table, Modal, Popconfirm, TimePicker, Upload, Image } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons'; 
 import api from '../../config/axios';
 import moment from 'moment';
-
+import uploadFile from "../../util/file"
 const Product = () => {
   const [clinics, setClinics] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
-
+  const props = {
+    name: 'file',
+    action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+    headers: {
+      authorization: 'authorization-text',
+    },
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        // message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
   const fetchClinics = async () => {
     try {
       const response = await api.get('/clinic/by-admin');
+      console.log(response.data)
       setClinics(response.data);
     } catch (error) {
       console.error('Failed to fetch clinics:', error);
@@ -35,6 +53,9 @@ const Product = () => {
   };
 
   const onFinish = async (values) => {
+    console.log(values)
+    const img = await uploadFile(values.url.file.originFileObj)
+    values.url = img;
     try {
       const formattedValues = {
         ...values,
@@ -83,6 +104,11 @@ const Product = () => {
       key: 'closeHours',
       render: (text) => moment(text, 'HH:mm').format('h:mm a'), // Format Close Hours
     },
+    {
+      title: 'Avatar',
+      dataIndex: 'url',
+      key: 'url',
+      render: (url) => <Image src={url}/>},
     {
       title: 'Status',
       dataIndex: 'clinicEnum',
@@ -149,6 +175,16 @@ const Product = () => {
             rules={[{ required: true, message: 'Please enter close hours' }]}
           >
             <TimePicker format="h:mm a" use12Hours />
+          </Form.Item>
+
+          <Form.Item
+            label="Avatar"
+            name="url"
+            rules={[{ required: true, message: 'Please enter avatar' }]}
+          >
+            <Upload {...props}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
