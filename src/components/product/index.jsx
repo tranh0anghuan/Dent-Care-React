@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, message, Table, Modal, Popconfirm, TimePicker } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
 import moment from 'moment';
 
@@ -36,7 +36,12 @@ const Product = () => {
 
   const onFinish = async (values) => {
     try {
-      const response = await api.post('/clinic', values);
+      const formattedValues = {
+        ...values,
+        openHours: values.openHours.format('h:mm a'),
+        closeHours: values.closeHours.format('h:mm a'),
+      };
+      const response = await api.post('/clinic', formattedValues);
       setClinics([...clinics, response.data]);
       message.success('Clinic created successfully!');
       setIsModalVisible(false);
@@ -70,11 +75,13 @@ const Product = () => {
       title: 'Open Hours',
       dataIndex: 'openHours',
       key: 'openHours',
+      render: (text) => moment(text, 'HH:mm').format('h:mm a'), // Format Open Hours
     },
     {
       title: 'Close Hours',
       dataIndex: 'closeHours',
       key: 'closeHours',
+      render: (text) => moment(text, 'HH:mm').format('h:mm a'), // Format Close Hours
     },
     {
       title: 'Status',
@@ -134,14 +141,14 @@ const Product = () => {
             name="openHours"
             rules={[{ required: true, message: 'Please enter open hours' }]}
           >
-            <TimePicker format="HH:mm" />
+            <TimePicker format="h:mm a" use12Hours />
           </Form.Item>
           <Form.Item
             label="Close Hours"
             name="closeHours"
             rules={[{ required: true, message: 'Please enter close hours' }]}
           >
-            <TimePicker format="HH:mm" />
+            <TimePicker format="h:mm a" use12Hours />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
