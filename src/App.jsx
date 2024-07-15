@@ -50,6 +50,7 @@ import CheckInHistory from './pages/check-in-history';
 import AppointmentDetails from './pages/appointment-details';
 import DayOff from './pages/day-off';
 import ViewDayOff from './pages/view-day-off';
+import AdminChart from './components/chart';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -272,6 +273,10 @@ function App() {
     {
       path: '/reset',
       element: <ResetPage />
+    },
+    {
+      path: '/chart',
+      element: <AdminChart />
     },
   ]);
 
