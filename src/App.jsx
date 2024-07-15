@@ -16,6 +16,7 @@ import Dashboard from './pages/dashboard';
 import Manager from './pages/manager';
 import Managerappointment from './components/managerappointment';
 import ManagerPatient from './components/manager-patient';
+import ManagerService from './components/manager-service';
 import Room from './components/room';
 import ManagerDentist from './components/manager-dentist';
 import Category from './components/category';
@@ -261,6 +262,10 @@ function App() {
         {
           path: '/manager/manager-dentist',
           element:<ManagerDentist />
+        },
+        {
+          path: '/manager/manager-service',
+          element:<ManagerService/>
         },
         
       ],
