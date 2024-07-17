@@ -26,7 +26,7 @@ function ClinicDetailPage() {
                 <div className="price-item pb-4">
                   <Link to={`/service/${item.id}`}>
                     <div className="position-relative">
-                      <img className="img-fluid rounded-top" src={`/${item?.name}.jpg`} alt={item?.name} />
+                      <img className="img-fluid rounded-top"  src={item?.url} alt={item?.name} />
                       <div className="d-flex align-items-center justify-content-center bg-light rounded pt-2 px-3 position-absolute top-100 start-50 translate-middle" style={{ zIndex: 2 }}>
                         <h2 className="text-primary m-0">${item?.price}</h2>
                       </div>
@@ -66,7 +66,7 @@ function ClinicDetailPage() {
                 <div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s" key={index}>
                   <Link to={`/dentist/${item.id}`} onClick={ScrollToTop} className="team-item">
                     <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
-                      <img className="img-fluid rounded-top w-100" src={`/${item?.fullName}.jpg`} alt={item?.fullName} />
+                      <img className="img-fluid rounded-top w-100"  src={item?.url} alt={item?.fullName} />
                       <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                         <Link to={'/appointment'} className="btn btn-primary py-2 px-3">Appointment</Link>
                       </div>

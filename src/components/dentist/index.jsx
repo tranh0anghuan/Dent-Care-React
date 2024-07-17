@@ -27,7 +27,7 @@ function Dentist() {
                     <div className="row pt-5 bg-light" style={{ borderRadius: 2, boxShadow: '0 1px 2px 0 rgba(0,0,0,0.1)' }}>
                         {/*Grid column*/}
                         <div className="col-md-6 mb-4">
-                            <img src={`/${dentist.fullName}.jpg`} className="img-fluid" alt style={{ width: 500 }} />
+                            <img  src={dentist?.url} className="img-fluid" alt style={{ width: 500 }} />
                         </div>
                         {/*Grid column*/}
                         {/*Grid column*/}
@@ -67,7 +67,7 @@ function Dentist() {
                                             <div className="price-item pb-4">
                                                 <Link to={`/dentist/${did}/service/${item.id}`}>
                                                     <div className="position-relative">
-                                                        <img className="img-fluid rounded-top" src={`/${item?.serviceDetail.name}.jpg`} alt />
+                                                        <img className="img-fluid rounded-top"  src={item?.url} alt />
                                                         <div className="d-flex align-items-center justify-content-center bg-light rounded pt-2 px-3 position-absolute top-100 start-50 translate-middle" style={{ zIndex: 2 }}>
                                                             <h2 className="text-primary m-0">${item?.serviceDetail.price}</h2>
                                                         </div>
@@ -104,7 +104,7 @@ function Dentist() {
                                 <div className="card-body p-1">
                                     <div className="row d-flex justify-content-between align-items-center">
                                         <div className="col-md-2 col-lg-2 col-xl-2">
-                                            <img src={`/${item.institution}.jpg`} className="img-fluid rounded-3"/>
+                                            <img  src={item?.url} className="img-fluid rounded-3"/>
                                         </div>
                                         <div className="col-md-3 col-lg-3 col-xl-3">
                                             <p className="lead fw-normal mb-2">{item.name}</p>

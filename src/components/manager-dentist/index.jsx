@@ -141,6 +141,7 @@ const ManagerDentist = () => {
               <p><strong>Room ID:</strong> {record.room.id}</p>
               <p><strong>Room Name:</strong> {record.room.name}</p>
               <p><strong>Room Status:</strong> {record.room.roomEnum}</p>
+              {/* <p><strong>URL:</strong> {record.url}</p> */}
             </div>
           )}
         </div>
@@ -287,11 +288,11 @@ const ManagerDentist = () => {
       dataIndex: 'fullName',
       key: 'fullName',
     },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
+    // {
+    //   title: 'Email',
+    //   dataIndex: 'email',
+    //   key: 'email',
+    // },
     {
       title: 'Phone',
       dataIndex: 'phone',
@@ -313,9 +314,10 @@ const ManagerDentist = () => {
       key: 'roomName',
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: 'IMG',
+      dataIndex: 'url',
+      key: 'url',
+      render: (url) => <img src={url} alt="service avatar" style={{ width: 80, height: 80 }} />,
     },
     {
       title: 'Action',

@@ -58,7 +58,7 @@ function Clinic() {
                                     {
                                         user ? (<Link to={`/clinic/${item.id}`} onClick={ScrollToTop} className="team-item">
                                             <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
-                                                <img className="img-fluid rounded-top w-100" src={`/${item?.clinicName}.jpg`} alt />
+                                                <img className="img-fluid rounded-top w-100" src={item?.url} alt />
                                                 <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                                                     <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-twitter fw-normal" /></a>
                                                     <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-facebook-f fw-normal" /></a>
@@ -73,7 +73,7 @@ function Clinic() {
                                         </Link>) :
                                             (<div onClick={show} className="team-item">
                                                 <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
-                                                    <img className="img-fluid rounded-top w-100" src={`/${item?.clinicName}.jpg`} alt />
+                                                    <img className="img-fluid rounded-top w-100"  src={item?.url} alt />
                                                     <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                                                         <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-twitter fw-normal" /></a>
                                                         <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-facebook-f fw-normal" /></a>

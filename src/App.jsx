@@ -267,7 +267,10 @@ function App() {
           path: '/manager/manager-service',
           element:<ManagerService/>
         },
-        
+        {
+          path: '/manager/manager-chart',
+          element: <AdminChart />
+        },
       ],
     },
 
@@ -278,10 +281,6 @@ function App() {
     {
       path: '/reset',
       element: <ResetPage />
-    },
-    {
-      path: '/chart',
-      element: <AdminChart />
     },
   ]);
 

@@ -54,7 +54,7 @@ function ServiceDetailPage() {
                                 </Link> */}
                                 <div onClick={() => navigate(`/service/${sid}/clinic/${item.id}`)} className="team-item">
                                     <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
-                                        <img className="img-fluid rounded-top w-100" src={`/${item?.clinicName}.jpg`} alt />
+                                        <img className="img-fluid rounded-top w-100"  src={item?.url} alt />
                                         <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                                             <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-twitter fw-normal" /></a>
                                             <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-facebook-f fw-normal" /></a>
@@ -95,7 +95,7 @@ function ServiceDetailPage() {
                         <div className="col-lg-7">
                             <div className="section-title mb-4">
                                 <h5 className="position-relative d-inline-block text-primary text-uppercase">Description</h5>
-                                <h1 className="display-5 mb-0">What is Ceramic Tooth? Is Ceramic Tooth Good?</h1>
+                                <h1 className="display-5 mb-0">What is {service.name}? Is Ceramic Tooth Good?</h1>
                             </div>
                             <h4 className="text-body fst-italic mb-4">At DentCare, we are dedicated to providing exceptional dental care in a warm and welcoming environment</h4>
                             <p className="mb-4">{service.description}</p>
@@ -112,7 +112,7 @@ function ServiceDetailPage() {
                         </div>
                         <div className="col-lg-5" style={{ minHeight: 500 }}>
                             <div className="position-relative h-100">
-                                <img className="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src={`/${service.name}.jpg`} style={{ objectFit: 'cover' }} />
+                                <img className="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"  src={service?.url} style={{ objectFit: 'cover' }} />
                             </div>
                         </div>
                     </div>

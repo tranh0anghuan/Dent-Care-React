@@ -24,7 +24,8 @@ const ManagerService = () => {
   const fetchServices = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
+      // const response = await api.get(`/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
+      const response = await api.get (`/service`);
       setServices(response.data);
       setLoading(false);
     } catch (error) {
@@ -114,7 +115,7 @@ const ManagerService = () => {
       title: 'Avatar',
       dataIndex: 'url',
       key: 'url',
-      render: (url) => <img src={url} alt="service avatar" style={{ width: 50, height: 50 }} />,
+      render: (url) => <img src={url} alt="service avatar" style={{ width: 150, height: 95 }} />,
     },
     {
       title: 'Status',
