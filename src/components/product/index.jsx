@@ -8,8 +8,10 @@ import uploadFile from "../../util/file";
 const Product = () => {
   const [clinics, setClinics] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [currentClinic, setCurrentClinic] = useState(null);
 
   const handleUploadChange = ({ fileList }) => {
     setFileList(fileList);
@@ -18,7 +20,6 @@ const Product = () => {
   const fetchClinics = async () => {
     try {
       const response = await api.get('/clinic/by-admin');
-      console.log(response.data);
       setClinics(response.data);
     } catch (error) {
       console.error('Failed to fetch clinics:', error);
@@ -41,9 +42,28 @@ const Product = () => {
     }
   };
 
+  const handleAddClinic = () => {
+    form.resetFields();
+    setFileList([]);
+    setIsEdit(false);
+    setIsModalVisible(true);
+  };
+
+  const handleEditClinic = (clinic) => {
+    form.setFieldsValue({
+      ...clinic,
+      openHours: moment(clinic.openHours, 'h:mm a'),
+      closeHours: moment(clinic.closeHours, 'h:mm a'),
+    });
+    setFileList(clinic.url ? [{ url: clinic.url, name: 'avatar' }] : []);
+    setIsEdit(true);
+    setCurrentClinic(clinic);
+    setIsModalVisible(true);
+  };
+
   const onFinish = async (values) => {
     try {
-      if (fileList.length > 0) {
+      if (fileList.length > 0 && fileList[0].originFileObj) {
         const img = await uploadFile(fileList[0].originFileObj);
         values.url = img;
       }
@@ -51,59 +71,26 @@ const Product = () => {
         ...values,
         openHours: values.openHours.format('h:mm a'),
         closeHours: values.closeHours.format('h:mm a'),
+        clinicEnum: "ACTIVE",
       };
-      const response = await api.post('/clinic', formattedValues);
-      setClinics([...clinics, response.data]);
-      message.success('Clinic created successfully!');
+      
+      if (isEdit) {
+        await api.put('/clinic', { ...formattedValues, id: currentClinic.id });
+        setClinics(clinics.map(clinic => clinic.id === currentClinic.id ? { ...clinic, ...formattedValues } : clinic));
+        message.success('Clinic updated successfully!');
+      } else {
+        const response = await api.post('/clinic', formattedValues);
+        setClinics([...clinics, response.data]);
+        message.success('Clinic created successfully!');
+      }
+
       setIsModalVisible(false);
       setFileList([]); // Reset file list
     } catch (error) {
-      console.error('Failed to create clinic:', error);
-      message.error('Failed to create clinic');
+      console.error('Failed to create/update clinic:', error);
+      message.error('Failed to create/update clinic');
     }
   };
-
-  const handleUpdateAccount = async (values) => {
-    setLoading(true);
-    let url = null;
-  
-    // Kiểm tra và thực hiện upload file nếu có
-    if (values.url && values.url.file && values.url.file.originFileObj) {
-      try {
-        url = await uploadFile(values.url.file.originFileObj); // Gọi hàm uploadFile để upload file lên server
-      } catch (error) {
-        console.error('File upload failed:', error);
-        message.error('File upload failed');
-        setLoading(false);
-        return;
-      }
-    }
-  
-    // Chuẩn bị dữ liệu để gọi API
-    const dataToUpdate = {
-      id: values.id,
-      clinicName: values.clinicName,
-      address: values.address,
-      openHours: values.openHours,
-      closeHours: values.closeHours,
-      url: url, // Bao gồm đường dẫn của file đã được upload hoặc là null nếu không có file
-    };
-  
-    try {
-      // Gọi API để cập nhật tài khoản
-      await api.put(`/clinic`, dataToUpdate);
-      message.success('Clinic updated successfully!'); // Thông báo khi cập nhật thành công
-      fetchData(); // Lấy lại dữ liệu mới để cập nhật danh sách tài khoản
-      setIsModalOpen(false); // Đóng modal sau khi hoàn thành cập nhật
-    } catch (e) {
-      console.error('Error:', e.response ? e.response.data : e.message);
-      const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to update clinic.';
-      message.error(errorMsg); // Thông báo lỗi nếu không thể cập nhật tài khoản
-    } finally {
-      setLoading(false); // Dừng trạng thái loading sau khi hoàn thành hoặc xảy ra lỗi
-    }
-  };
-
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -151,30 +138,32 @@ const Product = () => {
     {
       title: 'Action',
       render: (record) => (
-        
-        <Popconfirm
-          title="Are you sure delete this clinic?"
-          onConfirm={() => handleDeleteClinic(record.id)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button type="primary" danger>
-            Delete
+        <div>
+          <Button type="primary" onClick={() => handleEditClinic(record)} style={{ marginRight: 8 }}>
+            Edit
           </Button>
-          
-        </Popconfirm>
-        
+          <Popconfirm
+            title="Are you sure delete this clinic?"
+            onConfirm={() => handleDeleteClinic(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </div>
       ),
     },
   ];
 
   return (
     <div>
-      <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: 16 }}>
+      <Button type="primary" onClick={handleAddClinic} style={{ marginBottom: 16 }}>
         Create Clinic
       </Button>
       <Modal
-        title="Add New Clinic"
+        title={isEdit ? "Edit Clinic" : "Add New Clinic"}
         visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
@@ -216,7 +205,6 @@ const Product = () => {
           <Form.Item
             label="Avatar"
             name="url"
-            rules={[{ required: true, message: 'Please enter avatar' }]}
           >
             <Upload
               listType="picture"
