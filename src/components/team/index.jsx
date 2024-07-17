@@ -87,7 +87,7 @@ function Team() {
                             item?.status !== 'INACTIVE' ? (<div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
                                 <Link to={`/dentist/${item.id}`} onClick={ScrollToTop} className="team-item">
                                     <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
-                                        <img width={300} height={400} className="rounded-top w-100" src={`/${item?.fullName}.jpg`} alt style={{objectFit: "cover"}} />
+                                        <img width={300} height={400} className="rounded-top w-100"  src={item?.url} alt style={{objectFit: "cover"}} />
                                         <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                                             <Link to={`/dentist/${item.id}`} className="btn btn-primary py-2 px-3">Appointment</Link>
 

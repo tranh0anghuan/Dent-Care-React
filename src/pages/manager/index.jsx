@@ -29,6 +29,7 @@ const Manager = () => {
         { key: "manager-patient", label: "Manage Patient", icon: <ProfileOutlined /> },
         { key: "manager-dentist", label: "Manage Dentist", icon: <PlusOutlined />},
         { key: "manager-service", label: "Manager Service", icon: <ProfileOutlined/>},
+        { key: "manager-chart", label: "Manager Chart", icon: <ProfileOutlined/>},
       ]);
     }
   }, [role]);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Modal, message, DatePicker } from 'antd';
+import { Button, Table, Modal, message, DatePicker, Form } from 'antd';
 import api from '../../config/axios';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,10 @@ function ManagerAppointment() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [dateRange, setDateRange] = useState([]);
+    const [date,setDate] = useState([])
+    const { RangePicker  } = DatePicker;
+    const [isLoadingTable, setIsLoadingTable] = useState(true)
+
   const user = useSelector(selectUser);
   console.log(user);
 
@@ -18,6 +22,7 @@ function ManagerAppointment() {
       const response = await api.get(`/appointment-patient/clinic/${user.dentalClinic?.id}`);
       setData(response.data);
       setFilteredData(response.data); // Set initial filtered data
+      setIsLoadingTable(false)
     } catch (error) {
       console.error('Failed to fetch data:', error.response);
       message.error('Failed to fetch data');
@@ -145,14 +150,45 @@ function ManagerAppointment() {
       ),
     },
   ];
+  console.log(date);
+  const getAppointmentByDate = async () => {
+    try {
+      setIsLoadingTable(true)
+     if(!date[0] == ""){
+       const res = await api.get(`/appointment-patient/date/between/${date[0]}/${date[1]}/clinic/${user.dentalClinic.id}`)
+       console.log(res)
+       setFilteredData(res.data)
+     }else{
+      setFilteredData(data);
+     }
+     setIsLoadingTable(false)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
   return (
     <div>
       {/* Date Range Picker */}
-      <DatePicker.RangePicker onChange={handleDateRangeChange} />
+      <div className='d-flex justify-content-center'>
+                <Form layout="inline"
+                        onFinish={getAppointmentByDate}>
+                    <Form.Item label="Select Week">
+                    <RangePicker   onChange={(value, dateString) => {
+                 console.log('Formatted Selected Time: ', setDate(dateString));
+                 
+      }} />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button loading={isLoadingTable} type="primary" htmlType='submit' >
+                            Add Schedule
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
 
       {/* Table to display filtered appointment data */}
-      <Table dataSource={filteredData} columns={columns} />
+      <Table loading={isLoadingTable} dataSource={filteredData} columns={columns} />
     </div>
   );
 }
