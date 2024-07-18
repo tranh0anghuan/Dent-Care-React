@@ -48,6 +48,8 @@ function Appointment() {
 
     const {patientSelect} = usePatientForSelect(user.id)
 
+    const [loading, setLoading] = useState(false)
+
 
 
     const layout = {
@@ -84,6 +86,7 @@ function Appointment() {
 
 
     const onFinish = async (values) => {
+        setLoading(true)
         const phone = await createPatient(values)
         const { id } = await getPatient(phone)
         await makeAppointment(values, id)
@@ -123,6 +126,8 @@ function Appointment() {
         } catch (error) {
             console.log(error)
             toast.error(error.response.data)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -417,6 +422,7 @@ function Appointment() {
                                                 <Space>
                                                     <Button
                                                         type="primary"
+                                                        loading={loading}
                                                         htmlType="submit"
                                                         className="btn btn-primary btn-lg appointment-btn"
                                                         style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingBottom: '2.5rem', marginRight: '10px' }}
