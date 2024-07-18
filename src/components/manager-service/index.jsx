@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Table, message, Popconfirm, Button, Modal, Form, Input, Upload } from 'antd';
+import { Table, message, Popconfirm, Button, Modal, Form, Input, Upload, Select } from 'antd';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/counterSlice';
 import api from '../../config/axios';
 import uploadFile from '../../util/file';
+
+const { Option } = Select;
 
 const ManagerService = () => {
   const [services, setServices] = useState([]);
@@ -21,11 +23,10 @@ const ManagerService = () => {
     setFileList(fileList);
   };
 
-  const fetchServices = async () => {
+  const fetchServices = async (url) => {
     setLoading(true);
     try {
-      // const response = await api.get(`/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
-      const response = await api.get (`/service`);
+      const response = await api.get(url);
       setServices(response.data);
       setLoading(false);
     } catch (error) {
@@ -49,7 +50,7 @@ const ManagerService = () => {
   const handleActivateService = async (serviceId) => {
     try {
       await api.put(`/service/activate/${serviceId}`);
-      fetchServices(); // Refresh the service list
+      fetchServices(`/service`);
       message.success('Service activated successfully!');
     } catch (error) {
       console.error('Failed to activate service:', error);
@@ -64,7 +65,7 @@ const ManagerService = () => {
         values.url = img;
       }
       await api.put(`/service`, { ...currentService, ...values });
-      fetchServices(); // Refresh the service list
+      fetchServices(`/service`);
       message.success('Service updated successfully!');
       setIsUpdateModalVisible(false);
       setFileList([]); // Reset file list
@@ -93,6 +94,14 @@ const ManagerService = () => {
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
+  };
+
+  const handleRoleChange = (value) => {
+    if (value === 'ALL') {
+      fetchServices('/service');
+    } else if (value === 'HERE') {
+      fetchServices(`/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
+    }
   };
 
   const columns = [
@@ -163,7 +172,7 @@ const ManagerService = () => {
 
   useEffect(() => {
     if (user?.id) {
-      fetchServices(user.id);
+      fetchServices('/service');
     }
   }, [user?.id]);
 
@@ -278,6 +287,10 @@ const ManagerService = () => {
           </Form.Item>
         </Form>
       </Modal>
+      <Select onChange={handleRoleChange} style={{ width: 200, marginBottom: 16, marginLeft: 12 }}>
+        <Option value="ALL">ALL</Option>
+        <Option value="HERE">{user.dentalClinic?.clinicName}</Option>
+      </Select>
       <Table dataSource={services} columns={columns} loading={loading} />
     </div>
   );
