@@ -17,6 +17,7 @@ const ManagerService = () => {
   const [form] = Form.useForm();
   const [updateForm] = Form.useForm();
   const [currentService, setCurrentService] = useState(null);
+  const [role, setRole] = useState('ALL');
   const user = useSelector(selectUser);
 
   const handleUploadChange = ({ fileList }) => {
@@ -39,7 +40,7 @@ const ManagerService = () => {
   const handleDeleteService = async (serviceId) => {
     try {
       await api.delete(`/service/${serviceId}`);
-      setServices(services.filter(service => service.id !== serviceId));
+      fetchServices(role === 'ALL' ? '/service' : `/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
       message.success('Service deleted successfully!');
     } catch (error) {
       console.error('Failed to delete service:', error);
@@ -50,11 +51,25 @@ const ManagerService = () => {
   const handleActivateService = async (serviceId) => {
     try {
       await api.put(`/service/activate/${serviceId}`);
-      fetchServices(`/service`);
+      fetchServices(role === 'ALL' ? '/service' : `/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
       message.success('Service activated successfully!');
     } catch (error) {
       console.error('Failed to activate service:', error);
       message.error('Failed to activate service');
+    }
+  };
+
+  const handleAddServiceToClinic = async (serviceId) => {
+    try {
+      const payload = {
+        serviceId,
+        clinicId: user.dentalClinic?.id,
+      };
+      await api.post('/service-clinic', payload);
+      message.success('Service added to clinic successfully!');
+    } catch (error) {
+      console.error('Failed to add service to clinic:', error);
+      message.error('Failed to add service to clinic');
     }
   };
 
@@ -65,7 +80,7 @@ const ManagerService = () => {
         values.url = img;
       }
       await api.put(`/service`, { ...currentService, ...values });
-      fetchServices(`/service`);
+      fetchServices(role === 'ALL' ? '/service' : `/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
       message.success('Service updated successfully!');
       setIsUpdateModalVisible(false);
       setFileList([]); // Reset file list
@@ -82,7 +97,7 @@ const ManagerService = () => {
         values.url = img;
       }
       const response = await api.post('/service', values);
-      setServices([...services, response.data]);
+      fetchServices(role === 'ALL' ? '/service' : `/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
       message.success('Service created successfully!');
       setIsModalVisible(false);
       setFileList([]); // Reset file list
@@ -97,6 +112,7 @@ const ManagerService = () => {
   };
 
   const handleRoleChange = (value) => {
+    setRole(value);
     if (value === 'ALL') {
       fetchServices('/service');
     } else if (value === 'HERE') {
@@ -165,6 +181,17 @@ const ManagerService = () => {
               Delete
             </Button>
           </Popconfirm>
+
+          <Popconfirm 
+            title={`Are you want to add this service to ${user.dentalClinic?.clinicName}?`}
+            onConfirm={() => handleAddServiceToClinic(record.id)}
+            okText="Yes"
+            cancelText="No" 
+          >
+            <Button style={{ marginTop: 8, marginLeft: 8 }}>
+              Add
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },
@@ -181,6 +208,11 @@ const ManagerService = () => {
       <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: 16 }}>
         Create Service
       </Button>
+      <Select onChange={handleRoleChange} style={{ width: 200, marginBottom: 16, marginLeft: 12 }}>
+        <Option value="ALL">ALL</Option>
+        <Option value="HERE">{user.dentalClinic?.clinicName}</Option>
+      </Select>
+      <Table dataSource={services} columns={columns} loading={loading} />
       <Modal
         title="Add New Service"
         visible={isModalVisible}
@@ -203,7 +235,19 @@ const ManagerService = () => {
           <Form.Item
             label="Price"
             name="price"
-            rules={[{ required: true, message: 'Please enter service price' }]}
+            rules={[
+              { required: true, message: "Please enter your Price!" },
+              {
+                type: "number",
+                min: 0,
+                max: 100000000000,
+                message: "Price must be between 0 and 100000000000",
+              },
+            ]}
+            getValueFromEvent={(event) => {
+              const { value } = event.target;
+              return value ? (Number(value) ? Number(value) : 0) : value;
+            }}
           >
             <Input />
           </Form.Item>
@@ -223,9 +267,9 @@ const ManagerService = () => {
               listType="picture"
               fileList={fileList}
               onChange={handleUploadChange}
-              beforeUpload={() => false} // Prevent automatic upload
+              beforeUpload={() => false}
             >
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Upload Avatar</Button>
             </Upload>
           </Form.Item>
           <Form.Item>
@@ -235,6 +279,7 @@ const ManagerService = () => {
           </Form.Item>
         </Form>
       </Modal>
+
       <Modal
         title="Update Service"
         visible={isUpdateModalVisible}
@@ -256,7 +301,19 @@ const ManagerService = () => {
           <Form.Item
             label="Price"
             name="price"
-            rules={[{ required: true, message: 'Please enter service price' }]}
+            rules={[
+              { required: true, message: "Please enter your Price!" },
+              {
+                type: "number",
+                min: 0,
+                max: 100000000000,
+                message: "Price must be between 0 and 100000000000",
+              },
+            ]}
+            getValueFromEvent={(event) => {
+              const { value } = event.target;
+              return value ? (Number(value) ? Number(value) : 0) : value;
+            }}
           >
             <Input />
           </Form.Item>
@@ -275,25 +332,21 @@ const ManagerService = () => {
               listType="picture"
               fileList={fileList}
               onChange={handleUploadChange}
-              beforeUpload={() => false} // Prevent automatic upload
+              beforeUpload={() => false}
             >
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Upload Avatar</Button>
             </Upload>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Update
+              Submit
             </Button>
           </Form.Item>
         </Form>
       </Modal>
-      <Select onChange={handleRoleChange} style={{ width: 200, marginBottom: 16, marginLeft: 12 }}>
-        <Option value="ALL">ALL</Option>
-        <Option value="HERE">{user.dentalClinic?.clinicName}</Option>
-      </Select>
-      <Table dataSource={services} columns={columns} loading={loading} />
     </div>
   );
 };
 
 export default ManagerService;
+  
