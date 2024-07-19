@@ -49,7 +49,7 @@ function AdminChart() {
   return (
     <div style={{ width: "auto", height: "auto", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
       <div style={{ marginBottom: "20px", fontSize: "24px", fontWeight: "bold" }}>
-        Total year Appointments: {total}
+        Total of year Appointments: {total}
       </div>
       <LineChart width={1500} height={700} data={data}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
