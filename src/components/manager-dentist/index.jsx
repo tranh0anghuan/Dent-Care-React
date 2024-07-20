@@ -298,24 +298,24 @@ const ManagerDentist = () => {
       title: 'Action',
       key: 'action',
       
-      // render: (text, record) => (
-      //   <Dropdown
-      //     overlay={
-      //       <Menu>
-      //         <Menu.Item onClick={() => handleDetail(record)}>Detail</Menu.Item>
-      //         {record.role === 'DENTIST' && (
-      //           <Menu.Item onClick={() => showServiceModal(record)}>Add Service</Menu.Item>
-      //         )}
-      //         <Menu.Item onClick={() => showModal(record)}>Edit</Menu.Item>
-      //       </Menu>
-      //     }
-      //   >
-      //     <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-      //       Actions <DownOutlined />
-      //     </a>
-      //   </Dropdown>
-      // ),
-      // align: 'center',
+      render: (text, record) => (
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item onClick={() => handleDetail(record)}>Detail</Menu.Item>
+              {record.role === 'DENTIST' && (
+                <Menu.Item onClick={() => showServiceModal(record)}>Add Service</Menu.Item>
+              )}
+              <Menu.Item onClick={() => showModal(record)}>Edit</Menu.Item>
+            </Menu>
+          }
+        >
+          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+            Actions <DownOutlined />
+          </a>
+        </Dropdown>
+      ),
+      align: 'center',
     },
   ];
 
