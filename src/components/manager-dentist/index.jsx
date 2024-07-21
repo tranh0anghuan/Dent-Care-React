@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, message, Modal, Dropdown, Menu, Input, Select, Form, Upload, Image } from 'antd';
-import { DownOutlined, PlusOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/counterSlice';
+import { PlusOutlined } from '@ant-design/icons';
 import uploadFile from '../../util/file';
+
 
 const { Option } = Select;
 
@@ -12,12 +14,12 @@ const ManagerDentist = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+
   const [clinic, setClinic] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [services, setServices] = useState([]);
+
   const [form] = Form.useForm();
-  const [serviceForm] = Form.useForm();
+
   const user = useSelector(selectUser);
   const [roleFilter, setRoleFilter] = useState(['DENTIST', 'STAFF']); // Default role filter
 
@@ -26,8 +28,8 @@ const ManagerDentist = () => {
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState([]);
-
+  const [fileList, setFileList] = useState([
+  ]);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -65,6 +67,7 @@ const ManagerDentist = () => {
       reader.onerror = (error) => reject(error);
     });
 
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -81,28 +84,28 @@ const ManagerDentist = () => {
       setLoading(false);
     }
   };
+  
 
-  const fetchServices = async (service) => {
-    try {
-      const response = await api.get('/service');
-      setServices(response.data);
-    } catch (error) {
-      console.error('Failed to fetch services:', error);
-      message.error('Failed to fetch services');
-    }
-  };
 
-  const handleAddService = async (values) => {
-    try {
-      await api.post('/dentist-service', values);
-      message.success('Service added to dentist successfully!');
-      setIsServiceModalOpen(false);
-      serviceForm.resetFields();
-    } catch (error) {
-      console.error('Failed to add service to dentist:', error);
-      message.error('Failed to add service to dentist');
-    }
-  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     if (user?.dentalClinic?.id) {
@@ -125,7 +128,7 @@ const ManagerDentist = () => {
 
   useEffect(() => {
     fetchClinic();
-    fetchServices();
+
   }, [user?.dentalClinic?.id]);
 
   const handleSearch = (value) => {
@@ -167,6 +170,7 @@ const ManagerDentist = () => {
               <p><strong>Room ID:</strong> {record.room.id}</p>
               <p><strong>Room Name:</strong> {record.room.name}</p>
               <p><strong>Room Status:</strong> {record.room.roomEnum}</p>
+              {/* <p><strong>URL:</strong> {record.url}</p> */}
             </div>
           )}
         </div>
@@ -174,11 +178,38 @@ const ManagerDentist = () => {
       onOk() {},
     });
   };
+ 
+  // const handleCreateAccount = async (values) => {
+  //   setLoading(true);
+  //   const url = await uploadFile(values.url.file.originFileObj)
+  //   try {
+  //     await api.post('/register-by-admin', {
+  //       email: values.email,
+  //       password: values.password,
+  //       fullName: values.fullName,
+  //       phone: values.phone,
+  //       role: values.role,
+  //       clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
+  //       roomId: values.roomId,
+  //       url: url
+  //     });
+  //     message.success('Account created successfully!');
+  //     fetchData(); // Refresh the data to include the new account
+  //     setIsModalOpen(false);
+  //   } catch (e) {
+  //     console.error('Error:', e.response ? e.response.data : e.message);
+  //     const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to create account.';
+  //     message.error(errorMsg);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
 
   const handleUpdateAccount = async (values) => {
     setLoading(true);
     let url = null;
-
+  
     if (values.url && values.url.file && values.url.file.originFileObj) {
       try {
         url = await uploadFile(values.url.file.originFileObj);
@@ -189,7 +220,7 @@ const ManagerDentist = () => {
         return;
       }
     }
-
+  
     // Prepare data for the API call
     const dataToUpdate = {
       id: values.id,
@@ -199,7 +230,7 @@ const ManagerDentist = () => {
       clinicID: values.clinicId,
       url: url, // Include the uploaded file URL or null
     };
-
+  
     try {
       await api.put(`/account`, dataToUpdate);
       message.success('Account updated successfully!');
@@ -213,7 +244,7 @@ const ManagerDentist = () => {
       setLoading(false);
     }
   };
-
+  
   const onFinish = (values) => {
     if (isEdit) {
       handleUpdateAccount(values);
@@ -237,15 +268,15 @@ const ManagerDentist = () => {
     setIsModalOpen(true);
   };
 
-  const showServiceModal = (record) => {
-    setCurrentRecord(record);
-    setIsServiceModalOpen(true);
-    serviceForm.resetFields();
-  };
+
+
+
+
+
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setIsServiceModalOpen(false);
+
     setCurrentRecord(null);
     setIsEdit(false);
   };
@@ -253,228 +284,299 @@ const ManagerDentist = () => {
   const handleRoleChange = (value) => {
     form.setFieldsValue({ roomId: undefined }); // Reset room value when role changes
     if (value === 'DENTIST') {
-      fetchClinic(); // Fetch the clinic data again if role is dentist
+      fetchClinic(); // Fetch the rooms again
+    } else {
+      setRooms([]); // Clear the rooms if the role is not DENTIST
     }
   };
+
+  const handleDeleteAccount = async (accountId) => {
+    setLoading(true);
+    try {
+      await api.delete(`/account/${accountId}`);
+      message.success('Account deleted successfully!');
+      fetchData(); // Refresh the data to reflect the updated list
+    } catch (error) {
+      console.error('Failed to delete account:', error.response ? error.response.data : error.message);
+      message.error('Failed to delete account');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const menu = (
+    <Menu onClick={handleSearch}>
+      <Menu.Item key="ALL">All</Menu.Item>
+      <Menu.Item key="DENTIST">Dentist</Menu.Item>
+      <Menu.Item key="STAFF">Staff</Menu.Item>
+      {/* Add other roles as needed */}
+    </Menu>
+  );
 
   const columns = [
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      align: 'center',
+
     },
     {
       title: 'Full Name',
       dataIndex: 'fullName',
       key: 'fullName',
-      align: 'center',
+
+
+
+
+
+
+
     },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-      align: 'center',
-    },
+    // {
+    //   title: 'Email',
+    //   dataIndex: 'email',
+    //   key: 'email',
+    // },
     {
       title: 'Phone',
       dataIndex: 'phone',
       key: 'phone',
-      align: 'center',
+
     },
     {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      align: 'center',
+
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      align: 'center',
+      title: 'Clinic Name',
+      dataIndex: ['dentalClinic', 'clinicName'],
+      key: 'clinicName',
+    },
+    {
+      title: 'Room Name',
+      dataIndex: ['room', 'name'],
+      key: 'roomName',
+    },
+    {
+      title: 'IMG',
+      dataIndex: 'url',
+      key: 'url',
+      render: (url) => <img src={url} alt="service avatar" style={{ width: 80, height: 80 }} />,
     },
     {
       title: 'Action',
-      key: 'action',
-      
-      render: (text, record) => (
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item onClick={() => handleDetail(record)}>Detail</Menu.Item>
-              {record.role === 'DENTIST' && (
-                <Menu.Item onClick={() => showServiceModal(record)}>Add Service</Menu.Item>
-              )}
-              <Menu.Item onClick={() => showModal(record)}>Edit</Menu.Item>
-            </Menu>
-          }
-        >
-          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            Actions <DownOutlined />
-          </a>
-        </Dropdown>
+      render: (record) => (
+        <div>
+          <Button type="primary" onClick={() => handleDetail(record)}>
+            Detail
+          </Button>
+          <Button type="primary" style={{ marginLeft: 8 }} onClick={() => showModal(record)}>
+            Update
+          </Button>
+          {record.status !== 'INACTIVE' && (
+            <Button danger type="primary" style={{ marginLeft: 8 }} onClick={() => handleDeleteAccount(record.id)}>
+              Delete
+            </Button>
+          )}
+        </div>
       ),
-      align: 'center',
+
+
+
+
+
     },
   ];
 
-  const rowClassName = (record) => {
-    return record.status === 'INACTIVE' ? 'table-row-inactive' : '';
-  };
+
+
+
 
   return (
-    <div style={{ marginTop: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-        <Dropdown
-          overlay={
-            <Menu onClick={handleSearch}>
-              <Menu.Item key="ALL">ALL</Menu.Item>
-              <Menu.Item key="DENTIST">DENTIST</Menu.Item>
-              <Menu.Item key="STAFF">STAFF</Menu.Item>
-            </Menu>
-          }
-        >
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Dropdown overlay={menu}>
+
+
+
+
+
+
+
+
           <Button>
-            Select Role <DownOutlined />
+            Filter by Role <DownOutlined />
           </Button>
         </Dropdown>
-        <Button type="primary" onClick={() => showModal()}>
-          Add Account
-        </Button>
+        {/* <Button type="primary" onClick={() => showModal()}>
+          Create Account
+        </Button> */}
       </div>
-      <Table
-        columns={columns}
-        dataSource={data}
-        rowKey="id"
-        loading={loading}
-        rowClassName={rowClassName}
-        pagination={{ pageSize: 10 }}
-      />
+      <Table dataSource={data} columns={columns} rowKey="id" loading={loading} />
+
+
+
+
+
+
+
       <Modal
-        title={isEdit ? 'Edit Account' : 'Add Account'}
+        title={isEdit ? "Update Account" : "Create New Account"}
         visible={isModalOpen}
         onCancel={handleCancel}
         footer={null}
       >
         <Form
           form={form}
+          layout="vertical"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          initialValues={{
-            role: 'DENTIST',
-          }}
+
+
+
         >
-          <Form.Item
-            label="ID"
-            name="id"
-            hidden={!isEdit}
-          >
-            <Input disabled />
-          </Form.Item>
+          
+        <Form.Item   name="id">
+          <Input disabled/>
+        </Form.Item>
+
+
+
           <Form.Item
             label="Full Name"
             name="fullName"
-            rules={[{ required: true, message: 'Please input the full name!' }]}
+            rules={[{ required: true, message: 'Please input your full name!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Phone"
             name="phone"
-            rules={[{ required: true, message: 'Please input the phone number!' }]}
+            rules={[{ required: true, message: 'Please input your phone number!' }]}
           >
             <Input />
           </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+          >
+            <Input type="email" readOnly/>
+          </Form.Item>
+          {/* <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'Please input your password!' }]}
+          >
+            <Input.Password />
+          </Form.Item> */}
           <Form.Item
             label="Role"
             name="role"
             rules={[{ required: true, message: 'Please select a role!' }]}
           >
-            <Select onChange={handleRoleChange}>
-              <Option value="DENTIST">DENTIST</Option>
-              <Option value="STAFF">STAFF</Option>
+            <Select onChange={handleRoleChange} >
+              <Option value="DENTIST">Dentist</Option>
+              <Option value="STAFF">Staff</Option>
+              {/* Add other roles as needed */}
             </Select>
           </Form.Item>
-          {form.getFieldValue('role') === 'DENTIST' && (
-            <>
-              <Form.Item
-                label="Room"
-                name="roomId"
-                rules={[{ required: true, message: 'Please select a room!' }]}
-              >
-                <Select placeholder="Select a room">
-                  {rooms.map((room) => (
-                    <Option key={room.id} value={room.id}>
-                      {room.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item label="Avatar" name="url">
-                <Upload
-                  listType="picture-card"
-                  fileList={fileList}
-                  onPreview={handlePreview}
-                  onChange={handleChange}
-                >
-                  {fileList.length >= 1 ? null : uploadButton}
-                </Upload>
-                <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
-                  <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                </Modal>
-              </Form.Item>
-            </>
-          )}
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              {isEdit ? 'Update' : 'Create'}
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+          {/* {form.getFieldValue('role') === 'DENTIST' && (
+            <Form.Item
+              label="Room"
+              name="roomId"
+              rules={[{ required: true, message: 'Please select a room!' }]}
+            >
+              <Select>
+                {rooms.map((room) => (
+                  <Option key={room.id} value={room.id}>{room.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )} */}
 
-      <Modal
-        title="Add Service to Dentist"
-        visible={isServiceModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form
-          form={serviceForm}
-          onFinish={handleAddService}
-          initialValues={{
-            accountId: currentRecord?.id,
-          }}
-        >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <Form.Item
-            label="Service"
-            name="serviceId"
-            rules={[{ required: true, message: 'Please select a service!' }]}
+            label="Clinic"
+            name="clinicId"
+            initialValue={user.dentalClinic?.id}
           >
-            <Select placeholder="Select a service">
-              {services.map((service) => (
-                <Option key={service.id} value={service.id}>
-                  {service.name}
-                </Option>
-              ))}
+            <Select disabled>
+              <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
+
+
+
+
             </Select>
           </Form.Item>
-          <Form.Item
-            label="Dentist"
-            name="accountId"
-            rules={[{ required: true, message: 'Please select a dentist!' }]}
-            hidden
-          >
-            <Input />
+          <Form.Item label="Image" name="url">
+          <Upload
+        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+        listType="picture-card"
+        fileList={fileList}
+        onPreview={handlePreview}
+        onChange={handleChange}
+      >
+        {fileList.length >= 8 ? null : uploadButton}
+      </Upload>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Add Service
+            <Button loading={loading} type="primary" htmlType="submit">
+              {isEdit ? "Update Account" : "Create Account"}
             </Button>
           </Form.Item>
-        </Form>
+        </Form> 
       </Modal>
+      {previewImage && (
+        <Image
+          wrapperStyle={{
+            display: 'none',
+          }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+          }}
+          src={previewImage}
+        />
+      )}
     </div>
   );
 };
