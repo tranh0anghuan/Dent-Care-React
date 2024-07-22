@@ -84,27 +84,6 @@ const ManagerDentist = () => {
       setLoading(false);
     }
   };
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   useEffect(() => {
@@ -175,10 +154,10 @@ const ManagerDentist = () => {
           )}
         </div>
       ),
-      onOk() {},
+      onOk() { },
     });
   };
- 
+
   // const handleCreateAccount = async (values) => {
   //   setLoading(true);
   //   const url = await uploadFile(values.url.file.originFileObj)
@@ -209,7 +188,7 @@ const ManagerDentist = () => {
   const handleUpdateAccount = async (values) => {
     setLoading(true);
     let url = null;
-  
+
     if (values.url && values.url.file && values.url.file.originFileObj) {
       try {
         url = await uploadFile(values.url.file.originFileObj);
@@ -220,7 +199,7 @@ const ManagerDentist = () => {
         return;
       }
     }
-  
+
     // Prepare data for the API call
     const dataToUpdate = {
       id: values.id,
@@ -230,7 +209,7 @@ const ManagerDentist = () => {
       clinicID: values.clinicId,
       url: url, // Include the uploaded file URL or null
     };
-  
+
     try {
       await api.put(`/account`, dataToUpdate);
       message.success('Account updated successfully!');
@@ -244,7 +223,7 @@ const ManagerDentist = () => {
       setLoading(false);
     }
   };
-  
+
   const onFinish = (values) => {
     if (isEdit) {
       handleUpdateAccount(values);
@@ -437,10 +416,10 @@ const ManagerDentist = () => {
 
 
         >
-          
-        <Form.Item   name="id">
-          <Input disabled/>
-        </Form.Item>
+
+          <Form.Item name="id">
+            <Input disabled />
+          </Form.Item>
 
 
 
@@ -462,7 +441,7 @@ const ManagerDentist = () => {
             label="Email"
             name="email"
           >
-            <Input type="email" readOnly/>
+            <Input type="email" readOnly />
           </Form.Item>
           {/* <Form.Item
             label="Password"
@@ -547,22 +526,22 @@ const ManagerDentist = () => {
             </Select>
           </Form.Item>
           <Form.Item label="Image" name="url">
-          <Upload
-        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-        listType="picture-card"
-        fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}
-      >
-        {fileList.length >= 8 ? null : uploadButton}
-      </Upload>
+            <Upload
+              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
           </Form.Item>
           <Form.Item>
             <Button loading={loading} type="primary" htmlType="submit">
               {isEdit ? "Update Account" : "Create Account"}
             </Button>
           </Form.Item>
-        </Form> 
+        </Form>
       </Modal>
       {previewImage && (
         <Image

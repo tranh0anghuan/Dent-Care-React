@@ -13,6 +13,7 @@ import RecordPage from './pages/record';
 import SignupPage from './pages/signup';
 import SchedulePage from './pages/schedule';
 import Dashboard from './pages/dashboard';
+import AdminService from './components/admin-service';
 import Manager from './pages/manager';
 import Managerappointment from './components/managerappointment';
 import ManagerPatient from './components/manager-patient';
@@ -239,6 +240,10 @@ function App() {
         {
           path: '/dashboard/product',
           element:<Product />
+        },
+        {
+          path: '/dashboard/admin-service',
+          element:<AdminService/>
         }
       ],
     },
