@@ -245,6 +245,10 @@ function App() {
           path: '/dashboard/admin-service',
           element:<AdminService/>
         }
+        // {
+        //   path: '/dashboard/manager-service',
+        //   element:<ManagerService/>
+        // }
       ],
     },
     
