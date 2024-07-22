@@ -234,9 +234,12 @@ const ManagerService = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: 16 }}>
+      {/* <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: 16 }}>
         Create Service
-      </Button>
+      </Button> */}
+      {/* <div style={{ marginBottom: "20px", fontSize: "24px", fontWeight: "bold" }}>
+      {user.role}: {user.dentalClinic?.clinicName}
+      </div> */}
       <Select onChange={handleRoleChange} style={{ width: 200, marginBottom: 16, marginLeft: 12 }}>
         <Option value="ALL">ALL</Option>
         <Option value="HERE">{user.dentalClinic?.clinicName}</Option>

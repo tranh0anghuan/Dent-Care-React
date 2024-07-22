@@ -114,10 +114,10 @@ const AdminService = () => {
   const handleRoleChange = (value) => {
     setRole(value);
     if (value === 'ALL') {
-      fetchServices('/service');
-    } else if (value === 'HERE') {
-      fetchServices(`/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
-    }
+      fetchServices('/service');}
+    // } else if (value === 'HERE') {
+    //   fetchServices(`/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`);
+    // }
   };
 
   const columns = [
@@ -182,7 +182,7 @@ const AdminService = () => {
             </Button>
           </Popconfirm>
 
-          <Popconfirm 
+          {/* <Popconfirm 
             title={`Are you want to add this service to ${user.dentalClinic?.clinicName}?`}
             onConfirm={() => handleAddServiceToClinic(record.id)}
             okText="Yes"
@@ -191,7 +191,7 @@ const AdminService = () => {
             <Button style={{ marginTop: 8, marginLeft: 8 }}>
               Add
             </Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </div>
       ),
     },
@@ -208,10 +208,10 @@ const AdminService = () => {
       <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: 16 }}>
         Create Service
       </Button>
-      <Select onChange={handleRoleChange} style={{ width: 200, marginBottom: 16, marginLeft: 12 }}>
+      {/* <Select onChange={handleRoleChange} style={{ width: 200, marginBottom: 16, marginLeft: 12 }}>
         <Option value="ALL">ALL</Option>
         <Option value="HERE">{user.dentalClinic?.clinicName}</Option>
-      </Select>
+      </Select> */}
       <Table dataSource={services} columns={columns} loading={loading} />
       <Modal
         title="Add New Service"

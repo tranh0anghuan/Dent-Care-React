@@ -158,32 +158,31 @@ const ManagerDentist = () => {
     });
   };
 
-  // const handleCreateAccount = async (values) => {
-  //   setLoading(true);
-  //   const url = await uploadFile(values.url.file.originFileObj)
-  //   try {
-  //     await api.post('/register-by-admin', {
-  //       email: values.email,
-  //       password: values.password,
-  //       fullName: values.fullName,
-  //       phone: values.phone,
-  //       role: values.role,
-  //       clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
-  //       roomId: values.roomId,
-  //       url: url
-  //     });
-  //     message.success('Account created successfully!');
-  //     fetchData(); // Refresh the data to include the new account
-  //     setIsModalOpen(false);
-  //   } catch (e) {
-  //     console.error('Error:', e.response ? e.response.data : e.message);
-  //     const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to create account.';
-  //     message.error(errorMsg);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
+  const handleCreateAccount = async (values) => {
+    setLoading(true);
+    const url = await uploadFile(values.url.file.originFileObj)
+    try {
+      await api.post('/register-by-admin', {
+        email: values.email,
+        password: values.password,
+        fullName: values.fullName,
+        phone: values.phone,
+        role: values.role,
+        clinicId: values.role !== 'ADMIN' ? Number(values.clinicId) : undefined,
+        roomId: values.roomId,
+        url: url
+      });
+      message.success('Account created successfully!');
+      fetchData(); // Refresh the data to include the new account
+      setIsModalOpen(false);
+    } catch (e) {
+      console.error('Error:', e.response ? e.response.data : e.message);
+      const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to create account.';
+      message.error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleUpdateAccount = async (values) => {
     setLoading(true);
@@ -248,11 +247,6 @@ const ManagerDentist = () => {
   };
 
 
-
-
-
-
-
   const handleCancel = () => {
     setIsModalOpen(false);
 
@@ -303,12 +297,6 @@ const ManagerDentist = () => {
       title: 'Full Name',
       dataIndex: 'fullName',
       key: 'fullName',
-
-
-
-
-
-
 
     },
     // {
@@ -362,47 +350,10 @@ const ManagerDentist = () => {
         </div>
       ),
 
-
-
-
-
     },
-  ];
-
-
-
-
-
-  return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        <Dropdown overlay={menu}>
-
-
-
-
-
-
-
-
-          <Button>
-            Filter by Role <DownOutlined />
-          </Button>
-        </Dropdown>
-        {/* <Button type="primary" onClick={() => showModal()}>
-          Create Account
-        </Button> */}
-      </div>
-      <Table dataSource={data} columns={columns} rowKey="id" loading={loading} />
-
-
-
-
-
-
-
-      <Modal
-        title={isEdit ? "Update Account" : "Create New Account"}
+    <Modal
+        // title={isEdit ? "Update Account" : "Create New Account"}
+        title="Update Account"
         visible={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -412,17 +363,11 @@ const ManagerDentist = () => {
           layout="vertical"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-
-
-
         >
 
           <Form.Item name="id">
             <Input disabled />
           </Form.Item>
-
-
-
           <Form.Item
             label="Full Name"
             name="fullName"
@@ -475,42 +420,122 @@ const ManagerDentist = () => {
             </Form.Item>
           )} */}
 
+          <Form.Item
+            label="Clinic"
+            name="clinicId"
+            initialValue={user.dentalClinic?.id}
+          >
+            <Select disabled>
+              <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
 
 
 
 
+            </Select>
+          </Form.Item>
+          <Form.Item label="Image" name="url">
+            <Upload
+              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button loading={loading} type="primary" htmlType="submit">
+              {/* {isEdit ? "Update Account" : "Create Account"} */}
+              Update Account
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+  ];
+  return (
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Dropdown overlay={menu}>
+          <Button>
+            Filter by Role <DownOutlined />
+          </Button>
+        </Dropdown>
+        <Button type="primary" onClick={() => showModal()}>
+          Create Account
+        </Button>
+      </div>
+      <Table dataSource={data} columns={columns} rowKey="id" loading={loading} />
 
 
+      <Modal
+        // title={isEdit ? "Update Account" : "Create New Account"}
+        title="Update Account"
+        visible={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <Form.Item name="id">
+            <Input disabled />
+          </Form.Item>
+          <Form.Item
+            label="Full Name"
+            name="fullName"
+            rules={[{ required: true, message: 'Please input your full name!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Phone"
+            name="phone"
+            rules={[{ required: true, message: 'Please input your phone number!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+          >
+            <Input type="email" readOnly />
+          </Form.Item>
+          {/* <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'Please input your password!' }]}
+          >
+            <Input.Password />
+          </Form.Item> */}
+          <Form.Item
+            label="Role"
+            name="role"
+            rules={[{ required: true, message: 'Please select a role!' }]}
+          >
+            <Select onChange={handleRoleChange} >
+              <Option value="DENTIST">Dentist</Option>
+              <Option value="STAFF">Staff</Option>
+              {/* Add other roles as needed */}
+            </Select>
+          </Form.Item>
+          {/* {form.getFieldValue('role') === 'DENTIST' && (
+            <Form.Item
+              label="Room"
+              name="roomId"
+              rules={[{ required: true, message: 'Please select a room!' }]}
+            >
+              <Select>
+                {rooms.map((room) => (
+                  <Option key={room.id} value={room.id}>{room.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )} */}
 
           <Form.Item
             label="Clinic"
@@ -538,11 +563,120 @@ const ManagerDentist = () => {
           </Form.Item>
           <Form.Item>
             <Button loading={loading} type="primary" htmlType="submit">
-              {isEdit ? "Update Account" : "Create Account"}
+              {/* {isEdit ? "Update Account" : "Create Account"} */}
+              Update Account
             </Button>
           </Form.Item>
         </Form>
       </Modal>
+
+      {/* Creat Account */}
+      <Modal
+        // title={isEdit ? "Update Account" : "Create New Account"}
+        title="Create New Account"
+        visible={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+
+          {/* <Form.Item name="id">
+            <Input disabled />
+          </Form.Item> */}
+          <Form.Item
+            label="Full Name"
+            name="fullName"
+            rules={[{ required: true, message: 'Please input your full name!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Phone"
+            name="phone"
+            rules={[{ required: true, message: 'Please input your phone number!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: 'Please input your phone number!' }]}
+          >
+            <Input  />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'Please input your password!' }]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            label="Role"
+            name="role"
+            rules={[{ required: true, message: 'Please select a role!' }]}
+          >
+            <Select onChange={handleRoleChange} >
+              <Option value="DENTIST">Dentist</Option>
+              <Option value="STAFF">Staff</Option>
+              {/* Add other roles as needed */}
+            </Select>
+          </Form.Item>
+          {form.getFieldValue('role') === 'DENTIST' && (
+            <Form.Item
+              label="Room"
+              name="roomId"
+              rules={[{ required: true, message: 'Please select a room!' }]}
+            >
+              <Select>
+                {rooms.map((room) => (
+                  <Option key={room.id} value={room.id}>{room.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+
+          <Form.Item
+            label="Clinic"
+            name="clinicId"
+            initialValue={user.dentalClinic?.id}
+          >
+            <Select disabled>
+              <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
+
+
+
+
+            </Select>
+          </Form.Item>
+          <Form.Item label="Image" name="url">
+            <Upload
+              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button loading={loading} type="primary" htmlType="submit">
+              {/* {isEdit ? "Update Account" : "Create Account"} */}
+              Creat Account
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+      
+
+    
+
       {previewImage && (
         <Image
           wrapperStyle={{
