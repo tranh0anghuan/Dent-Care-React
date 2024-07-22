@@ -378,8 +378,20 @@ function Appointment() {
                                             <Form.Item
                                                 name="age"
                                                 label="Age"
-                                                rules={[{ required: true, message: 'Please enter your age!' }]}
-                                            >
+                                                rules={[
+                                                    { required: true, message: "Please enter your age!" },
+                                                    {
+                                                      type: "number",
+                                                      min: 0,
+                                                      max: 120,
+                                                      message: "Age must be between 0 and 120!",
+                                                    },
+                                                  ]}
+                                                  getValueFromEvent={(event) => {
+                                                    const { value } = event.target;
+                                                    return value ? (Number(value) ? Number(value) : 0) : value;
+                                                  }}
+                                                >
                                                 <Input placeholder="Age" />
                                             </Form.Item>
 
