@@ -88,6 +88,8 @@ const Dashboard = () => {
         getItem("New clinic", "product", <PlusOutlined />),
         // getItem("Hồ sơ", "information", <PlusOutlined />),
         getItem("Account", "category", <ProfileOutlined />),
+        getItem("Service", "admin-service", <ProfileOutlined />),
+        
         
         // getItem("Quản lý Clubs", "clubs", <HeartOutlined />, [
         //   getItem("Club 1", "club1"),
