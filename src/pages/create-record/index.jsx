@@ -13,6 +13,7 @@ import api from '../../config/axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import useAppointmentByID from '../../callApi/appointmentByID';
 import HeroHeader from '../../components/hero-header';
+import { fi } from 'date-fns/locale/fi';
 
 function CreateRecord() {
 
@@ -21,6 +22,8 @@ function CreateRecord() {
     const { appointment } = useAppointmentByID(aid)
 
     const navigate= useNavigate()
+
+    const [loading, setLoading] = useState(false)
 
     const createRecord= async (values) =>{
         try {
@@ -34,14 +37,18 @@ function CreateRecord() {
           } catch (error) {
             console.log(error)
             toast.error(error.response.data)
+          }finally{
+            setLoading(false)
+            navigate(`/treatment-plan/${appointment.id}`)
           }
     }
 
 
     const onFinish = (values) => {
         console.log(values)
+        setLoading(true)
         createRecord(values)
-        navigate(`/treatment-plan/${appointment.id}`)
+        // navigate(`/treatment-plan/${appointment.id}`)
     }
 
     const formItemLayout = {
@@ -123,7 +130,7 @@ function CreateRecord() {
                         </Form.Item>
 
                         <Form.Item {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                            <Button loading={loading} type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
                                 Next
                             </Button>
                         </Form.Item>

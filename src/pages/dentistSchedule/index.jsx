@@ -9,13 +9,15 @@ import api from '../../config/axios';
 
 function DentistSchedule() {
 
+    const [loading, setLoading] = useState(false)
+
     const { Option } = Select;
-    const { RangePicker  } = DatePicker;
+    const { RangePicker } = DatePicker;
 
     const user = useSelector(selectUser)
     const [appointment, setAppointment] = useState([])
-    const navigate= useNavigate()
-    const [date,setDate] = useState([])
+    const navigate = useNavigate()
+    const [date, setDate] = useState([])
     const getAppointment = async () => {
         try {
             const res = await api.get(`/appointment-patient/dentist/${user.id}`)
@@ -24,7 +26,7 @@ function DentistSchedule() {
             console.log(error)
         }
     }
-      
+
     useEffect(() => {
         getAppointment()
     }, [date]);
@@ -43,15 +45,18 @@ function DentistSchedule() {
 
     const getAppointmentByDate = async () => {
         try {
+            setLoading(true)
             const res = await api.get(`/appointment-patient/date/between/${date[0]}/${date[1]}/dentist/${user.id}`)
             console.log(res)
             setAppointment(res.data)
 
         } catch (error) {
             console.log(error)
+        }finally{
+            setLoading(false)
         }
     }
-   
+
 
 
 
@@ -65,15 +70,14 @@ function DentistSchedule() {
 
             <div className='d-flex justify-content-center'>
                 <Form layout="inline"
-                        onFinish={getAppointmentByDate}>
+                    onFinish={getAppointmentByDate}>
                     <Form.Item label="Select Week">
-                    <RangePicker   onChange={(value, dateString) => {
-                 console.log('Formatted Selected Time: ', setDate(dateString));
-                 
-      }} />
+                        <RangePicker onChange={(value, dateString) => {
+                            console.log('Formatted Selected Time: ', setDate(dateString));
+                        }} />
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType='submit' >
+                        <Button loading={loading} type="primary" htmlType='submit' >
                             Add Schedule
                         </Button>
                     </Form.Item>
@@ -108,7 +112,7 @@ function DentistSchedule() {
                                                 <td>{item.patient.name}</td>
                                                 <td>{item.dentistServices.account.room?.name}</td>
                                                 <td>
-                                                    <Link  onClick={()=>{navigate(`/regular-schedule/${item?.id}`)}}  className='btn btn-primary'>Create</Link>
+                                                    <Link onClick={() => { navigate(`/regular-schedule/${item?.id}`) }} className='btn btn-primary'>Create</Link>
                                                 </td>
                                             </tr>
                                         ) : ""
@@ -118,14 +122,14 @@ function DentistSchedule() {
                             </table>
                         </main>
                     </div></div></div>
-                    <Pagination
-                            className='d-flex justify-content-center mt-5'
-                            current={currentPage}
-                            total={appointment?.length}
-                            pageSize={itemsPerPage}
-                            onChange={handlePageChange}
-                            
-                        />
+            <Pagination
+                className='d-flex justify-content-center mt-5'
+                current={currentPage}
+                total={appointment?.length}
+                pageSize={itemsPerPage}
+                onChange={handlePageChange}
+
+            />
         </>
     )
 }

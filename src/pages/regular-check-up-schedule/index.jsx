@@ -27,6 +27,10 @@ function RegularCheckUpSchedule() {
 
     const [slot, setSlot] = useState([]);
 
+    const [loading, setLoading] = useState(false)
+
+    const navigate = useNavigate()
+
 
     const onFinish = (values) => {
         // console.log(appointment.patient.id)
@@ -35,6 +39,8 @@ function RegularCheckUpSchedule() {
         // console.log(appointment.patient.account.id)
 
         // console.log(values.slotID)
+
+        setLoading(true)
 
         makeAppointment(values)
 
@@ -55,6 +61,7 @@ function RegularCheckUpSchedule() {
                 status: "ALREADY",
             });
             toast.success('Make appointment successfully!');
+            navigate('/dentist-schedule')
         } catch (error) {
             console.log(error)
             toast.error(error.response.data)
@@ -225,7 +232,7 @@ function RegularCheckUpSchedule() {
                         </Form.Item> */}
 
                         <Form.Item {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                            <Button loading={loading} type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
                                 Make Appointment
                             </Button>
                         </Form.Item>

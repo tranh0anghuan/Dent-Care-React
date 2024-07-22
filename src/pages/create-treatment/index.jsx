@@ -23,6 +23,8 @@ function CreateTreatment() {
 
     const navigate= useNavigate()
 
+    const [loading, setLoading] = useState(false)
+
     const createTreatment= async (values) =>{
         try {
             const res = await api.post('/treatment-plan', {
@@ -37,14 +39,18 @@ function CreateTreatment() {
           } catch (error) {
             console.log(error)
             toast.error(error.response.data)
+          }finally{
+            setLoading(false)
+            navigate(`/dentist-record/${record.id}`)
           }
     }
 
 
     const onFinish = (values) => {
         console.log(values)
+        setLoading(true)
         createTreatment(values)
-        navigate(`/dentist-record/${record.id}`)
+        // navigate(`/dentist-record/${record.id}`)
     }
 
     const formItemLayout = {
@@ -115,7 +121,7 @@ function CreateTreatment() {
                         </Form.Item>
 
                         <Form.Item {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                            <Button loading={loading} type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
                                 Submit
                             </Button>
                         </Form.Item>

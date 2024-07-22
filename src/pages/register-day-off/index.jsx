@@ -23,15 +23,22 @@ function RegisterDayOff() {
 
     const [form] = Form.useForm();
 
-    const { slot } = useSlot()
+    // const { slot } = useSlot()
+
+    const [date, setDate] = useState('');
+
+    const [slot, setSlot] = useState([]);
 
     const user = useSelector(selectUser);
 
     const navigate= useNavigate()
 
+    const [loading, setLoading] = useState(false)
+
 
     const onFinish = (values) => {
         console.log(values.date.format('YYYY-MM-DD'))
+        setLoading(true)
         register(values)
     }
 
@@ -43,13 +50,26 @@ function RegisterDayOff() {
                 slotId: values.slotID
             })
             toast.success('Register day off successfully')
-            navigate('/day-off')
+            
         } catch (error) {
             console.log(error)
+        }finally{
+            setLoading(false)
+            navigate('/day-off')
         }
     }
 
-
+    const getDate = async (value) => {
+        const datee = value.format('YYYY-MM-DD');
+        setDate(datee);
+        try {
+            const res = await api.get(`/slot/available/dentist/${user.id}/day-off/${datee}`);
+            console.log(res.data)
+            setSlot(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     const formItemLayout = {
@@ -87,7 +107,7 @@ function RegisterDayOff() {
                             label="Select Date"
                             rules={[{ required: true, message: 'Please select a date!' }]}
                         >
-                            <DatePicker style={{ width: '100%' }} />
+                            <DatePicker onChange={getDate} style={{ width: '100%' }} />
                         </Form.Item>
 
                         <Form.Item
@@ -97,7 +117,7 @@ function RegisterDayOff() {
                         >
                             <Select placeholder="Select Slot">
                                 {slot?.map((item) => (
-                                    <Select.Option key={item.id} value={item.id}>
+                                    <Select.Option key={item.id} value={item.id} disabled={!item.available}>
                                         Slot {item.id}: {item.startTime} - {item.endTime}
                                     </Select.Option>
                                 ))}
@@ -106,7 +126,7 @@ function RegisterDayOff() {
 
 
                         <Form.Item {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                            <Button loading={loading} type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
                                 Register
                             </Button>
                         </Form.Item>

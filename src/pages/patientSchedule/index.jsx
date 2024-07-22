@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../redux/features/counterSlice'
 import HeroHeader from '../../components/hero-header'
@@ -14,7 +14,6 @@ function PatientSchedule() {
     const { pid } = useParams()
 
     const { appointment,setAppointment } = useAppointmentByPatientID(pid)
-
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };

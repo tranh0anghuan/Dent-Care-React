@@ -25,6 +25,8 @@ function DentistRecord
 
     const { treatment } = useTreatmentByRecordName(record.name)
 
+    const [loading, setLoading] = useState(false)
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -33,6 +35,7 @@ function DentistRecord
 
     const onFinish = (values) => {
         console.log(values)
+        setLoading(true)
         updateRecord(values)
     }
 
@@ -77,6 +80,8 @@ function DentistRecord
         } catch (error) {
             console.log(error)
             toast.error(error.response.data)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -150,7 +155,7 @@ function DentistRecord
                         </Form.Item>
 
                         <Form.Item {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                            <Button loading={loading} type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
                                 Update
                             </Button>
                         </Form.Item>

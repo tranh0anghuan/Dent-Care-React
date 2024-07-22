@@ -21,7 +21,7 @@ function AppointmentRecord() {
 
     return (
         <>
-            <HeroHeader content="Patient Schedule" />
+            <HeroHeader content="Patient Record" />
 
             <div className="row  wow zoomIn" style={{ margin: '20px 50px' }} data-wow-delay="0.6s">
                 <div className="col-lg-12">

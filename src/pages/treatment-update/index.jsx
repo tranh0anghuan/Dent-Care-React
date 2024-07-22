@@ -13,6 +13,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import HeroHeader from '../../components/hero-header';
 import useRecordByAppointmentID from '../../callApi/recordByAppointmentID';
 import useTreatmentByID from '../../callApi/treatmentPlanByID';
+import { set } from 'date-fns';
 
 function UpdateTreatment() {
 
@@ -27,6 +28,8 @@ function UpdateTreatment() {
     const navigate= useNavigate()
 
     const [form] = Form.useForm();
+
+    const [loading, setLoading] = useState(false)
 
 
     const updateTreatment= async (values) =>{
@@ -43,13 +46,17 @@ function UpdateTreatment() {
           } catch (error) {
             console.log(error)
             toast.error(error.response.data)
+          }finally{
+            setLoading(false)
+            navigate(`/dentist-record/${record.id}`)
           }
     }
 
 
     const onFinish = (values) => {
+        setLoading(true)
         updateTreatment(values)
-        navigate(`/dentist-record/${record.id}`)
+        
     }
 
     useEffect(() => {
@@ -133,7 +140,7 @@ function UpdateTreatment() {
                         </Form.Item>
 
                         <Form.Item {...tailFormItemLayout}>
-                            <Button type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
+                            <Button loading={loading} type="primary" htmlType="submit" className='btn btn-primary' style={{ padding: '0px 80px', borderRadius: '4px' }}>
                                 Update
                             </Button>
                         </Form.Item>
