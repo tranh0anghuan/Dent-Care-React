@@ -59,19 +59,21 @@ const ManagerService = () => {
   //   }
   // };
 
-  // const handleAddServiceToClinic = async (serviceId) => {
-  //   try {
-  //     const payload = {
-  //       serviceId,
-  //       clinicId: user.dentalClinic?.id,
-  //     };
-  //     await api.post('/service-clinic', payload);
-  //     message.success('Service added to clinic successfully!');
-  //   } catch (error) {
-  //     console.error('Failed to add service to clinic:', error);
-  //     message.error('Failed to add service to clinic');
-  //   }
-  // };
+  const handleAddServiceToClinic = async (serviceId) => {
+    try {
+      const payload = {
+        serviceId,
+        clinicId: user.dentalClinic?.id,
+      };
+      await api.post('/service-clinic', payload);
+      message.success('Service added to clinic successfully!');
+    } catch (error) {
+      console.error('Failed to add service to clinic:', error);
+      message.error('Failed to add service to clinic');
+    }
+  };
+
+  
 
   const handleUpdateService = async (values) => {
     try {
