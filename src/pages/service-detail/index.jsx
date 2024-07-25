@@ -95,7 +95,7 @@ function ServiceDetailPage() {
                         <div className="col-lg-7">
                             <div className="section-title mb-4">
                                 <h5 className="position-relative d-inline-block text-primary text-uppercase">Description</h5>
-                                <h1 className="display-5 mb-0">What is {service.name}? Is Ceramic Tooth Good?</h1>
+                                <h1 className="display-5 mb-0">What is {service.name}? Is {service.name} Good?</h1>
                             </div>
                             <h4 className="text-body fst-italic mb-4">At DentCare, we are dedicated to providing exceptional dental care in a warm and welcoming environment</h4>
                             <p className="mb-4">{service.description}</p>

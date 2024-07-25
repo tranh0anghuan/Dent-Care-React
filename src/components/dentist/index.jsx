@@ -15,7 +15,7 @@ function Dentist() {
 
     const { qualification } = useQualification(did);
 
-
+console.log(service)
     return (
         <>
 
@@ -67,7 +67,7 @@ function Dentist() {
                                             <div className="price-item pb-4">
                                                 <Link to={`/dentist/${did}/service/${item.id}`}>
                                                     <div className="position-relative">
-                                                        <img className="img-fluid rounded-top"  src={item?.url} alt />
+                                                        <img className="img-fluid rounded-top"  src={item?.serviceDetail.url} alt />
                                                         <div className="d-flex align-items-center justify-content-center bg-light rounded pt-2 px-3 position-absolute top-100 start-50 translate-middle" style={{ zIndex: 2 }}>
                                                             <h2 className="text-primary m-0">${item?.serviceDetail.price}</h2>
                                                         </div>
