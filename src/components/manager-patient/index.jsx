@@ -70,6 +70,8 @@ const Managerpatient = () => {
     },
   ];
 
+  
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 20 }}>

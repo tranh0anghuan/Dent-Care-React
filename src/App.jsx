@@ -242,6 +242,10 @@ function App() {
           element:<Product />
         },
         {
+          path: '/dashboard/manager-chart',
+          element: <AdminChart />
+        },
+        {
           path: '/dashboard/admin-service',
           element:<AdminService/>
         }
@@ -249,6 +253,7 @@ function App() {
         //   path: '/dashboard/manager-service',
         //   element:<ManagerService/>
         // }
+
       ],
     },
     

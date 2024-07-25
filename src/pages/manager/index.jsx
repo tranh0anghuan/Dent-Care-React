@@ -6,6 +6,8 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu, Button, Popconfirm, Breadcrumb, message } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/counterSlice';
 
 const { Header, Content, Sider, Footer } = Layout;
 
@@ -16,6 +18,7 @@ const Manager = () => {
   const location = useLocation();
   const currentURI = location.pathname.split("/").pop();
   const role = "manager"; // Assume admin role for now
+  const user = useSelector(selectUser);
 
   const dataOpen = JSON.parse(localStorage.getItem("keys")) ?? [];
   const [openKeys, setOpenKeys] = useState(dataOpen);
@@ -34,6 +37,14 @@ const Manager = () => {
       ]);
     }
   }, [role]);
+
+  useEffect(() => {
+    const currentURI = location.pathname.split("/").pop();
+    if (currentURI === "manager") {
+      navigate("/manager/managerappointment");
+    }
+    setOpenKeys((prevKeys) => [...prevKeys, currentURI]);
+  }, [location.pathname, navigate]);
 
   const handleSubMenuOpen = (keyMenuItem) => {
     setOpenKeys(keyMenuItem);
@@ -111,6 +122,7 @@ const Manager = () => {
                   <Link to={`/${path}`}>{path}</Link>
                 </Breadcrumb.Item>
               ))}
+              <h3 style ={{color : "white", marginLeft: "-140px"}}>Manager:{user.fullName} - {user.dentalClinic.clinicName}</h3>
             </Breadcrumb>
             <Popconfirm
               title="Are you sure you want to logout?"

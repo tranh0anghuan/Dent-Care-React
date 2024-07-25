@@ -14,11 +14,15 @@ const ManagerDentist = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
 
   const [clinic, setClinic] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [services, setServices] = useState([]);
+  
 
   const [form] = Form.useForm();
+  const [serviceForm] = Form.useForm();
 
   const user = useSelector(selectUser);
   const [roleFilter, setRoleFilter] = useState(['DENTIST', 'STAFF']); // Default role filter
@@ -117,6 +121,36 @@ const ManagerDentist = () => {
       setRoleFilter([value.key]);
     }
   };
+  const fetchServices = async () => {
+    try {
+      const servicesResponse = await api.get(`/service-clinic/search-service-by-clinic-id/${user.dentalClinic?.id}`); // Adjust API endpoint as needed
+      setServices(servicesResponse.data);
+      
+    } catch (error) {
+      console.error('Failed to fetch services:', error.response ? error.response.data : error.message);
+      message.error('Failed to fetch services');
+    }
+  };
+  
+  // const handleServicefetch = async (values) => {
+  //   setLoading(true);
+  //   try {
+  //     await api.get(`/service`, values); // Adjust API endpoint as needed
+  //     message.success('Service created successfully!');
+  //     setIsServiceModalOpen(false);
+  //     fetchServices(); // Refresh the services list
+  //   } catch (e) {
+  //     console.error('Error:', e.response ? e.response.data : e.message);
+  //     const errorMsg = e.response && e.response.data ? JSON.stringify(e.response.data) : 'Failed to create service.';
+  //     message.error(errorMsg);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  useEffect(() => {
+    fetchServices();
+  }, [user?.dentalClinic?.id]);
+  
 
   const handleDetail = (record) => {
     Modal.info({
@@ -210,6 +244,7 @@ const ManagerDentist = () => {
     };
 
     try {
+      console.log(dataToUpdate)
       await api.put(`/account`, dataToUpdate);
       message.success('Account updated successfully!');
       fetchData(); // Refresh the data to reflect the updated account
@@ -222,14 +257,18 @@ const ManagerDentist = () => {
       setLoading(false);
     }
   };
-
+  
+  //  call để không bị trùng creat và update sài chung model
   const onFinish = (values) => {
     if (isEdit) {
+      console.log("dung")
       handleUpdateAccount(values);
     } else {
       handleCreateAccount(values);
     }
   };
+
+ 
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -285,6 +324,33 @@ const ManagerDentist = () => {
       {/* Add other roles as needed */}
     </Menu>
   );
+  const handleAddService = async (values) => {
+    console.log(values)
+    try {
+      await api.post('/dentist-service', {
+        dentistId: values.dentistId,
+        serviceId: values.serviceId,
+        
+      });
+      message.success('Service assigned successfully!');
+      handleServiceModalCancel();
+      setIsServiceModalOpen(false);
+    } catch (error) {
+      console.error('Failed to assign service:', error.response ? error.response.data : error.message);
+      message.error(error.response.data);
+    }
+  };
+  
+  const showServiceModal = () => {
+    fetchServices();
+    serviceForm.resetFields();
+    setIsServiceModalOpen(true);
+  };
+
+  const handleServiceModalCancel = () => {
+    setIsServiceModalOpen(false);
+  };
+  
 
   const columns = [
     {
@@ -339,7 +405,7 @@ const ManagerDentist = () => {
           <Button type="primary" onClick={() => handleDetail(record)}>
             Detail
           </Button>
-          <Button type="primary" style={{ marginLeft: 8 }} onClick={() => showModal(record)}>
+          <Button type="primary" style={{ marginLeft: 8 }} onClick={() => {showModal(record)}}>
             Update
           </Button>
           {record.status !== 'INACTIVE' && (
@@ -347,111 +413,16 @@ const ManagerDentist = () => {
               Delete
             </Button>
           )}
+          {/* {record.role !== 'STAFF' && (
+            <Button type="primary" style={{ marginLeft: 8 }} onClick={() => handleAddService(record)}>
+            add service
+          </Button>
+          )} */}
         </div>
       ),
 
     },
-    <Modal
-        // title={isEdit ? "Update Account" : "Create New Account"}
-        title="Update Account"
-        visible={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-
-          <Form.Item name="id">
-            <Input disabled />
-          </Form.Item>
-          <Form.Item
-            label="Full Name"
-            name="fullName"
-            rules={[{ required: true, message: 'Please input your full name!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Phone"
-            name="phone"
-            rules={[{ required: true, message: 'Please input your phone number!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-          >
-            <Input type="email" readOnly />
-          </Form.Item>
-          {/* <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password />
-          </Form.Item> */}
-          <Form.Item
-            label="Role"
-            name="role"
-            rules={[{ required: true, message: 'Please select a role!' }]}
-          >
-            <Select onChange={handleRoleChange} >
-              <Option value="DENTIST">Dentist</Option>
-              <Option value="STAFF">Staff</Option>
-              {/* Add other roles as needed */}
-            </Select>
-          </Form.Item>
-          {/* {form.getFieldValue('role') === 'DENTIST' && (
-            <Form.Item
-              label="Room"
-              name="roomId"
-              rules={[{ required: true, message: 'Please select a room!' }]}
-            >
-              <Select>
-                {rooms.map((room) => (
-                  <Option key={room.id} value={room.id}>{room.name}</Option>
-                ))}
-              </Select>
-            </Form.Item>
-          )} */}
-
-          <Form.Item
-            label="Clinic"
-            name="clinicId"
-            initialValue={user.dentalClinic?.id}
-          >
-            <Select disabled>
-              <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
-
-
-
-
-            </Select>
-          </Form.Item>
-          <Form.Item label="Image" name="url">
-            <Upload
-              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={handlePreview}
-              onChange={handleChange}
-            >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
-          </Form.Item>
-          <Form.Item>
-            <Button loading={loading} type="primary" htmlType="submit">
-              {/* {isEdit ? "Update Account" : "Create Account"} */}
-              Update Account
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+    
   ];
   return (
     <div>
@@ -464,10 +435,13 @@ const ManagerDentist = () => {
         <Button type="primary" onClick={() => showModal()}>
           Create Account
         </Button>
+        <Button type="primary"  onClick={showServiceModal}>
+          Add Service
+        </Button>
       </div>
       <Table dataSource={data} columns={columns} rowKey="id" loading={loading} />
 
-
+{/* 
       <Modal
         // title={isEdit ? "Update Account" : "Create New Account"}
         title="Update Account"
@@ -505,13 +479,6 @@ const ManagerDentist = () => {
           >
             <Input type="email" readOnly />
           </Form.Item>
-          {/* <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password />
-          </Form.Item> */}
           <Form.Item
             label="Role"
             name="role"
@@ -520,22 +487,10 @@ const ManagerDentist = () => {
             <Select onChange={handleRoleChange} >
               <Option value="DENTIST">Dentist</Option>
               <Option value="STAFF">Staff</Option>
-              {/* Add other roles as needed */}
+              
             </Select>
           </Form.Item>
-          {/* {form.getFieldValue('role') === 'DENTIST' && (
-            <Form.Item
-              label="Room"
-              name="roomId"
-              rules={[{ required: true, message: 'Please select a room!' }]}
-            >
-              <Select>
-                {rooms.map((room) => (
-                  <Option key={room.id} value={room.id}>{room.name}</Option>
-                ))}
-              </Select>
-            </Form.Item>
-          )} */}
+          
 
           <Form.Item
             label="Clinic"
@@ -544,9 +499,6 @@ const ManagerDentist = () => {
           >
             <Select disabled>
               <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
-
-
-
 
             </Select>
           </Form.Item>
@@ -563,17 +515,18 @@ const ManagerDentist = () => {
           </Form.Item>
           <Form.Item>
             <Button loading={loading} type="primary" htmlType="submit">
-              {/* {isEdit ? "Update Account" : "Create Account"} */}
+             
               Update Account
             </Button>
           </Form.Item>
         </Form>
-      </Modal>
+      </Modal> */}
+
 
       {/* Creat Account */}
       <Modal
         // title={isEdit ? "Update Account" : "Create New Account"}
-        title="Create New Account"
+        title={isEdit ? "Update Account" : "Create New Account"}
         visible={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -584,10 +537,7 @@ const ManagerDentist = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
-
-          {/* <Form.Item name="id">
-            <Input disabled />
-          </Form.Item> */}
+          <Form.Item name="id" style={{display: "none"}} />
           <Form.Item
             label="Full Name"
             name="fullName"
@@ -609,13 +559,13 @@ const ManagerDentist = () => {
           >
             <Input  />
           </Form.Item>
-          <Form.Item
+          {!isEdit &&  <Form.Item
             label="Password"
             name="password"
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
             <Input.Password />
-          </Form.Item>
+          </Form.Item>}
           <Form.Item
             label="Role"
             name="role"
@@ -650,8 +600,6 @@ const ManagerDentist = () => {
               <Option value={user.dentalClinic?.id}>{user.dentalClinic?.clinicName}</Option>
 
 
-
-
             </Select>
           </Form.Item>
           <Form.Item label="Image" name="url">
@@ -673,9 +621,46 @@ const ManagerDentist = () => {
           </Form.Item>
         </Form>
       </Modal>
-      
 
-    
+
+             {/* Add service */}
+      <Modal
+         title="Add Service"
+         visible={isServiceModalOpen}
+         onCancel={handleServiceModalCancel}
+         footer={null}
+      >
+        <Form form={serviceForm} layout="vertical" onFinish={handleAddService}>
+  <Form.Item
+    label="Select Doctor"
+    name="dentistId"
+    rules={[{ required: true, message: 'Please select a doctor!' }]}
+  >
+    <Select>
+      {data.filter(item => item.role === 'DENTIST').map((item) => (
+        <Option key={item.id} value={item.id}>{item.fullName}</Option>
+      ))}
+    </Select>
+  </Form.Item>
+  <Form.Item
+    label="Service"
+    name="serviceId"
+    rules={[{ required: true, message: 'Please select a service!' }]}
+  >
+    <Select>
+      {services.map((service) => (
+        <Option key={service.id} value={service.id}>{service.name}</Option>
+      ))}
+    </Select>
+  </Form.Item>
+  <Form.Item>
+    <Button type="primary" htmlType="submit" loading={loading}>
+      Add Service
+    </Button>
+  </Form.Item>
+</Form>
+
+      </Modal>
 
       {previewImage && (
         <Image
@@ -690,6 +675,9 @@ const ManagerDentist = () => {
           src={previewImage}
         />
       )}
+
+
+      
     </div>
   );
 };

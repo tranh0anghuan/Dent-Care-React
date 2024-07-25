@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import {
   ProfileOutlined,
-  HeartOutlined,
-  UserOutlined,
-  BarChartOutlined,
-  CheckCircleOutlined,
-  TeamOutlined,
-  AppstoreAddOutlined,
   PlusOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { Avatar, Breadcrumb, Layout, Menu, Space, theme, Button, Popconfirm, message } from "antd";
-import { Footer } from "antd/es/layout/layout";
+import {
+  Layout,
+  Menu,
+  Button,
+  Popconfirm,
+  message,
+  Breadcrumb,
+  theme,
+} from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider, Footer } = Layout;
 
 function getItem(label, key, icon, children) {
   return {
@@ -32,107 +33,42 @@ const Dashboard = () => {
   } = theme.useToken();
 
   const [items, setItems] = useState([]);
-  const [key, setKey] = useState();
+  const [openKeys, setOpenKeys] = useState([]);
   const location = useLocation();
-  const currentURI =
-    location.pathname.split("/")[location.pathname.split("/").length - 1];
+  const navigate = useNavigate();
   const role = "admin";
 
-  const dataOpen = JSON.parse(localStorage.getItem("keys")) ?? [];
-
-  const [openKeys, setOpenKeys] = useState(dataOpen);
-  const navigate = useNavigate();
-
   useEffect(() => {
-    // if (role === "owner") {
-    //   setItems([
-    //     getItem("Category", "category"),
-    //     getItem("Hồ sơ", "profile", <ProfileOutlined />),
-    //     getItem("Quản lý Clubs", "club", <HeartOutlined />, [
-    //       getItem("Club 1", "club1"),
-    //       getItem("Club 2", "club2"),
-    //       getItem("Club 3", "club3"),
-    //       getItem("All Promotion", "all-promotion"),
-    //     ]),
-    //     getItem("Quản lý Staffs", "staffs", <UserOutlined />, [
-    //       getItem("Club 1", "staff-club-1"),
-    //       getItem("Club 2", "staff-club-2"),
-    //       getItem("Club 3", "staff-club-3"),
-    //       getItem("All Staffs", "all-staffs"),
-    //     ]),
-    //     getItem("Thống kê", "statistics", <BarChartOutlined />, [
-    //       getItem("Club 1", "stats-club-1"),
-    //       getItem("Club 2", "stats-club-2"),
-    //       getItem("Club 3", "stats-club-3"),
-    //       getItem("All Clubs", "all-clubs"),
-    //     ]),
-    //   ]);
-    // }
-    // if (role === 'DENTIST') {
-    //   setItems([
-    //     getItem("thanhaf", "category"),
-    //     getItem("Hồ sơ", "profile", <ProfileOutlined />),
-    //     getItem("Club", "clubs", <HeartOutlined />, [
-    //       getItem("Time Slot", "time-slot"),
-    //       getItem("Promotion", "promotion"),
-    //     ]),
-    //     getItem("Booking", "booking", <CheckCircleOutlined />, [
-    //       getItem("Court ID 1", "court-1"),
-    //       getItem("Court ID 2", "court-2"),
-    //     ]),
-    //   ]);
-    // }
-
     if (role === "admin") {
       setItems([
+        getItem("Chart", "manager-chart", <ProfileOutlined />),
         getItem("New clinic", "product", <PlusOutlined />),
-        // getItem("Hồ sơ", "information", <PlusOutlined />),
         getItem("Account", "category", <ProfileOutlined />),
         getItem("Service", "admin-service", <ProfileOutlined />),
-        // getItem("Service", "manager-service", <ProfileOutlined />),
-        
-        
-        // getItem("Quản lý Clubs", "clubs", <HeartOutlined />, [
-        //   getItem("Club 1", "club1"),
-        //   getItem("Club 2", "club2"),
-        //   getItem("Club 3", "club3"),
-        //   getItem("All Promotion", "all-promotion"),
-        // ]),
-        // getItem("Quản lý Accounts", "accounts", <TeamOutlined />, [
-        //   getItem("Club 1", "account-club-1"),
-        //   getItem("Club 2", "account-club-2"),
-        //   getItem("Club 3", "account-club-3"),
-        //   getItem("All Staffs", "all-staffs"),
-        // ]),
-        // getItem("Thống kê", "statistics", <BarChartOutlined />, [
-        //   getItem("Club 1", "stats-club-1"),
-        //   getItem("Club 2", "stats-club-2"),
-        //   getItem("Club 3", "stats-club-3"),
-        //   getItem("All Clubs", "all-clubs"),
-        // ]),
       ]);
     }
-  }, []);
+  }, [role]);
 
-  const handleSubMenuOpen = (keyMenuItem) => {
-    setOpenKeys(keyMenuItem);
-  };
-  const handleSelectKey = (keyPath) => {
-    setKey(keyPath);
-  };
+  useEffect(() => {
+    const currentURI = location.pathname.split("/").pop();
+    if (currentURI === "dashboard") {
+      navigate("/dashboard/manager-chart");
+    }
+    setOpenKeys((prevKeys) => [...prevKeys, currentURI]);
+  }, [location.pathname, navigate]);
 
   useEffect(() => {
     localStorage.setItem("keys", JSON.stringify(openKeys));
   }, [openKeys]);
 
-  useEffect(() => {
-    handleSubMenuOpen([...openKeys, key]);
-  }, [currentURI]);
+  const handleSubMenuOpen = (keyMenuItem) => {
+    setOpenKeys(keyMenuItem);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
-    message.success('Logged out successfully');
+    message.success("Logged out successfully");
   };
 
   return (
@@ -144,9 +80,8 @@ const Dashboard = () => {
       >
         <Menu
           theme="dark"
-          defaultSelectedKeys={["profile"]}
           mode="inline"
-          selectedKeys={currentURI}
+          selectedKeys={[location.pathname.split("/").pop()]}
           openKeys={openKeys}
           onOpenChange={handleSubMenuOpen}
         >
@@ -154,10 +89,7 @@ const Dashboard = () => {
             item.children ? (
               <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
                 {item.children.map((subItem) => (
-                  <Menu.Item
-                    key={subItem.key}
-                    onClick={(e) => handleSelectKey(e.keyPath[1])}
-                  >
+                  <Menu.Item key={subItem.key}>
                     <Link to={`/dashboard/${subItem.key}`}>
                       {subItem.label}
                     </Link>
@@ -182,9 +114,7 @@ const Dashboard = () => {
               paddingRight: 24,
             }}
           >
-            <div>
-              <header></header>
-            </div>
+            <h1 style = {{marginLeft: 20}}>ADMIN DASHBOARD</h1>
             <Popconfirm
               title="Are you sure you want to logout?"
               onConfirm={handleLogout}
@@ -201,11 +131,13 @@ const Dashboard = () => {
           style={{ margin: "0 16px", display: "flex", flexDirection: "column" }}
         >
           <Breadcrumb>
-            {location.pathname.split("/").map((path, index, array) => (
-              <Breadcrumb.Item key={path}>
-                {index === 0 ? path : <Link to={`/${path}`}>{path}</Link>}
-              </Breadcrumb.Item>
-            ))}
+            {location.pathname
+              .split("/")
+              .map((path, index, array) => (
+                <Breadcrumb.Item key={path}>
+                  {index === 0 ? path : <Link to={`/${path}`}>{path}</Link>}
+                </Breadcrumb.Item>
+              ))}
           </Breadcrumb>
           <div
             style={{
