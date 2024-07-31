@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HeroHeader from '../../components/hero-header'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import useServicesByClinicID from '../../callApi/serByCli'
@@ -6,6 +6,7 @@ import useClinicDetail from '../../callApi/clinicDetail'
 import useDentistsByClinic from '../../callApi/denByCli'
 import Offer from '../../components/offer'
 import ScrollToTop from '../../components/scrollToTop'
+import { Button, Form, Input, Pagination } from 'antd'
 
 function ClinicDetailPage() {
   const { id } = useParams()
@@ -14,19 +15,81 @@ function ClinicDetailPage() {
   const { dentist } = useDentistsByClinic();
   const navigate = useNavigate();
 
+  //service
+  const [dataService, setDataService] = useState([]);
+  const [currentPageService, setCurrentPageService] = useState(1);
+  const itemsPerPageService = 4;
+
+  useEffect(() => {
+    setDataService(service);
+  }, [service]);
+
+  const handleSearchService = (values) => {
+    setDataService(service.filter(s => s.name.toLowerCase().includes(values.keyword.toLowerCase())));
+    setCurrentPageService(1); // Reset to first page after search
+  };
+
+  const handlePageChangeService = (page) => {
+    setCurrentPageService(page);
+  };
+
+  // Calculate the items to display on the current page
+  const indexOfLastItem = currentPageService * itemsPerPageService;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPageService;
+  const currentDataService = dataService.slice(indexOfFirstItem, indexOfLastItem);
+
+
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 14 },
+    },
+  };
+
+  const tailFormItemLayout = {
+    wrapperCol: {
+      xs: { span: 24, offset: 0 },
+      sm: { span: 14, offset: 6 },
+    },
+  };
+
   return (
     <>
       <HeroHeader content={`${clinic.clinicName}`} />
 
+      <div className='container bg-light'>
+        <div style={{ maxWidth: 600, margin: '0 auto', padding: '40px' }}>
+          <Form {...formItemLayout} onFinish={handleSearchService}>
+            <Form.Item label="Service Name" name="keyword">
+              <Input />
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className='btn btn-primary'
+                style={{ padding: '0px 80px', borderRadius: '4px' }}
+              >
+                Search
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
+
       <div className="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div className="container">
           <div className="row">
-            {service.map((item, index) => (
+            {currentDataService.map((item, index) => (
               <div key={index} className="col-md-3">
                 <div className="price-item pb-4">
                   <Link to={`/service/${item.id}`}>
                     <div className="position-relative">
-                      <img className="img-fluid rounded-top"  src={item?.url} alt={item?.name} />
+                      <img className="rounded-top w-100" style={{ objectFit: "cover" }} height={180} src={item?.url} alt={item?.name} />
                       <div className="d-flex align-items-center justify-content-center bg-light rounded pt-2 px-3 position-absolute top-100 start-50 translate-middle" style={{ zIndex: 2 }}>
                         <h2 className="text-primary m-0">${item?.price}</h2>
                       </div>
@@ -46,42 +109,18 @@ function ClinicDetailPage() {
               </div>
             ))}
           </div>
+          <Pagination
+            className='d-flex justify-content-center mt-5'
+            current={currentPageService}
+            total={dataService.length}
+            pageSize={itemsPerPageService}
+            onChange={handlePageChangeService}
+          />
         </div>
       </div>
 
       <Offer />
 
-      <div className="container-fluid py-5">
-        <div className="container">
-          <div className="row g-5">
-            <div className="col-lg-4 wow slideInUp" data-wow-delay="0.1s">
-              <div className="section-title bg-light rounded h-100 p-5">
-                <h5 className="position-relative d-inline-block text-primary text-uppercase">Our Dentist</h5>
-                <h1 className="display-6 mb-4">Meet Our Certified &amp; Experienced Dentist</h1>
-                <Link to={'/appointment'} className="btn btn-primary py-3 px-5">Appointment</Link>
-              </div>
-            </div>
-            {dentist.map((item, index) => (
-              item?.status !== 'INACTIVE' && (
-                <div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s" key={index}>
-                  <Link to={`/dentist/${item.id}`} onClick={ScrollToTop} className="team-item">
-                    <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
-                      <img className="img-fluid rounded-top w-100"  src={item?.url} alt={item?.fullName} />
-                      <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                        <Link to={'/appointment'} className="btn btn-primary py-2 px-3">Appointment</Link>
-                      </div>
-                    </div>
-                    <div className="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                      <h4 className="mb-2">{item?.fullName}</h4>
-                      <p className="text-primary mb-0">{item?.phone}</p>
-                    </div>
-                  </Link>
-                </div>
-              )
-            ))}
-          </div>
-        </div>
-      </div>
     </>
   )
 }

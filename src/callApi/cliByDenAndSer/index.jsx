@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../config/axios';
 import { useParams } from 'react-router-dom';
 
-const useClinicByServicesAndDentist = (did,sid) => {
+const useClinicByServicesAndDentist = (did, sid) => {
 
 
     const [clinic, setClinic] = useState([])
@@ -18,9 +18,9 @@ const useClinicByServicesAndDentist = (did,sid) => {
 
     useEffect(() => {
         getClinics()
-    }, []);
+    }, [did, sid]);
 
-    return { clinic};
+    return { clinic };
 };
 
 export default useClinicByServicesAndDentist;

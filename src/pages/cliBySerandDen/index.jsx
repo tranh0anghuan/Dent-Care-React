@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useClinicByServicesAndDentist from '../../callApi/cliByDenAndSer';
 import { Link, useParams } from 'react-router-dom';
+import HeroHeader from '../../components/hero-header';
 
 function ClinicByServiceAndDentistPage() {
 
@@ -11,8 +12,14 @@ function ClinicByServiceAndDentistPage() {
     const { clinic } = useClinicByServicesAndDentist(did, sid);
     console.log(clinic)
 
+
     return (
         <>
+
+            <HeroHeader content={`Dental Clinic`} />
+
+
+
 
             <div className="container-fluid py-5">
                 <div className="container">
@@ -27,7 +34,7 @@ function ClinicByServiceAndDentistPage() {
                         <div className="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
                             <Link to={`/dentist/${did}/service/${sid}/clinic/${clinic.id}`} className="team-item">
                                 <div className="position-relative rounded-top" style={{ zIndex: 1 }}>
-                                    <img className="img-fluid rounded-top w-100"  src={clinic?.url} alt />
+                                    <img className="rounded-top w-100" style={{ objectFit: "cover" }} width={400} height={300} src={clinic?.url} alt />
                                     <div className="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                                         <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-twitter fw-normal" /></a>
                                         <a className="btn btn-primary btn-square m-1" href="#"><i className="fab fa-facebook-f fw-normal" /></a>

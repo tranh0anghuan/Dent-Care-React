@@ -64,18 +64,12 @@ function Navbar() {
 
         </div>
 
-        {/* <form action>
-          <input type="text" className="nav-input" />
-          <button type="button" className="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i className="fa-solid fa-magnifying-glass fs-5" /></button>
-        </form> */}
-
         {user ? (
           <div className="navbar-nav py-0" style={{ marginRight: '80px', marginLeft: '20px' }}>
             <div className="d-flex justify-content-center align-items-center nav-item dropdown">
               <img src="/logo.png" alt="User" className="header__navbar-user-img dropdown-toggle" data-bs-toggle="dropdown" />
               <div className="dropdown-menu m-0">
                 <Link to={"/profile"} className="dropdown-item">Profile</Link>
-                <Link to={"/schedule"} className="dropdown-item">Schedule</Link>
                 <Link to={"/login"} className="dropdown-item" onClick={handleLogout}>Log out</Link>
               </div>
             </div>

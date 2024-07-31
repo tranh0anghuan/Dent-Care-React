@@ -5,8 +5,8 @@ import useServices from '../../callApi/services';
 
 function Services() {
     const { service, setService } = useServices();
+    
     const [data, setData] = useState([]);
-    const [input, setInput] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4;
 
@@ -48,14 +48,14 @@ function Services() {
 
     return (
         <>
+
+
+
             <div className='container bg-light'>
                 <div style={{ maxWidth: 600, margin: '0 auto', padding: '40px' }}>
                     <Form {...formItemLayout} onFinish={handleSearch}>
-                        <Form.Item label="keyword" name="keyword">
-                            <Input
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                            />
+                        <Form.Item label="Service Name" name="keyword">
+                            <Input/>
                         </Form.Item>
                         <Form.Item {...tailFormItemLayout}>
                             <Button
@@ -79,7 +79,7 @@ function Services() {
                                 <div className="price-item pb-4">
                                     <Link to={`/service/${item.id}`}>
                                         <div className="position-relative">
-                                            <img className="img-fluid rounded-top"  src={item?.url} alt="" />
+                                            <img className="rounded-top w-100" style={{objectFit: "cover"}} height={180}  src={item?.url} alt="" />
                                             <div className="d-flex align-items-center justify-content-center bg-light rounded pt-2 px-3 position-absolute top-100 start-50 translate-middle" style={{ zIndex: 2 }}>
                                                 <h2 className="text-primary m-0">${item?.price}</h2>
                                             </div>
