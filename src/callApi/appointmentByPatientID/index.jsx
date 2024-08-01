@@ -5,13 +5,17 @@ const useAppointmentByPatientID = (id) => {
 
 
     const [appointment, setAppointment] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const getAppointment = async () => {
         try {
+            setLoading(true)
             const res = await api.get(`/appointment-patient/patient/id/${id}`)
             setAppointment(res.data)
         } catch (error) {
             console.log(error)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -19,7 +23,7 @@ const useAppointmentByPatientID = (id) => {
         getAppointment()
     }, []);
 
-    return { appointment,setAppointment};
+    return { appointment,setAppointment, loading};
 };
 
 export default useAppointmentByPatientID;

@@ -370,7 +370,10 @@ function Appointment() {
                                             <Form.Item
                                                 name="name"
                                                 label="Name"
-                                                rules={[{ required: true, message: 'Please enter your name!' }]}
+                                                rules={[{ required: true, message: 'Please enter your name!' },
+                                                    { max: 25, message: 'Name cannot be longer than 25 characters!' },
+                                                    { pattern: /^[a-zA-Z0-9\s,.'-]{10,100}$/, message: 'Name contains invalid characters!' }
+                                                ]}
                                             >
                                                 <Input placeholder="Name" />
                                             </Form.Item>
@@ -409,7 +412,12 @@ function Appointment() {
                                             <Form.Item
                                                 name="address"
                                                 label="Address"
-                                                rules={[{ required: true, message: 'Please enter your address!' }]}
+                                                rules={[
+                                                    { required: true, message: 'Please enter your address!' },
+                                                    { min: 10, message: 'Address must be at least 10 characters long!' },
+                                                    { max: 100, message: 'Address cannot be longer than 100 characters!' },
+                                                    { pattern: /^[a-zA-Z0-9\s,.'-]{10,100}$/, message: 'Address contains invalid characters!' }
+                                                ]}
                                             >
                                                 <Input placeholder="Address" />
                                             </Form.Item>
@@ -417,7 +425,10 @@ function Appointment() {
                                             <Form.Item
                                                 name="phone"
                                                 label="Phone"
-                                                rules={[{ required: true, message: 'Please enter your phone number!' }]}
+                                                rules={[
+                                                    { required: true, message: 'Please enter your phone number!' },
+                                                    { pattern: /^(0|\+84)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7}$/, message: 'Please follow this template 0xxx  (10 digits)' }
+                                                ]}
                                             >
                                                 <Input placeholder="Phone" />
                                             </Form.Item>
@@ -425,7 +436,10 @@ function Appointment() {
                                             <Form.Item
                                                 name="email"
                                                 label="Email"
-                                                rules={[{ required: true, message: 'Please enter your email!' }]}
+                                                rules={[
+                                                    { required: true, message: 'Please enter your email!' },
+                                                    { type: 'email', message: 'Please enter a valid email address!' }
+                                                ]}
                                             >
                                                 <Input placeholder="Email" />
                                             </Form.Item>

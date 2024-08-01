@@ -128,7 +128,7 @@ function FormAppointment({ clinic, service, denSer, dentist, patient, did, setIs
                 dentistServiceId: values.serviceID,
                 date: date,
                 cusId: user.id,
-                status: "ALREADY",
+                status: "PROCESSING",
             });
         } catch (error) {
             console.log(error)
@@ -217,27 +217,27 @@ function FormAppointment({ clinic, service, denSer, dentist, patient, did, setIs
                 </Form.Item>
 
                 <Form.Item name="name" label="Name">
-                    <Input />
+                    <Input readOnly />
                 </Form.Item>
 
                 <Form.Item name="age" label="Age">
-                    <Input />
+                    <Input readOnly />
                 </Form.Item>
 
                 <Form.Item name="gender" label="Gender">
-                    <Input />
+                    <Input readOnly />
                 </Form.Item>
 
                 <Form.Item name="address" label="Address">
-                    <Input />
+                    <Input readOnly />
                 </Form.Item>
 
                 <Form.Item name="phone" label="Phone">
-                    <Input />
+                    <Input readOnly />
                 </Form.Item>
 
                 <Form.Item name="email" label="Email">
-                    <Input />
+                    <Input readOnly />
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
