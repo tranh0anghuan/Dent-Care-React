@@ -86,29 +86,6 @@ function CheckInHistory() {
             title: 'Status',
             dataIndex: 'status',
         },
-        // {
-        //     title: 'Action',
-        //     render: (appointment) => (
-        //         <div>
-        //             <Button style={{marginRight:'20px'}}
-        //                 className='btn btn-primary'
-        //                 onClick={() => {
-        //                     handleCheckIn(appointment.id);
-        //                 }}
-        //             >
-        //                 Check-in
-        //             </Button>
-        //             <Button
-        //                 className='btn btn-primary'
-        //                 onClick={() => {
-        //                     cancelAppointment(appointment.id);
-        //                 }}
-        //             >
-        //                 Cancel
-        //             </Button>
-        //         </div>
-        //     ),
-        // },
     ];
 
     const handleSearch = (values) => {

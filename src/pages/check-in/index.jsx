@@ -209,44 +209,6 @@ function CheckIn() {
                 <div className="col-lg-12">
                     <div className="row">
                         <main className="col-lg-12 mb-5" style={{ fontSize: 15, marginTop: 40 }}>
-                            {/* <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Slot</th>
-                                        <th scope="col">Service</th>
-                                        <th scope="col">Patient</th>
-                                        <th scope="col">Room</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {appointment.map((item, index) => (
-
-
-                                        item?.status != 'CANCEL' ? (
-                                            <tr>
-                                                <td>{formatDate(item.date)}</td>
-                                                <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>
-                                                <td>{item.dentistServices.serviceDetail.name}</td>
-                                                <td>{item.patient.name}</td>
-                                                <td>{item.dentistServices.account.room?.name}</td>
-                                                <td>{item.status}</td>
-                                                {item?.status === "PROCESSING" &&(
-                                                    <td>
-                                                        <Link  onClick={() => handleCheckIn(item?.id)} className='btn btn-primary me-5'>Check In</Link>
-                                                        <Link onClick={() => cancelAppointment(item?.id)}  className='btn btn-primary'>Cancel</Link>
-
-                                                    </td>
-                                                    
-                                                )}
-                                            </tr>
-                                        ) : ""
-                                    ))}
-
-                                </tbody>
-                            </table> */}
                             <Table dataSource={data} columns={columns} loading={loading} />
 
                         </main>
