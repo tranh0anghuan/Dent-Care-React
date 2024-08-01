@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import HeroHeader from '../../components/hero-header'
 import { Link, useNavigate } from 'react-router-dom'
 import useAppointmentByDentistID from '../../callApi/appointmentByDentistID'
-import { Button, DatePicker, Form, Pagination, Select } from 'antd';
+import { Button, DatePicker, Form, Pagination, Select, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/counterSlice';
 import api from '../../config/axios';
@@ -11,45 +11,25 @@ function DentistSchedule() {
 
     const [loading, setLoading] = useState(false)
 
-    const { Option } = Select;
+    const [data, setData] = useState([]);
+
     const { RangePicker } = DatePicker;
 
     const user = useSelector(selectUser)
+
     const [appointment, setAppointment] = useState([])
+
     const navigate = useNavigate()
+
     const [date, setDate] = useState([])
+
+    const [datePicker, setDatePicker] = useState([])
+
     const getAppointment = async () => {
         try {
+            setLoading(true)
             const res = await api.get(`/appointment-patient/dentist/${user.id}`)
             setAppointment(res.data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        getAppointment()
-    }, [date]);
-
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 7;
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentData = appointment.slice(indexOfFirstItem, indexOfLastItem);
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
-
-    // const [appointment, setAppointment] = useState([])
-
-    const getAppointmentByDate = async () => {
-        try {
-            setLoading(true)
-            const res = await api.get(`/appointment-patient/date/between/${date[0]}/${date[1]}/dentist/${user.id}`)
-            console.log(res)
-            setAppointment(res.data)
-
         } catch (error) {
             console.log(error)
         }finally{
@@ -57,13 +37,89 @@ function DentistSchedule() {
         }
     }
 
+    useEffect(() => {
+        getAppointment()
+    }, [date]);
 
+    useEffect(() => {
+        setData(appointment.filter(a => a.status == 'PROCESSING'));
+    }, [appointment,date]);
 
+    const getAppointmentByDate = async () => {
+        try {
+            console.log(date)
+            setLoading(true)
+            const res = await api.get(`/appointment-patient/date/between/${date[0]}/${date[1]}/dentist/${user.id}`)
+            console.log(res)
+            setAppointment(res.data)
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setLoading(false)
+        }
+    }
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString(undefined, options);
+    };
 
+    const columns = [
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            render: (date) => formatDate(date)
+        },
+        {
+            title: 'CLinic',
+            dataIndex: ['dentistServices', 'account', 'dentalClinic','clinicName'],
+        },
+        {
+            title: 'Patient',
+            dataIndex: ['patient', 'name'],
+        },
+        {
+            title: 'Slot',
+            dataIndex: ['slot'],
+            render: (slot) => `${slot.name}:   ${slot.startTime}-${slot.endTime}`
+        },
+        {
+            title: 'Service',
+            dataIndex: ['dentistServices', 'serviceDetail', 'name'],
+        },
+        {
+            title: 'Dentist',
+            dataIndex: ['dentistServices', 'account', 'fullName'],
+        },
+        {
+            title: 'Room',
+            dataIndex: ['dentistServices', 'account', 'room', 'name'],
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+        },
+    ];
 
-    console.log(date[0])
-    console.log(date[1])
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 14 },
+        },
+    };
+
+    const tailFormItemLayout = {
+        wrapperCol: {
+            xs: { span: 24, offset: 0 },
+            sm: { span: 14, offset: 6 },
+        },
+    };
+
     return (
         <>
             <HeroHeader content="Dentist Schedule" />
@@ -71,9 +127,9 @@ function DentistSchedule() {
             <div className='d-flex justify-content-center'>
                 <Form layout="inline"
                     onFinish={getAppointmentByDate}>
-                    <Form.Item label="Select Week">
-                        <RangePicker onChange={(value, dateString) => {
-                            console.log('Formatted Selected Time: ', setDate(dateString));
+                    <Form.Item name="dateRange" label="Select Week">
+                        <RangePicker  onChange={(value, dateString) => {
+                             setDate(dateString)
                         }} />
                     </Form.Item>
                     <Form.Item>
@@ -88,48 +144,10 @@ function DentistSchedule() {
                 <div className="col-lg-12">
                     <div className="row">
                         <main className="col-lg-12 mb-5" style={{ fontSize: 15, marginTop: 40 }}>
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Clinic</th>
-                                        <th scope="col">Slot</th>
-                                        <th scope="col">Service</th>
-                                        <th scope="col">Patient</th>
-                                        <th scope="col">Room</th>
-                                        <th scope="col">Regular Schedule</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {currentData.map((item, index) => (
-
-                                        item?.status != 'CANCEL' ? (
-                                            <tr>
-                                                <td>{item.date}</td>
-                                                <td>{item.dentistServices.account.dentalClinic.address}</td>
-                                                <td>{item.slot.name}:   {item.slot.startTime}-{item.slot.endTime}</td>
-                                                <td>{item.dentistServices.serviceDetail.name}</td>
-                                                <td>{item.patient.name}</td>
-                                                <td>{item.dentistServices.account.room?.name}</td>
-                                                <td>
-                                                    <Link onClick={() => { navigate(`/regular-schedule/${item?.id}`) }} className='btn btn-primary'>Create</Link>
-                                                </td>
-                                            </tr>
-                                        ) : ""
-                                    ))}
-
-                                </tbody>
-                            </table>
+                           
+                            <Table dataSource={data} columns={columns} loading={loading} />
                         </main>
                     </div></div></div>
-            <Pagination
-                className='d-flex justify-content-center mt-5'
-                current={currentPage}
-                total={appointment?.length}
-                pageSize={itemsPerPage}
-                onChange={handlePageChange}
-
-            />
         </>
     )
 }

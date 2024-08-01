@@ -45,7 +45,6 @@ function CheckIn() {
     }, [])
 
     useEffect(() => {
-        // setData(appointment.filter(a => a.status == 'PROCESSING'));
         setData((appointment.filter(a => a.status == 'PROCESSING')).sort((a, b) => a.slot.id - b.slot.id));
 
     }, [appointment,handleCheckIn]);

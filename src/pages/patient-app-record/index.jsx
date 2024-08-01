@@ -17,13 +17,13 @@ function PatientAppointmentRecord() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        setData(patient);
+        setData(patient.sort((a, b) => b.id - a.id));
     }, [patient]);
 
     const handleSearch = (values) => {
         try{
             setLoading(true)
-            setData(patient.filter(s => s.name.toLowerCase().includes(values.keyword.toLowerCase())));
+            setData((patient.filter(s => s.name.toLowerCase().includes(values.keyword.toLowerCase()))).sort((a, b) => b.id - a.id));
         }catch(e){
             console.log(e)
         }finally{
